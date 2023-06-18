@@ -1,0 +1,6 @@
+schema: ../schema.graphql
+generates:
+  ./server/resolvers/generated/resolvers-types.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
