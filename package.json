@@ -1,5 +1,5 @@
 {
-  "name": "turboPnpmTest",
+  "name": "turbo_pnpm_test",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -15,6 +15,19 @@
     "pnpm": ">=8.6.2"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.1",
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
     "turbo": "^1.10.3"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
   }
 }
