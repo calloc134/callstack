@@ -23,10 +23,9 @@ export const Query: QueryResolvers<Context> = {
 
       // 結果を返す
       return result;
-      
     } catch (error) {
       // エラーが発生した場合はGraphQLErrorとして返却
       throw new GraphQLError(error);
     }
-  }
+  },
 };

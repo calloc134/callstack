@@ -10,5 +10,4 @@ export const resolvers: Resolvers<Context> = {
 
   // クエリのリゾルバーを定義
   Query: Query,
-
 };
