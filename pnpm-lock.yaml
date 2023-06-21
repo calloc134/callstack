@@ -87,6 +87,9 @@ importers:
       clsx:
         specifier: ^1.2.1
         version: 1.2.1
+      graphql:
+        specifier: ^16.6.0
+        version: 16.6.0
       lucide-react:
         specifier: ^0.244.0
         version: 0.244.0(react@18.2.0)
@@ -116,7 +119,7 @@ importers:
         version: 1.0.6(tailwindcss@3.3.2)
       urql:
         specifier: ^4.0.4
-        version: 4.0.4(react@18.2.0)
+        version: 4.0.4(graphql@16.6.0)(react@18.2.0)
       vite-tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0(typescript@5.0.2)(vite@4.3.9)
@@ -181,13 +184,15 @@ importers:
 
 packages:
 
-  /@0no-co/graphql.web@1.0.4:
+  /@0no-co/graphql.web@1.0.4(graphql@16.6.0):
     resolution: {integrity: sha512-W3ezhHGfO0MS1PtGloaTpg0PbaT8aZSmmaerL7idtU5F7oCI+uu25k+MsMS31BVFlp4aMkHSrNRxiD72IlK8TA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     peerDependenciesMeta:
       graphql:
         optional: true
+    dependencies:
+      graphql: 16.6.0
     dev: false
 
   /@alloc/quick-lru@5.2.0:
@@ -5212,10 +5217,10 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: true
 
-  /@urql/core@4.0.10:
+  /@urql/core@4.0.10(graphql@16.6.0):
     resolution: {integrity: sha512-Vs3nOSAnYftqOCg034Ostp/uSqWlQg5ryLIzcOrm8+O43s4M+Ew4GQAuemIH7ZDB8dek6h61zzWI3ujd8FH3NA==}
     dependencies:
-      '@0no-co/graphql.web': 1.0.4
+      '@0no-co/graphql.web': 1.0.4(graphql@16.6.0)
       wonka: 6.3.2
     transitivePeerDependencies:
       - graphql
@@ -10918,12 +10923,12 @@ packages:
   /urlpattern-polyfill@9.0.0:
     resolution: {integrity: sha512-WHN8KDQblxd32odxeIgo83rdVDE2bvdkb86it7bMhYZwWKJz0+O0RK/eZiHYnM+zgt/U7hAHOlCQGfjjvSkw2g==}
 
-  /urql@4.0.4(react@18.2.0):
+  /urql@4.0.4(graphql@16.6.0)(react@18.2.0):
     resolution: {integrity: sha512-C5P4BMnAsk+rbytCWglit5ijXbIKXsa9wofSGPbuMyJKsDdL+9GfipS362Nff/Caag+eYOK5W+sox8fwEILT6Q==}
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:
-      '@urql/core': 4.0.10
+      '@urql/core': 4.0.10(graphql@16.6.0)
       react: 18.2.0
       wonka: 6.3.2
     transitivePeerDependencies:
