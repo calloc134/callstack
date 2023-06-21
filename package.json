@@ -4,9 +4,9 @@
   "description": "",
   "scripts": {
     "build": "turbo build",
-    "typecheck": "tsc --noEmit -p .",
-    "format": "prettier --check .",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
+    "typecheck": "turbo typecheck",
+    "format": "turbo format",
+    "lint": "turbo lint"
   },
   "keywords": [],
   "repository": {
@@ -25,6 +25,7 @@
     "@commitlint/config-conventional": "^17.6.5",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
+    "tsc": "^2.0.4",
     "turbo": "^1.10.3"
   },
   "devDependencies": {

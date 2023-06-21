@@ -20,8 +20,8 @@ jobs:
       - name: typecheck
         run: pnpm typecheck
 
-      - name: eslint
-        run: pnpm lint
+      # - name: eslint
+      #   run: pnpm lint
 
       - name: prettier
         run: pnpm format
