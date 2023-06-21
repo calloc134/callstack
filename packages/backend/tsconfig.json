@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
-    "noImplicitAny": false
-  }
+    "noImplicitAny": false,
+    "baseUrl": ".",
+  },
+
 }

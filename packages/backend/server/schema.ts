@@ -1,6 +1,6 @@
 import { createSchema } from "graphql-yoga";
 import { loadFilesSync } from "@graphql-tools/load-files";
-import { resolvers } from "./resolvers/resolver";
+import { resolvers } from "./resolver";
 import { typeDefs as scalarTypeDefs } from "graphql-scalars";
 import { applyMiddleware } from "graphql-middleware";
 import { permissions } from "./permission";
