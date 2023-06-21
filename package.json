@@ -2,13 +2,15 @@
   "name": "turbo_pnpm_test",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "turbo build"
   },
   "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+github.com:calloc134/turbo_pnpm_test.git"
+  },
+  "author": "calloc134",
   "license": "ISC",
   "packageManager": "pnpm@78.6.2",
   "engines": {
