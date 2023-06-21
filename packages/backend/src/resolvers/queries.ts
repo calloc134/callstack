@@ -5,7 +5,7 @@ import { GraphQLError } from "graphql";
 // クエリのリゾルバーを定義
 export const Query: QueryResolvers<Context> = {
   // userクエリのリゾルバー
-  user: async (_parent, args, context: Context) => {
+  user: async (_parent, args: { uuid: string }, context: Context) => {
     // 呼び出し引数よりuuidを取得
     const { uuid: user_uuid } = args;
 
@@ -25,7 +25,7 @@ export const Query: QueryResolvers<Context> = {
       return result;
     } catch (error) {
       // エラーが発生した場合はGraphQLErrorとして返却
-      throw new GraphQLError(error);
+      throw new GraphQLError(error as string);
     }
   },
 };

@@ -17,7 +17,7 @@ export const isLoginUser = rule({ cache: "contextual" })(async (_parent, _args, 
   // Authorizationヘッダーからトークンを取得
 
   // authヘッダを格納する変数の初期化
-  let auth = "";
+  let auth: string | undefined;
 
   // authヘッダーを取得
   // node:httpのヘッダーを取得
