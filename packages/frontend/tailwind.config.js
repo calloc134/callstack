@@ -1,7 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
+  // ダークモードの設定
+  // ブラウザの設定に従うようにする
   darkMode: ["media", "class"], 
+  // Tailwindを適用するファイルを指定
   content: [
     'src/components/pages/*.{ts,tsx}',
     'src/components/ui/*.{ts,tsx}',
@@ -72,5 +75,7 @@ module.exports = {
       },
     },
   },
+  // プラグインの設定
+  // windy-radix-paletteは、radix-uiのパレットをtailwindcssで使用できるようにするプラグイン
   plugins: [require("tailwindcss-animate"), require("windy-radix-palette")]
 }

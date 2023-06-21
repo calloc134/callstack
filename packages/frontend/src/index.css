@@ -4,6 +4,9 @@
 
 @layer base {
   :root {
+    // 色を指定
+    // radix-ui/colors から色を選択している
+
     --background: var(--lime1);
     --foreground: var(--green10);
     --muted: var(--yellow3);
