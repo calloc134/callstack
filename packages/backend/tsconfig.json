@@ -3,5 +3,8 @@
     "noImplicitAny": false,
     "baseUrl": ".",
   },
+  "ts-node": {
+    "transpileOnly": true,
+  }
 
 }

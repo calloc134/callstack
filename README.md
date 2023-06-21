@@ -15,6 +15,8 @@
 
  - graphql-yoga  
 graphqlサーバの立ち上げに使用しています。
+ - tsx
+ビルドツールとして利用しています
  - prisma  
 データベースへのアクセスに使用しています。
  - grpahql-scalars  
