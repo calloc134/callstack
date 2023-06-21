@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8.6.3
+
+      - name: typecheck
+        run: pnpm typecheck
+
+      - name: eslint
+        run: pnpm lint
+
+      - name: prettier
+        run: pnpm format
