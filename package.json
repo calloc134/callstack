@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "build": "turbo build"
+    "build": "turbo build",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --check .",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "keywords": [],
   "repository": {
