@@ -14,14 +14,7 @@ export default {
     variant: {
       control: {
         type: "select",
-        options: [
-          "default",
-          "destructive",
-          "outline",
-          "secondary",
-          "ghost",
-          "link",
-        ],
+        options: ["default", "destructive", "outline", "secondary", "ghost", "link"],
       },
     },
     // ボタンのサイズ
@@ -40,4 +33,4 @@ export default {
   },
 } as Meta;
 
-export const Default = (args: ButtonProps) => <Button {...args}/>
+export const Default = (args: ButtonProps) => <Button {...args} />;
