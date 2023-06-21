@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "turbo build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p .",
     "format": "prettier --check .",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
