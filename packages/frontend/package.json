@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
     "lucide-react": "^0.244.0",
     "postcss": "^8.4.24",
     "react": "^18.2.0",
@@ -32,9 +33,13 @@
     "tailwindcss-animate": "^1.0.6",
     "urql": "^4.0.4",
     "vite-tsconfig-paths": "^4.2.0",
-    "windy-radix-palette": "^0.6.1"
+    "windy-radix-palette": "^0.6.1",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-urql": "^3.7.3",
     "@storybook/addon-essentials": "7.0.22",
     "@storybook/addon-interactions": "7.0.22",
     "@storybook/addon-links": "7.0.22",

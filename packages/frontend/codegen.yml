@@ -1,0 +1,12 @@
+schema: ../schema.graphql
+generates:
+  ./src/lib/generated/urql-types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-urql
+
+    config:
+      strictScalars: true
+      scalars:
+        UUID: string
