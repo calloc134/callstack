@@ -1,11 +1,11 @@
 import { Context } from "src/context";
-import { QueryResolvers } from "./generated/resolvers-types";
+import { QueryResolvers } from "src/lib/generated/resolver-types";
 import { GraphQLError } from "graphql";
 
 // クエリのリゾルバーを定義
 export const Query: QueryResolvers<Context> = {
   // userクエリのリゾルバー
-  user: async (_parent, args: { uuid: string }, context: Context) => {
+  user: async (_parent, args, context) => {
     // 呼び出し引数よりuuidを取得
     const { uuid: user_uuid } = args;
 
