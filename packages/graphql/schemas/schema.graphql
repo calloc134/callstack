@@ -1,5 +1,9 @@
 scalar UUID
 
+schema {
+  query: Query
+}
+
 type Query {
   user(uuid: UUID!): User!
 }

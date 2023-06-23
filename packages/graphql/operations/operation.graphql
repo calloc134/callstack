@@ -1,0 +1,12 @@
+scalar UUID
+
+fragment UserFields on User {
+  uuid
+  email
+}
+
+query findUser($uuid: UUID!) {
+  user(uuid: $uuid) {
+    ...UserFields
+  }
+}

@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
+import { Context } from "../../context";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -9,7 +10,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends " $fragmentName" |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string };
+  ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -128,14 +129,14 @@ export type ResolversParentTypes = {
   User: User;
 };
 
-export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes["Profile"] = ResolversParentTypes["Profile"]> = {
+export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes["Profile"] = ResolversParentTypes["Profile"]> = {
   age?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryUserArgs, "uuid">>;
 };
 
@@ -143,14 +144,14 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: "UUID";
 }
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]> = {
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]> = {
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes["Profile"]>, ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type Resolvers<ContextType = any> = {
+export type Resolvers<ContextType = Context> = {
   Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UUID?: GraphQLScalarType;
