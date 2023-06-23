@@ -23,13 +23,16 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
-      - name: Install dependencies
+      - name: install dependencies
         run: pnpm install --frozen-lockfile
+        
+      - name: graphql codegen
+        run: pnpm turbo codegen
 
       - name: typecheck
         run: pnpm turbo typecheck
 
-      # - name: Build
+      # - name: build
       #   run: pnpm turbo build
 
       # - name: eslint

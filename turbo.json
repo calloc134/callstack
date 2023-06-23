@@ -5,6 +5,7 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "codegen": {},
     "typecheck": {},
     "lint": {},
     "format": {}
