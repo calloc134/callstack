@@ -1,5 +1,5 @@
 import { Context } from "./context";
-import { Resolvers } from "./resolvers/generated/resolvers-types";
+import { Resolvers } from "./lib/generated/resolver-types";
 import { resolvers as scalarResolvers } from "graphql-scalars";
 import { Query } from "./resolvers/queries";
 
