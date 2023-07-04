@@ -7,7 +7,20 @@ services:
       dockerfile: Dockerfile
 
     volumes:
-      - ../..:/workspaces:cached
+      # - ../..:/workspaces:cached
+      - type: bind
+        source: ../../
+        target: /workspaces
+        consistency: cached
+      - type: volume
+        source: root-data
+        target: /workspaces/turboPNPMtest/node_modules
+      - type: volume
+        source: frontend-data
+        target: /workspaces/turboPNPMtest/packages/frontend/node_modules
+      - type: volume
+        source: backend-data
+        target: /workspaces/turboPNPMtest/packages/backend/node_modules
       
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -22,7 +35,9 @@ services:
     image: postgres:latest
     restart: unless-stopped
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: main
@@ -33,3 +48,6 @@ services:
 
 volumes:
   postgres-data:
+  root-data:
+  frontend-data:
+  backend-data:
