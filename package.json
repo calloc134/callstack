@@ -9,7 +9,7 @@
     "lint": "turbo lint",
     "prigen": "turbo prigen",
     "primig": "turbo primig",
-    "prepare": "husky install && prigen"
+    "prepare": "husky install && turbo prigen && turbo codegen"
   },
   "keywords": [],
   "repository": {

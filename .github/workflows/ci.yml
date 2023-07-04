@@ -25,13 +25,7 @@ jobs:
 
       - name: install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: prisma generate
-        run: pnpm prigen
         
-      - name: graphql codegen
-        run: pnpm turbo codegen
-
       - name: typecheck
         run: pnpm turbo typecheck
 
