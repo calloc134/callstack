@@ -53,7 +53,9 @@
         "PKief.material-icon-theme",
         "oderwat.indent-rainbow",
         "formulahendry.auto-close-tag",
-        "markdown.showPreview"
+        "markdown.showPreview",
+        "eamodio.gitlens",
+        "GitHub.vscode-pull-request-github"
       ]
     }
   }
