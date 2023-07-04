@@ -8,7 +8,7 @@
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "codegen": "graphql-codegen --config codegen.ts",
-    "generate": "prisma generate"
+    "prigen": "prisma generate"
   },
   "keywords": [],
   "author": "",

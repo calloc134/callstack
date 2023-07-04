@@ -6,7 +6,8 @@
     "build": "turbo build",
     "typecheck": "turbo typecheck",
     "format": "turbo format",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "prigen": "turbo prigen"
   },
   "keywords": [],
   "repository": {
