@@ -7,7 +7,8 @@
     "typecheck": "turbo typecheck",
     "format": "turbo format",
     "lint": "turbo lint",
-    "prigen": "turbo prigen"
+    "prigen": "turbo prigen",
+    "primig": "turbo primig"
   },
   "keywords": [],
   "repository": {
