@@ -1,0 +1,123 @@
+version: '3.8'
+
+# ボリュームの作成
+volumes:
+  # バックエンドのパッケージキャッシュを格納するボリューム
+  backend-vol:
+  # フロントエンドのパッケージキャッシュを格納するボリューム
+  frontend-vol:
+  # データベースのデータを格納するボリューム
+  postgres-vol:
+
+# ネットワークの作成
+networks:
+  # 内部ネットワーク
+  docker-network:
+
+services:
+  postgres:
+    container_name: posgre-prod
+    # ポスグレの最新イメージを使用
+    image: postgres:latest
+    # ポスグレの環境変数を読み込む
+    env_file: ${POSTGRES_ENV}
+    # ポスグレのデータを格納するボリュームを指定
+    volumes:
+      - type: volume
+        source: postgres-vol
+        # ポスグレのデータを格納するボリュームのマウント先を指定
+        target: /var/lib/postgresql/data
+    # 内部ネットワークに接続
+    networks:
+      - docker-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  backend:
+    container_name: backend-prod
+    # バックエンドのDockerfileを指定
+    build:
+      context: .
+      dockerfile: Dockerfiles/Backend-Dockerfile
+    # バックエンドの環境変数を読み込む
+    env_file: ${BACK_ENV}
+    # バックエンドのデータを格納するボリュームを指定
+    volumes:
+      - type: bind
+        # 環境変数で指定したバックエンドのディレクトリを指定
+        source: ${BACKDIR}
+        target: /home/
+      - type: bind
+        # graphqlのディレクトリを指定
+        source: ${BACKDIR}/../graphql/
+        target: /home/graphql/
+      - type: volume
+        # バックエンドのパッケージキャッシュを格納するボリュームを指定
+        source: backend-vol
+        target: /home/node_modules/
+    # 内部ネットワークに接続
+    networks:
+      - docker-network
+    # 使用するシークレットを指定
+    secrets:
+      - private.key
+      - public.key
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  frontend:
+    container_name: frontend-prod
+    build: 
+      context: .
+      # フロントエンドのDockerfileを指定
+      dockerfile: Dockerfiles/Frontend-Dockerfile
+    volumes:
+      - type: bind
+        # 環境変数で指定したフロントエンドのディレクトリを指定
+        source: ${FRONTDIR}
+        target: /home/
+      - type: volume
+        # フロントエンドのパッケージキャッシュを格納するボリュームを指定
+        source: frontend-vol
+        target: /home/node_modules/
+    # 内部ネットワークに接続
+    networks:
+      - docker-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  nginx:
+    container_name: nginx
+    # nginxの最新イメージを使用
+    image: nginx:latest
+    ports:
+      # 80ポートを開放
+      - target: 80
+        published: 80
+        host_ip: localhost
+    volumes:
+      - type: bind
+        # フロントエンドのビルドしたファイルを格納するディレクトリを指定
+        source: ${FRONTDIR}/dist
+        target: /usr/share/nginx/dist
+      - type: bind
+        # nginxの設定ファイルを指定
+        source: config/nginx-prod
+        target: /etc/nginx/conf.d
+    networks:
+      # 内部ネットワークに接続
+      - docker-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+# 使用するシークレットを指定
+secrets:
+  # バックエンドの秘密鍵を指定
+  private.key:
+    file: ../../keys/private.key
+  # バックエンドの公開鍵を指定
+  public.key:
+    file: ../../keys/public.key
+
+
+

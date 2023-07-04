@@ -5,8 +5,8 @@ import { PrismaClient } from "@prisma/client";
 
 // graphql-yogaのcreateYoga関数を利用してyogaサーバーを作成
 const yoga = createYoga({
-  // エンドポイントはルートに設定
-  graphqlEndpoint: "/",
+  // エンドポイントは/api/graphqlに指定
+  graphqlEndpoint: "/api/",
   // スキーマを設定
   schema,
   // 利用するコンテキストを設定

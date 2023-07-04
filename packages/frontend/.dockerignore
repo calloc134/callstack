@@ -1,0 +1,9 @@
+node_modules
+.pnpm-store
+.git
+.gitignore
+.github
+.vscode
+.eslintignore
+.eslintrc.js
+node_modules

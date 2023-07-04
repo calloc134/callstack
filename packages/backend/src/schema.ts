@@ -14,7 +14,9 @@ export const schema = applyMiddleware(
       // スカラー型の定義をマージ
       ...scalarTypeDefs,
       // ファイルからスキーマを読み込み
-      loadFilesSync(`${__dirname}/../../schema.graphql`),
+      // 環境変数が存在していれば、そのパスから読み込み
+      // 環境変数が存在しなければ、../../schema.graphqlから読み込み
+      loadFilesSync(process.env.SCHEMA_PATH || "../schemas/*.graphql"),
     ],
     // リゾルバー
     resolvers,

@@ -1,0 +1,15 @@
+# nodeイメージを利用
+FROM node:latest
+
+# 作業ディレクトリを指定
+WORKDIR /home
+
+# pnpmをインストールする
+RUN npm install -g pnpm
+
+# 3000ポートを開放している
+EXPOSE 5173
+
+# コンテナ起動時に実行するコマンド
+# 依存パッケージのインストールとサーバーの起動を行う
+CMD ["sh", "-c", "pnpm install && pnpm build"]

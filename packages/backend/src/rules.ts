@@ -3,9 +3,15 @@ import { Context } from "./context";
 import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 
+// 環境変数から鍵のパスを取得
+const public_key_path = process.env.PUBLIC_KEY_PATH;
+const private_key_path = process.env.PRIVATE_KEY_PATH;
+
 // 秘密鍵を取得
-const public_key = fs.readFileSync(`${__dirname}/../secret/public.key`, "utf8");
-const private_key = fs.readFileSync(`${__dirname}/../secret/private.key`, "utf8");
+// 環境変数が存在していれば、そのパスから読み込み
+// 環境変数が存在しなければ、../../private.keyから読み込み
+const public_key = fs.readFileSync(public_key_path || "../../keys/public.key", "utf8");
+const private_key = fs.readFileSync(private_key_path || "../../keys/private.key", "utf8");
 
 // JWTのペイロードの型定義
 type Payload = {
