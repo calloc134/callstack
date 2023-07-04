@@ -7,7 +7,7 @@ volumes:
   # フロントエンドのパッケージキャッシュを格納するボリューム
   frontend-vol:
   # データベースのデータを格納するボリューム
-  posgre-vol:
+  postgres-vol:
 
 # ネットワークの作成
 networks:
@@ -20,11 +20,11 @@ services:
     # ポスグレの最新イメージを使用
     image: postgres:latest
     # ポスグレの環境変数を読み込む
-    env_file: ../../env_files/posgre.prod.env
+    env_file: ${POSTGRES_ENV}
     # ポスグレのデータを格納するボリュームを指定
     volumes:
       - type: volume
-        source: posgre-vol
+        source: postgres-vol
         # ポスグレのデータを格納するボリュームのマウント先を指定
         target: /var/lib/postgresql/data
     # 内部ネットワークに接続
@@ -40,7 +40,7 @@ services:
       context: .
       dockerfile: Dockerfiles/Backend-Dockerfile
     # バックエンドの環境変数を読み込む
-    env_file: ../../env_files/backend.prod.env
+    env_file: ${BACK_ENV}
     # バックエンドのデータを格納するボリュームを指定
     volumes:
       - type: bind
