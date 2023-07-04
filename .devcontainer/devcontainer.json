@@ -52,7 +52,8 @@
         "formulahendry.auto-rename-tag",
         "PKief.material-icon-theme",
         "oderwat.indent-rainbow",
-        "formulahendry.auto-close-tag"
+        "formulahendry.auto-close-tag",
+        "markdown.showPreview"
       ]
     }
   }
