@@ -8,7 +8,8 @@
     "format": "turbo format",
     "lint": "turbo lint",
     "prigen": "turbo prigen",
-    "primig": "turbo primig"
+    "primig": "turbo primig",
+    "prepare": "husky install && prigen"
   },
   "keywords": [],
   "repository": {
