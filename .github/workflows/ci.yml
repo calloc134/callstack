@@ -26,9 +26,6 @@ jobs:
       - name: install dependencies
         run: pnpm install --frozen-lockfile
         
-      - name: graphql codegen
-        run: pnpm turbo codegen
-
       - name: typecheck
         run: pnpm turbo typecheck
 

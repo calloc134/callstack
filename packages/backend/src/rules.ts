@@ -5,13 +5,13 @@ import * as jwt from "jsonwebtoken";
 
 // 環境変数から鍵のパスを取得
 const public_key_path = process.env.PUBLIC_KEY_PATH;
-const private_key_path = process.env.PRIVATE_KEY_PATH;
+// const private_key_path = process.env.PRIVATE_KEY_PATH;
 
 // 秘密鍵を取得
 // 環境変数が存在していれば、そのパスから読み込み
 // 環境変数が存在しなければ、../../private.keyから読み込み
 const public_key = fs.readFileSync(public_key_path || "../../keys/public.key", "utf8");
-const private_key = fs.readFileSync(private_key_path || "../../keys/private.key", "utf8");
+// const private_key = fs.readFileSync(private_key_path || "../../keys/private.key", "utf8");
 
 // JWTのペイロードの型定義
 type Payload = {
@@ -23,11 +23,8 @@ export const isLoginUser = rule({ cache: "contextual" })(async (_parent, _args, 
   // Authorizationヘッダーからトークンを取得
 
   // authヘッダを格納する変数の初期化
-  let auth: string | undefined;
-
-  // authヘッダーを取得
-  // node:httpのヘッダーを取得
-  auth = context.req.headers.authorization;
+  // authヘッダーが存在しない場合はundefined
+  const auth: string | undefined = context.req.headers.authorization;
 
   // authヘッダーが存在しない場合はfalseを返す
   if (!auth) {

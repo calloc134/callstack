@@ -8,6 +8,8 @@
     "codegen": {},
     "typecheck": {},
     "lint": {},
-    "format": {}
+    "format": {},
+    "prigen": {},
+    "primig": {}
   }
 }

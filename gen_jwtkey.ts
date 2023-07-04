@@ -25,5 +25,5 @@ const generateJWTKeyPair = () => {
 
 // 鍵ペアを生成してファイルに書き出す
 const { publicKey, privateKey } = generateJWTKeyPair();
-fs.writeFileSync("./public.key", publicKey);
-fs.writeFileSync("./private.key", privateKey);
+fs.writeFileSync("./keys/public.key", publicKey);
+fs.writeFileSync("./keys/private.key", privateKey);

@@ -15,8 +15,8 @@ export const schema = applyMiddleware(
       ...scalarTypeDefs,
       // ファイルからスキーマを読み込み
       // 環境変数が存在していれば、そのパスから読み込み
-      // 環境変数が存在しなければ、../../schema.graphqlから読み込み
-      loadFilesSync(process.env.SCHEMA_PATH || "../schemas/*.graphql"),
+      // 環境変数が存在しなければ、../graphql/schema.graphqlから読み込み
+      loadFilesSync(process.env.SCHEMA_PATH || "../graphql/schemas/*.graphql"),
     ],
     // リゾルバー
     resolvers,

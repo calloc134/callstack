@@ -27,10 +27,38 @@
   "forwardPorts": [4000, 5173],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "pnpm install"
+  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && mv packages/backend/.env.devcontainer packages/backend/.env && pnpm primig",
 
   // Configure tool-specific properties.
-  // "customizations": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "ms-vscode.vscode-typescript-next",
+        "prisma.prisma",
+        "redhat.vscode-yaml",
+        "zhuangtongfa.material-theme",
+        "dsznajder.es7-react-js-snippets",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "yzhang.markdown-all-in-one",
+        "kamikillerto.vscode-colorize",
+        "vscode.json-language-features",
+        "GraphQL.vscode-graphql",
+        "vscode.git",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "PKief.material-icon-theme",
+        "oderwat.indent-rainbow",
+        "formulahendry.auto-close-tag",
+        "markdown.showPreview",
+        "eamodio.gitlens",
+        "GitHub.vscode-pull-request-github"
+      ]
+    }
+  }
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
