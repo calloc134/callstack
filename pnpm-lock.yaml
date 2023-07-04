@@ -26,6 +26,9 @@ importers:
       tsc:
         specifier: ^2.0.4
         version: 2.0.4
+      tsx:
+        specifier: ^3.12.7
+        version: 3.12.7
       turbo:
         specifier: ^1.10.3
         version: 1.10.3

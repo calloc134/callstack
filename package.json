@@ -26,6 +26,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "tsc": "^2.0.4",
+    "tsx": "^3.12.7",
     "turbo": "^1.10.3"
   },
   "devDependencies": {
