@@ -27,7 +27,7 @@
   "forwardPorts": [4000, 5173],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts"
+  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && mv packages/backend/.env.devcontainer packages/backend/.env"
 
   // Configure tool-specific properties.
   // "customizations": {},
