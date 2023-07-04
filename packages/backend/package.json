@@ -7,7 +7,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "generate": "prisma generate"
   },
   "keywords": [],
   "author": "",
