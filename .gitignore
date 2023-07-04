@@ -1,3 +1,4 @@
-.env*
+*.env
+*.key
 node_modules
 packages/*/secret/*
