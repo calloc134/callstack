@@ -27,7 +27,7 @@
   "forwardPorts": [4000, 5173],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && mv packages/backend/.env.devcontainer packages/backend/.env",
+  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && mv packages/backend/.env.devcontainer packages/backend/.env && pnpm primig",
 
   // Configure tool-specific properties.
   "customizations": {
@@ -52,7 +52,8 @@
         "formulahendry.auto-rename-tag",
         "PKief.material-icon-theme",
         "oderwat.indent-rainbow",
-        "formulahendry.auto-close-tag"
+        "formulahendry.auto-close-tag",
+        "markdown.showPreview"
       ]
     }
   }
