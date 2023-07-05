@@ -1,8 +1,8 @@
-# turboPNPMtest
+# 概要
 
 このプロジェクトは、pnpm と turbo を使って、モノリポ構成で Web アプリケーションを開発するためのテストプロジェクトです。
 
-## モノリポ構成とは
+### モノリポ構成とは
 
 モノリポ構成とは、複数のプロジェクトを一つのリポジトリで管理する構成のことです。
 
@@ -53,7 +53,7 @@
 - graphql-codegen  
   graphql スキーマから、型定義を生成するために使用しています。
 
-## 開発環境整備
+### 開発環境整備
 
 - pnpm  
   パッケージマネージャとして使用しています。
@@ -70,13 +70,13 @@
 - changesets  
   バージョン管理とリリース管理に使用しています。
 
-## インフラ環境(開発環境)
+### インフラ環境(開発環境)
 
 - devcontainer  
   開発環境の立ち上げに使用しています。
   ベースとなるアプリケーションコンテナに加えて、PostgreSQL のデータベースコンテナを立ち上げています。
 
-## インフラ環境(本番環境)
+### インフラ環境(本番環境)
 
 - docker compose  
   本番環境の立ち上げに使用しています。  
@@ -85,11 +85,82 @@
   リバースプロキシと HTML ファイルの配信を行っています。  
   バックエンドの API に対してはそのままリバースプロキシを行い、フロントエンドの配信に関しては、nginx のコンテナ内でビルドを行い、そのビルド済みのファイルを配信しています。
 
-## CI/CD 環境
+### CI/CD 環境
 
 - Github Actions  
   ここで、型チェックを行っています。  
   現時点では型チェックのみですが、今後はテストコードの実行も行う予定です。
+
+## ディレクトリ構成
+
+ディレクトリ構成は以下のようになっています。  
+一部省略をしています。
+
+```
+.
+├── .github
+│   └── workflows # Github Actions の設定ファイル
+│       └── ci.yml # CIの設定ファイル
+├── .husky # husky の設定ファイルが格納
+├── .devcontainer # 開発環境の設定ファイルが格納
+│   └── devcontainer.json # 開発環境の設定ファイル
+├── .changeset # changesetsの設定ファイルが格納
+│
+├── env_files # 主に本番環境の環境変数ファイルが格納
+│   ├── .env # docker composeで参照する環境変数ファイル
+│   ├── backend.ev # バックエンドの環境変数ファイル
+│   └── postgres.ev # PostgreSQLの環境変数ファイル
+│
+├── keys # JWTの署名に使用する鍵ファイルが格納
+│   ├── private.key # 秘密鍵
+│   └── public.key # 公開鍵
+│
+├── packages # モノリポ構成のパッケージが格納
+│   ├── backend # バックエンドのパッケージ
+│   │   ├── prisma # prismaの設定ファイルが格納
+│   │   │   ├── migrations # マイグレーションファイルが格納
+│   │   │   └── schema.prisma # prismaのスキーマファイル
+│   │   ├── src # ソースコードが格納
+│   │   │   ├── lib # ライブラリが格納
+│   │   │   │   └── generated # graphql-codegenで生成されたファイルが格納
+│   │   │   └── resolvers # resolverが格納
+│   │   └── ... # その他のファイルが格納
+│   │
+│   ├── frontend # フロントエンドのパッケージ
+│   │   ├── src # ソースコードが格納
+│   │   │   ├── components # コンポーネントが格納
+│   │   │   │   ├── ui # radix-ui/primitivesで生成されたコンポーネントなどのUIコンポーネントが格納
+│   │   │   │   └── ... # その他のコンポーネントが格納
+│   │   │   ├── lib # ライブラリが格納
+│   │   │   │   └── generated # graphql-codegenで生成されたファイルが格納
+│   │   └── ... # その他のファイルが格納
+│   │
+│   ├── infra # インフラ環境のパッケージ
+│   │   ├── docker-compose.yml # docker composeの設定ファイル
+│   │   ├── config # nginxの設定ファイルが格納
+│   │   │   └── nginx.conf # nginxの設定ファイル
+│   │   └── Dockerfiles # 利用するDockerfileが格納
+│   │       ├── Backend-Dockerfile # バックエンドのDockerfile
+│   │       └── Frontend-Dockerfile # フロントエンドのDockerfile
+│   │
+│   └── graphql # graphqlのパッケージ
+│       ├── schemas # graphqlのスキーマファイルが格納
+│       ├── operations # graphqlの操作ファイルが格納
+│       └── ... # その他のファイルが格納
+│
+├── .gitignore # gitのignoreファイル
+├── .prettierrc # prettierの設定ファイル
+├── .prettieriignore # prettierのignoreファイル
+├── .huskyrc.json # huskyの設定ファイル
+├── .commitlintrc.json # commitlintの設定ファイル
+├── .lintstagedrc.json # lint-stagedの設定ファイル
+├── .npmrc # npmの設定ファイル
+├── package.json # ルートのpackage.json
+├── pnpm-lock.yaml # pnpmのlockファイル
+├── turbo.json # turboの設定ファイル
+├── tsconfig.json # ルートのtsconfigファイル
+└── ... # その他のファイルが格納
+```
 
 ## 今後の予定
 
