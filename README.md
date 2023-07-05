@@ -184,8 +184,9 @@ devcontainer を利用することで、開発環境を立ち上げることが�
 
 docker compose を利用することで、本番環境を立ち上げることができます。
 
-1. packages/infra/compose.yml のあるディレクトリに移動します。
-2. docker のインストールされている環境で、以下のコマンドを実行します。
+1. env_files ディレクトリに、末尾.env の環境変数ファイルを例を参考に配置します。
+2. packages/infra/compose.yml のあるディレクトリに移動します。
+3. docker のインストールされている環境で、以下のコマンドを実行します。
 
 ```
 docker compose --env-file ../env_files/.env up
