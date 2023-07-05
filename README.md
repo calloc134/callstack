@@ -162,6 +162,35 @@
 └── ... # その他のファイルが格納
 ```
 
+# 起動方法
+
+## 開発環境の起動方法
+
+devcontainer を利用することで、開発環境を立ち上げることができます。
+
+1. VSCode を起動します。
+2. VSCode の左下にある「><」をクリックします。
+3. 「Remote-Containers: Reopen in Container」をクリックします。
+
+また、Github 上でも開発環境を立ち上げることができます。
+
+1. Github 上でこのリポジトリを開きます。
+2. 「Code」ボタンをクリックします。
+3. 「Open with Codespaces」をクリックします。
+
+なお、devcontainer を立ち上げると、packages/backend 以下の.env.devcontainer ファイルが自動で.env にコピーされます。
+
+## 本番環境の起動方法
+
+docker compose を利用することで、本番環境を立ち上げることができます。
+
+1. packages/infra/compose.yml のあるディレクトリに移動します。
+2. docker のインストールされている環境で、以下のコマンドを実行します。
+
+```
+docker compose --env-file ../env_files/.env up
+```
+
 ## 今後の予定
 
 - [ ] バックエンドの実装
