@@ -1,19 +1,27 @@
+# UUIDスカラー型を利用するための定義
 scalar UUID
 
+# クエリのスキーマ定義
 schema {
   query: Query
 }
 
+# クエリの定義
 type Query {
   user(uuid: UUID!): User!
 }
 
+# ユーザ型の定義
+# uuidがプライマリキーの役割を果たす
+# profileはUserと1対1の関係
 type User {
   uuid: UUID!
   email: String!
   profile: Profile
 }
 
+# プロフィール型の定義
+# uuidがプライマリキーの役割を果たす
 type Profile {
   uuid: UUID!
   age: Int!

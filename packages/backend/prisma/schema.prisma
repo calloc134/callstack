@@ -1,6 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// データベースソースの設定
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -10,12 +11,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// ユーザのモデルを定義
+// UUIDがプライマリキーの役割を果たす
+// ユーザとプロフィールは1対1の関係
 model User {
   uuid    String   @id @default(uuid())
   email   String   @unique
   profile Profile?
 }
 
+// プロフィールのモデルを定義
+// UUIDがプライマリキーの役割を果たす
 model Profile {
   uuid   String @id @unique @default(uuid())
   age    Int
