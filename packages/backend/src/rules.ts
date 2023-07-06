@@ -1,5 +1,5 @@
 import { rule } from "graphql-shield";
-import { Context } from "./context";
+import { GraphQLContext } from "./context";
 import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 
@@ -19,7 +19,7 @@ type Payload = {
 };
 
 // ユーザーがログインしているかどうかを判定するルール
-export const isLoginUser = rule({ cache: "contextual" })(async (_parent, _args, context: Context) => {
+export const isLoginUser = rule({ cache: "contextual" })(async (_parent, _args, context: GraphQLContext) => {
   // Authorizationヘッダーからトークンを取得
 
   // authヘッダを格納する変数の初期化

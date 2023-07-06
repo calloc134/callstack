@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "0.0.1",
   "scripts": {
-    "dev": "tsx watch ./src/index.ts",
+    "dev": "NODE_ENV=development tsx watch ./src/index.ts",
     "build": "tsc && node dist/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
@@ -15,6 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@envelop/disable-introspection": "^5.0.0",
+    "@escape.tech/graphql-armor": "^2.2.0",
     "@graphql-tools/load-files": "^7.0.0",
     "@graphql-tools/merge": "^9.0.0",
     "@prisma/client": "^4.15.0",

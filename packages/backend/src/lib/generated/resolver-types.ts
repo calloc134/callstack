@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
-import { Context } from "../../context";
+import { GraphQLContext } from "../../context";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -129,14 +129,14 @@ export type ResolversParentTypes = {
   User: User;
 };
 
-export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes["Profile"] = ResolversParentTypes["Profile"]> = {
+export type ProfileResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Profile"] = ResolversParentTypes["Profile"]> = {
   age?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
+export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryUserArgs, "uuid">>;
 };
 
@@ -144,14 +144,14 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: "UUID";
 }
 
-export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]> = {
+export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]> = {
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes["Profile"]>, ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type Resolvers<ContextType = Context> = {
+export type Resolvers<ContextType = GraphQLContext> = {
   Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UUID?: GraphQLScalarType;

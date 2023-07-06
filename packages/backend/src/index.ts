@@ -2,17 +2,40 @@ import { createYoga } from "graphql-yoga";
 import { createServer } from "node:http";
 import { schema } from "./schema";
 import { PrismaClient } from "@prisma/client";
+import { useDisableIntrospection } from "@envelop/disable-introspection";
+import { armor } from "./armor";
+
+// 環境変数を取得し、開発環境かどうかを判定
+const isDev = process.env.NODE_ENV === "development";
+
+// graphql-armorのプラグインを取得
+const enhancements = armor.protect();
 
 // graphql-yogaのcreateYoga関数を利用してyogaサーバーを作成
 const yoga = createYoga({
   // エンドポイントは/api/graphqlに指定
-  graphqlEndpoint: "/api/",
+  graphqlEndpoint: "/api/graphql",
   // スキーマを設定
   schema,
   // 利用するコンテキストを設定
   context: {
     prisma: new PrismaClient(),
   },
+  // 開発環境の場合はplaygroundを有効化
+  graphiql: isDev,
+  // 開発環境のときはCORSをすべて許可
+  // そうでないときはすべて拒否
+  cors: isDev
+    ? {
+        origin: "*",
+      }
+    : false,
+  plugins: [
+    // もし開発環境でなければ、introspectionを無効化
+    ...(isDev ? [] : [useDisableIntrospection()]),
+    // もし開発環境でなければ、graphql-armorを有効化
+    ...(isDev ? [] : [...enhancements.plugins]),
+  ],
 });
 
 // yogaサーバーをnodeのhttpサーバーとして起動
