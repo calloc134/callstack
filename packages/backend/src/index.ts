@@ -3,13 +3,12 @@ import { createServer } from "node:http";
 import { schema } from "./schema";
 import { PrismaClient } from "@prisma/client";
 import { useDisableIntrospection } from "@envelop/disable-introspection";
-import { EnvelopArmor } from "@escape.tech/graphql-armor";
+import { armor } from "./armor";
 
 // 環境変数を取得し、開発環境かどうかを判定
 const isDev = process.env.NODE_ENV === "development";
 
-// graphql-armorのセットアップ
-const armor = new EnvelopArmor({});
+// graphql-armorのプラグインを取得
 const enhancements = armor.protect();
 
 // graphql-yogaのcreateYoga関数を利用してyogaサーバーを作成
