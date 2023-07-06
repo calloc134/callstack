@@ -2,6 +2,8 @@ import { createYoga } from "graphql-yoga";
 import { createServer } from "node:http";
 import { schema } from "./schema";
 import { PrismaClient } from "@prisma/client";
+import { plugins } from "@swc/core";
+import { useDisableIntrospection } from "@envelop/disable-introspection";
 
 // 環境変数を取得し、開発環境かどうかを判定
 const isDev = process.env.NODE_ENV === "development";
@@ -27,6 +29,10 @@ const yoga = createYoga({
         origin: "*",
       }
     : false,
+  plugins: [
+    // もし開発環境の場合は、useDisableIntrospectionを利用してintrospectionを無効化
+    ...(isDev ? [useDisableIntrospection()] : []),
+  ],
 });
 
 // yogaサーバーをnodeのhttpサーバーとして起動
