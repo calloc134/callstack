@@ -2,13 +2,15 @@ import { createYoga } from "graphql-yoga";
 import { createServer } from "node:http";
 import { schema } from "./schema";
 import { PrismaClient } from "@prisma/client";
-import { plugins } from "@swc/core";
 import { useDisableIntrospection } from "@envelop/disable-introspection";
+import { EnvelopArmor } from "@escape.tech/graphql-armor";
 
 // 環境変数を取得し、開発環境かどうかを判定
 const isDev = process.env.NODE_ENV === "development";
 
-console.debug("process.env.NODE_ENV", process.env.NODE_ENV);
+// graphql-armorのセットアップ
+const armor = new EnvelopArmor({});
+const enhancements = armor.protect();
 
 // graphql-yogaのcreateYoga関数を利用してyogaサーバーを作成
 const yoga = createYoga({
@@ -30,8 +32,10 @@ const yoga = createYoga({
       }
     : false,
   plugins: [
-    // もし開発環境の場合は、useDisableIntrospectionを利用してintrospectionを無効化
-    ...(isDev ? [useDisableIntrospection()] : []),
+    // もし開発環境でなければ、introspectionを無効化
+    ...(isDev ? [] : [useDisableIntrospection()]),
+    // もし開発環境でなければ、graphql-armorを有効化
+    ...(isDev ? [...enhancements.plugins] : []),
   ],
 });
 
