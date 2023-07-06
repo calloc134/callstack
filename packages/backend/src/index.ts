@@ -34,7 +34,7 @@ const yoga = createYoga({
     // もし開発環境でなければ、introspectionを無効化
     ...(isDev ? [] : [useDisableIntrospection()]),
     // もし開発環境でなければ、graphql-armorを有効化
-    ...(isDev ? [...enhancements.plugins] : []),
+    ...(isDev ? [] : [...enhancements.plugins]),
   ],
 });
 
