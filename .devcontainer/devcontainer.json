@@ -4,7 +4,7 @@
   "name": "Node.js & PostgreSQL",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceFolder": "/workspaces/repo",
   "features": {
     "ghcr.io/devcontainers-contrib/features/pnpm:2": {
       "version": "latest"
