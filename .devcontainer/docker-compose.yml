@@ -1,34 +1,34 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
 
     volumes:
       # - ../..:/workspaces:cached
       - type: bind
-        source: ../../
-        target: /workspaces
+        source: ../
+        target: /workspaces/repo
         consistency: cached
       - type: volume
         source: root-data
-        target: /workspaces/turboPNPMtest/node_modules
+        target: /workspaces/repo/node_modules
       - type: volume
         source: frontend-data
-        target: /workspaces/turboPNPMtest/packages/frontend/node_modules
+        target: /workspaces/repo/packages/frontend/node_modules
       - type: volume
         source: backend-data
-        target: /workspaces/turboPNPMtest/packages/backend/node_modules
-      
+        target: /workspaces/repo/packages/backend/node_modules
+
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     network_mode: service:db
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   db:
