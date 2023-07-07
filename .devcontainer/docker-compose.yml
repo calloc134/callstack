@@ -8,19 +8,26 @@ services:
 
     volumes:
       # - ../..:/workspaces:cached
+      # ワークスペースにリポジトリのデータをマウント
       - type: bind
         source: ../
         target: /workspaces/repo
         consistency: cached
+      # ルートのnode_modulesをボリュームにマウント
       - type: volume
         source: root-data
         target: /workspaces/repo/node_modules
+      # フロントのnode_modulesをボリュームにマウント
       - type: volume
         source: frontend-data
         target: /workspaces/repo/packages/frontend/node_modules
+      # バックのnode_modulesをボリュームにマウント
       - type: volume
         source: backend-data
         target: /workspaces/repo/packages/backend/node_modules
+
+    # アプリケーションコンテナの環境変数を読み込む
+    env_file: ${BACK_ENV}
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -38,10 +45,8 @@ services:
       - type: volume
         source: postgres-data
         target: /var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: main
-      POSTGRES_DB: postgres
+    # ポスグレの環境変数を読み込む
+    env_file: ${POSTGRES_ENV}
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
