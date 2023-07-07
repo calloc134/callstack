@@ -1,3 +1,18 @@
+<p align="center">
+  <img src="./callstack.png" alt="callstack" width="300" />
+</p>
+
+<h1 align="center">callstack - pnpm/turborepoで構成されたボイラープレート</h1>
+
+<p align="center">
+   <img src="https://img.shields.io/github/stars/calloc134/callstack?style=flat-square" alt="GitHub stars" />
+    <img src="https://img.shields.io/github/forks/calloc134/callstack?style=flat-square" alt="GitHub forks" />
+    <img src="https://img.shields.io/github/issues/calloc134/callstack?style=flat-square" alt="GitHub issues" />
+    <img src="https://img.shields.io/github/license/calloc134/callstack?style=flat-square" alt="GitHub license" />
+    <img src="https://img.shields.io/github/last-commit/calloc134/callstack?style=flat-square" alt="GitHub commit" />
+    <img src="https://img.shields.io/github/languages/code-size/calloc134/callstack?style=flat-square" alt="GitHub code size in bytes" />
+    <img src="https://img.shields.io/github/repo-size/calloc134/callstack?style=flat-square" alt="GitHub repo size" />
+
 ## コンテンツ内容
 
 - 📋 [概要](#概要)
@@ -10,7 +25,7 @@
   - 🐳 [インフラ環境(開発環境)](#インフラ環境開発環境)
   - 🐳 [インフラ環境(本番環境)](#インフラ環境本番環境)
   - 🚀 [CI/CD 環境](#cicd-環境)
-- 📂 ディレクトリ構成
+- 📂 [ディレクトリ構成](#ディレクトリ構成)
 - 💻 [起動方法](#起動方法)
   - 💻 [開発環境の起動方法](#開発環境の起動方法)
   - 💻 [本番環境の起動方法](#本番環境の起動方法)
@@ -19,7 +34,8 @@
 
 # 概要
 
-このプロジェクトは、pnpm と turbo を使って、モノリポ構成で Web アプリケーションを開発するためのテストプロジェクトです。
+このプロジェクトは、pnpm と turbo を用いて構成されたボイラープレートです。  
+現在開発途上です。
 
 ### モノリポ構成とは
 
