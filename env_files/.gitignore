@@ -1,2 +1,2 @@
 !backend.dev.env
-!postgres.env
+!postgres.dev.env
