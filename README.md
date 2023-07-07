@@ -206,3 +206,9 @@ docker compose --env-file ../env_files/prod.env up
 - [ ] インフラ環境のコード化 (terraform)
 
 (開発中)
+
+## ライセンス
+
+MIT License
+
+Copyright (c) 2023 calloc134
