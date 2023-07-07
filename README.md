@@ -189,7 +189,7 @@ docker compose を利用することで、本番環境を立ち上げること�
 3. docker のインストールされている環境で、以下のコマンドを実行します。
 
 ```
-docker compose --env-file ../env_files/.env up
+docker compose --env-file ../env_files/prod.env up
 ```
 
 ## 今後の予定
