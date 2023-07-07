@@ -27,7 +27,7 @@
   "forwardPorts": [4000, 5173],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && cp packages/backend/.env.devcontainer packages/backend/.env && pnpm primig",
+  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && pnpm primig",
 
   // Configure tool-specific properties.
   "customizations": {
@@ -61,5 +61,9 @@
   },
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  "remoteUser": "root"
+  "remoteUser": "root",
+  "containerEnv": {
+    "POSTGRES_ENV": "../env_files/postgres.env",
+    "BACK_ENV": "../env_files/backend.dev.env"
+  }
 }
