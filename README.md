@@ -26,6 +26,10 @@
   graphql スキーマから、resolver や型定義を生成するために使用しています。
 - graphql-shield  
   認可処理や権限管理に使用しています。
+- graphql-armor  
+  様々なセキュリティ対策に使用しています。
+- @envelop/disable-introspection  
+  GraphQL のイントロスペクションを無効化するために使用しています。
 - jsonwebtoken  
   JWT 認証処理に利用しています。
 
