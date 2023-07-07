@@ -1,8 +1,9 @@
+<h1 align="center">callstack</h1>
 <p align="center">
   <img src="./callstack.png" alt="callstack" width="300" />
 </p>
 
-<h1 align="center">callstack - pnpm/turborepoで構成されたボイラープレート</h1>
+<h2 align="center"> pnpm + turborepoで構成されたモノリポ構成のボイラープレート </h2>
 
 <p align="center">
    <img src="https://img.shields.io/github/stars/calloc134/callstack?style=flat-square" alt="GitHub stars" />
