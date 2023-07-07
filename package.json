@@ -1,7 +1,6 @@
 {
-  "name": "turbo_pnpm_test",
+  "name": "callstack",
   "version": "0.0.1",
-  "description": "",
   "scripts": {
     "build": "turbo build",
     "typecheck": "turbo typecheck",
@@ -14,10 +13,10 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "git+github.com:calloc134/turbo_pnpm_test.git"
+    "url": "git+github.com:calloc134/callstack.git"
   },
-  "author": "calloc134",
-  "license": "ISC",
+  "author": "calloc134 <calloc134personal@gmail.com>",
+  "license": "MIT",
   "packageManager": "pnpm@78.6.2",
   "engines": {
     "pnpm": ">=8.6.2"
