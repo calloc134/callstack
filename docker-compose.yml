@@ -5,6 +5,10 @@ networks:
   # 内部ネットワーク
   docker-network:
 
+# データベースのデータを格納するボリューム
+volumes:
+  postgres-vol:
+
 services:
   postgres:
     container_name: posgre-prod
