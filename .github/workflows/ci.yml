@@ -6,10 +6,18 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+
 jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    
+    # 環境変数の読み込み
+    env:
+      SCHEMA_PATH: ../graphql/schemas/*.graphql
+      OPERATION_PATH: ../graphql/operations/*.graphql
+
+    # 実行ステップ
     steps:
       - uses: actions/checkout@v2
 
@@ -23,14 +31,17 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
+      # 依存関係のインストール
       - name: install dependencies
         run: pnpm install --frozen-lockfile
         
+      # 型チェック
       - name: typecheck
         run: pnpm turbo typecheck
 
-      # - name: build
-      #   run: pnpm turbo build
+      # ビルド
+      - name: build
+        run: pnpm turbo build
 
       # - name: eslint
       #   run: pnpm lint
