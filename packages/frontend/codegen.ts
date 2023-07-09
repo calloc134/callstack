@@ -2,8 +2,8 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "../graphql/schemas/*.graphql",
-  documents: "../graphql/operations/*.graphql",
+  schema: process.env.SCHEMA_PATH,
+  documents: process.env.OPERATION_PATH,
   generates: {
     "src/lib/generated/dummy.ts": {
       plugins: [

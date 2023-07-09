@@ -37,8 +37,13 @@ services:
       args:
         # バックエンドの環境変数を指定
         PACKAGE_PATH: ${BACKDIR}
+        # スキーマの環境変数を指定
+        SCHEMA_PATH: ${SCHEMA_PATH}
     # バックエンドの環境変数を読み込む
     env_file: ${BACK_ENV}
+    # スキーマの環境変数を読み込む
+    environment:
+      - SCHEMA_PATH=${SCHEMA_PATH}
     # 内部ネットワークに接続
     networks:
       - docker-network
@@ -51,6 +56,11 @@ services:
 
   frontend:
     container_name: frontend-prod
+    ports:
+      # 80ポートを開放
+      - target: 80
+        published: 80
+        host_ip: localhost
     build:
       context: .
       # フロントエンドのDockerfileを指定
@@ -58,32 +68,22 @@ services:
       args:
         # フロントエンドの環境変数を指定
         PACKAGE_PATH: ${FRONTDIR}
-    # 内部ネットワークに接続
-    networks:
-      - docker-network
-    # コンテナが停止したら再起動
-    restart: on-failure
-
-  nginx:
-    container_name: nginx
-    # nginxの最新イメージを使用
-    image: nginx:latest
-    ports:
-      # 80ポートを開放
-      - target: 80
-        published: 80
-        host_ip: localhost
+        # スキーマの環境変数を指定
+        SCHEMA_PATH: ${SCHEMA_PATH}
+        # オペレーションの環境変数を指定
+        OPERATION_PATH: ${OPERATION_PATH}
+        # インフラの環境変数を指定
+        INFRADIR: ${INFRADIR}
     volumes:
       - type: bind
-        # フロントエンドのビルドしたファイルを格納するディレクトリを指定
+        # フロントエンドのソースコードを格納するディレクトリを指定
         source: ${FRONTDIR}/dist
-        target: /usr/share/nginx/dist
-      - type: bind
-        # nginxの設定ファイルを指定
-        source: config/nginx-prod
-        target: /etc/nginx/conf.d
+        target: /home/dist
+    environment:
+      - SCHEMA_PATH=${SCHEMA_PATH}
+      - OPERATION_PATH=${OPERATION_PATH}
+    # 内部ネットワークに接続
     networks:
-      # 内部ネットワークに接続
       - docker-network
     # コンテナが停止したら再起動
     restart: on-failure
@@ -92,7 +92,7 @@ services:
 secrets:
   # バックエンドの秘密鍵を指定
   private.key:
-    file: ../../keys/private.key
+    file: ${PRIVATE_KEY_PATH}
   # バックエンドの公開鍵を指定
   public.key:
-    file: ../../keys/public.key
+    file: ${PUBLIC_KEY_PATH}
