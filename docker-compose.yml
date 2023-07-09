@@ -1,0 +1,100 @@
+version: "3.8"
+
+# ネットワークの作成
+networks:
+  # 内部ネットワーク
+  docker-network:
+
+# データベースのデータを格納するボリューム
+volumes:
+  postgres-vol:
+
+services:
+  postgres:
+    container_name: posgre-prod
+    # ポスグレの最新イメージを使用
+    image: postgres:latest
+    # ポスグレの環境変数を読み込む
+    env_file: ${POSTGRES_ENV}
+    # ポスグレのデータを格納するボリュームを指定
+    volumes:
+      - type: volume
+        source: postgres-vol
+        # ポスグレのデータを格納するボリュームのマウント先を指定
+        target: /var/lib/postgresql/data
+    # 内部ネットワークに接続
+    networks:
+      - docker-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  backend:
+    container_name: backend-prod
+    # バックエンドのDockerfileを指定
+    build:
+      context: .
+      dockerfile: packages/infra/Dockerfiles/Backend-Dockerfile
+      args:
+        # バックエンドのディレクトリを指定
+        PACKAGE_PATH: ${BACKDIR}
+        # ビルド時のスキーマのパスを指定
+        SCHEMA_PATH: ${SCHEMA_PATH}
+    # バックエンドの環境変数を読み込む
+    env_file: ${BACK_ENV}
+    # スキーマのパスを指定
+    environment:
+    # スキーマのパスを指定
+      - SCHEMA_PATH=${SCHEMA_PATH}
+    # NODE_ENVをproductionに指定
+      - NODE_ENV=production
+    # 内部ネットワークに接続
+    networks:
+      - docker-network
+    # 使用するシークレットを指定
+    secrets:
+      - private.key
+      - public.key
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  frontend:
+    container_name: frontend-prod
+    ports:
+      # 80ポートを開放
+      - target: 80
+        published: 80
+        host_ip: localhost
+    build:
+      context: .
+      # フロントエンドのDockerfileを指定
+      dockerfile: packages/infra/Dockerfiles/Frontend-Dockerfile
+      args:
+        # フロントエンドのディレクトリを指定
+        PACKAGE_PATH: ${FRONTDIR}
+        # ビルド時のスキーマのパスを指定
+        SCHEMA_PATH: ${SCHEMA_PATH}
+        # オペレーションの環境変数を指定
+        OPERATION_PATH: ${OPERATION_PATH}
+        # インフラの環境変数を指定
+        INFRADIR: ${INFRADIR}
+    environment:
+      # スキーマのパスを指定
+      - SCHEMA_PATH=${SCHEMA_PATH}
+      # オペレーションの環境変数を指定
+      - OPERATION_PATH=${OPERATION_PATH}
+      # NODE_ENVをproductionに指定
+      - NODE_ENV=production
+    # 内部ネットワークに接続
+    networks:
+      - docker-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+# 使用するシークレットを指定
+secrets:
+  # バックエンドの秘密鍵を指定
+  private.key:
+    file: ${PRIVATE_KEY_PATH}
+  # バックエンドの公開鍵を指定
+  public.key:
+    file: ${PUBLIC_KEY_PATH}

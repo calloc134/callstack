@@ -1,15 +1,57 @@
-# nodeイメージを利用
-FROM node:latest
+# ビルド用ステージ
+FROM node:latest as build-stage
 
 # 作業ディレクトリを指定
 WORKDIR /home
 
-# pnpmをインストールする
-RUN npm install -g pnpm
+# パッケージの存在するパス
+ARG PACKAGE_PATH=packages/backend
+ARG SCHEMA_PATH=./graphql/schemas/*.graphql
+ARG OPERATION_PATH=/home/graphql/operations/*.graphql
+
+# データの引継ぎ
+COPY ${PACKAGE_PATH}/ ./
+COPY ${PACKAGE_PATH}/../graphql/ ./graphql/
+
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
+# 依存関係をインストールする
+RUN pnpm install
+
+# graphql codegenを実行する
+RUN pnpm codegen
+
+# prisma generateを実行する
+RUN pnpm prigen
+
+# ビルドする
+RUN pnpm build
+
+# 本番用ステージ
+# nodeイメージを利用
+FROM node:latest as production-stage
+
+# 作業ディレクトリを指定
+WORKDIR /home
 
 # 4000ポートを開放している
 EXPOSE 4000
 
+# データを引き継ぐ
+COPY --from=build-stage --chown=node:node /home ./
+
+# tiniのインストール
+RUN apt-get update && apt-get install -y tini
+
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
+USER node
+
 # コンテナ起動時に実行するコマンド
 # 依存パッケージのインストールとPrismaのマイグレーション、サーバーの起動を行う
-CMD ["sh", "-c", "pnpm install && pnpm prisma migrate deploy && pnpm build && pnpm start"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["sh", "-c", "pnpm prisma migrate deploy & pnpm start"]

@@ -1,15 +1,37 @@
-# nodeイメージを利用
-FROM node:latest
+# ビルド用ステージ
+FROM node:latest as build-stage
 
 # 作業ディレクトリを指定
 WORKDIR /home
 
-# pnpmをインストールする
-RUN npm install -g pnpm
+# パッケージの存在するパス
+ARG PACKAGE_PATH=packages/frontend
+ARG SCHEMA_PATH=./graphql/schemas/*.graphql
+ARG OPERATION_PATH=/home/graphql/operations/*.graphql
 
-# 3000ポートを開放している
-EXPOSE 5173
+# データの引継ぎ
+COPY ${PACKAGE_PATH}/ ./
+COPY ${PACKAGE_PATH}/../graphql/ ./graphql/
 
-# コンテナ起動時に実行するコマンド
-# 依存パッケージのインストールとサーバーの起動を行う
-CMD ["sh", "-c", "pnpm install && pnpm build"]
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
+# 依存関係をインストールする
+RUN pnpm install
+
+# graphql codegenを実行する
+RUN pnpm codegen
+
+# ビルドする
+RUN pnpm build
+
+# 本番用ステージ
+# nginxイメージを利用
+FROM nginx:latest as production-stage
+
+ARG INFRADIR=packages/infra
+
+# データを引き継ぐ
+COPY --from=build-stage /home/dist /usr/share/nginx/dist
+COPY ${INFRADIR}/config/nginx-prod /etc/nginx/conf.d

@@ -55,7 +55,8 @@
         "formulahendry.auto-close-tag",
         "markdown.showPreview",
         "eamodio.gitlens",
-        "GitHub.vscode-pull-request-github"
+        "GitHub.vscode-pull-request-github",
+        "ms-azuretools.vscode-docker"
       ]
     }
   },
