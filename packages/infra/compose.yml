@@ -74,9 +74,6 @@ services:
       context: .
       # フロントエンドのDockerfileを指定
       dockerfile: Dockerfiles/Frontend-Dockerfile
-      args:
-        # フロントエンドの環境変数を指定
-        PACKAGE_PATH: ${FRONTDIR}
     volumes:
       - type: bind
         # 環境変数で指定したフロントエンドのディレクトリを指定
@@ -94,19 +91,22 @@ services:
 
   nginx:
     container_name: nginx
-    build:
-      context: .
-      # nginxのDockerfileを指定
-      dockerfile: Dockerfiles/Nginx-Dockerfile
-      args:
-        # フロントエンドのディレクトリを指定
-        FRONTEND_PACKAGE_PATH: ${FRONTDIR}
-        NGINX_CONFIG_PATH: ../config/nginx-prod/
+    # nginxの最新イメージを使用
+    image: nginx:latest
     ports:
       # 80ポートを開放
       - target: 80
         published: 80
         host_ip: localhost
+    volumes:
+      - type: bind
+        # フロントエンドのビルドしたファイルを格納するディレクトリを指定
+        source: ${FRONTDIR}/dist
+        target: /usr/share/nginx/dist
+      - type: bind
+        # nginxの設定ファイルを指定
+        source: config/nginx-prod
+        target: /etc/nginx/conf.d
     networks:
       # 内部ネットワークに接続
       - docker-network
