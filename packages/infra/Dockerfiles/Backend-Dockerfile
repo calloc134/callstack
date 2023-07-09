@@ -42,8 +42,8 @@ EXPOSE 4000
 # データを引き継ぐ
 COPY --from=build-stage /home ./
 
-# tiniをインストール
-RUN apk add --no-cache tini
+# tiniのインストール
+RUN apt-get update && apt-get install -y tini
 
 # pnpmに切り替える
 RUN corepack enable pnpm
