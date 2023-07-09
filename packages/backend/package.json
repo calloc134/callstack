@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "NODE_ENV=development tsx watch ./src/index.ts",
-    "build": "tsc && node dist/index.js",
+    "build": "tsc",
+    "start": "NODE_ENV=production node ./dist/src/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
