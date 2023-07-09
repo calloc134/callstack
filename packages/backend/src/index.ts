@@ -45,3 +45,11 @@ server.listen(4000, () => {
   console.log(`
   🚀 Server ready at: http://localhost:4000`);
 });
+
+// SIGTERMを受け取ったら、プロセスを終了
+process.on("SIGTERM", () => {
+  console.log("✅ SIGTERM signal received: closing HTTP server");
+  server.close(() => {
+    console.log("HTTP server closed");
+  });
+});
