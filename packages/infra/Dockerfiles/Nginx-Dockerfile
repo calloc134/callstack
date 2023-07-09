@@ -1,0 +1,17 @@
+ARG NGINX_CONFIG_PATH=../config/nginx-prod
+ARG FRONTEND_PACKAGE_PATH=packages/frontend
+
+# nginx/Dockerfile
+
+FROM nginx:latest
+
+# データをコピー
+
+COPY ${FRONTDIR}/dist /usr/share/nginx/dist
+COPY ${NGINX_CONFIG_PATH} /etc/nginx/conf.d
+
+# 80ポートを開放
+PORT 80
+
+# コンテナ起動時に実行するコマンド
+CMD ["nginx", "-g", "daemon off;"]

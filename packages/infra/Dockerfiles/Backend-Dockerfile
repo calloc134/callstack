@@ -1,15 +1,60 @@
+# パッケージの存在するパス
+ARG PACKAGE_PATH=../../packages/backend
+
+# フェッチ用ステージ
 # nodeイメージを利用
-FROM node:latest
+FROM node:latest as fetch-stage
 
 # 作業ディレクトリを指定
 WORKDIR /home
 
-# pnpmをインストールする
-RUN npm install -g pnpm
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
+# 依存関係をフェッチする
+COPY ../${PACKAGE_PATH}/pnpm-lock.yaml ./
+RUN pnpm fetch --prod ./
+
+# ビルド用ステージ
+FROM node:latest as build-stage
+
+# 作業ディレクトリを指定
+WORKDIR /home
+
+# データの引継ぎ
+COPY --from=fetch-stage /home/node_modules ./node_modules
+COPY --from=fetch-stage /home/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY ../${PACKAGE_PATH}/ ./
+
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
+# 依存関係をインストールする
+RUN pnpm i --offline --prod --frozen-lockfile
+
+# マイグレーションを実行する
+RUN pnpm prisma migrate deploy
+
+# ビルドする
+RUN pnpm prigen
+RUN pnpm build
+
+# 本番用ステージ
+# nodeイメージを利用
+FROM node:latest as production-stage
 
 # 4000ポートを開放している
 EXPOSE 4000
 
+# データを引き継ぐ
+COPY --from=build-stage /home ./
+
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
 # コンテナ起動時に実行するコマンド
 # 依存パッケージのインストールとPrismaのマイグレーション、サーバーの起動を行う
-CMD ["sh", "-c", "pnpm install && pnpm prisma migrate deploy && pnpm build && pnpm start"]
+CMD ["sh", "-c", "pnpm start"]

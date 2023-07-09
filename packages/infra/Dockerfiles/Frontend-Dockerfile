@@ -1,15 +1,37 @@
+# パッケージの存在するパス
+ARG PACKAGE_PATH=../../packages/frontend
+
 # nodeイメージを利用
-FROM node:latest
+FROM node:latest as fetch-stage
 
 # 作業ディレクトリを指定
 WORKDIR /home
 
-# pnpmをインストールする
-RUN npm install -g pnpm
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
 
-# 3000ポートを開放している
-EXPOSE 5173
+# 依存関係をフェッチする
+COPY ../${PACKAGE_PATH}/pnpm-lock.yaml ./
+RUN pnpm fetch --prod ./
 
-# コンテナ起動時に実行するコマンド
-# 依存パッケージのインストールとサーバーの起動を行う
-CMD ["sh", "-c", "pnpm install && pnpm build"]
+# ビルド用ステージ
+FROM node:latest as build-stage
+
+# 作業ディレクトリを指定
+WORKDIR /home
+
+# データの引継ぎ
+COPY --from=fetch-stage /home/node_modules ./node_modules
+COPY --from=fetch-stage /home/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY ../${PACKAGE_PATH}/ ./
+
+# pnpmに切り替える
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@latest --activate
+
+# 依存関係をインストールする
+RUN pnpm i --offline --prod --frozen-lockfile
+
+# ビルドする
+RUN pnpm build
