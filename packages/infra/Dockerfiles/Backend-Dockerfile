@@ -42,10 +42,14 @@ EXPOSE 4000
 # データを引き継ぐ
 COPY --from=build-stage /home ./
 
+# tiniをインストール
+RUN apk add --no-cache tini
+
 # pnpmに切り替える
 RUN corepack enable pnpm
 RUN corepack prepare pnpm@latest --activate
 
 # コンテナ起動時に実行するコマンド
 # 依存パッケージのインストールとPrismaのマイグレーション、サーバーの起動を行う
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["sh", "-c", "pnpm prisma migrate deploy & pnpm start"]

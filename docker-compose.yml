@@ -43,7 +43,10 @@ services:
     env_file: ${BACK_ENV}
     # スキーマのパスを指定
     environment:
+    # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
+    # NODE_ENVをproductionに指定
+      - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
       - docker-network
@@ -79,6 +82,8 @@ services:
       - SCHEMA_PATH=${SCHEMA_PATH}
       # オペレーションの環境変数を指定
       - OPERATION_PATH=${OPERATION_PATH}
+      # NODE_ENVをproductionに指定
+      - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
       - docker-network
