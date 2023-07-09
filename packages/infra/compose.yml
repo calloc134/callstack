@@ -44,20 +44,6 @@ services:
         PACKAGE_PATH: ${BACKDIR}
     # バックエンドの環境変数を読み込む
     env_file: ${BACK_ENV}
-    # バックエンドのデータを格納するボリュームを指定
-    volumes:
-      - type: bind
-        # 環境変数で指定したバックエンドのディレクトリを指定
-        source: ${BACKDIR}
-        target: /home/
-      - type: bind
-        # graphqlのディレクトリを指定
-        source: ${BACKDIR}/../graphql/
-        target: /home/graphql/
-      - type: volume
-        # バックエンドのパッケージキャッシュを格納するボリュームを指定
-        # source: backend-vol
-        # target: /home/node_modules/
     # 内部ネットワークに接続
     networks:
       - docker-network
@@ -74,15 +60,6 @@ services:
       context: .
       # フロントエンドのDockerfileを指定
       dockerfile: Dockerfiles/Frontend-Dockerfile
-    volumes:
-      - type: bind
-        # 環境変数で指定したフロントエンドのディレクトリを指定
-        source: ${FRONTDIR}
-        target: /home/
-      - type: volume
-        # フロントエンドのパッケージキャッシュを格納するボリュームを指定
-        # source: frontend-vol
-        # target: /home/node_modules/
     # 内部ネットワークに接続
     networks:
       - docker-network

@@ -26,6 +26,7 @@ WORKDIR /home
 COPY --from=fetch-stage /home/node_modules ./node_modules
 COPY --from=fetch-stage /home/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY ../${PACKAGE_PATH}/ ./
+COPY ../${PACKAGE_PATH}/../graphql/ ./graphql/
 
 # pnpmに切り替える
 RUN corepack enable pnpm
