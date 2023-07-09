@@ -11,7 +11,7 @@ COPY ${FRONTDIR}/dist /usr/share/nginx/dist
 COPY ${NGINX_CONFIG_PATH} /etc/nginx/conf.d
 
 # 80ポートを開放
-PORT 80
+EXPOSE 80
 
 # コンテナ起動時に実行するコマンド
 CMD ["nginx", "-g", "daemon off;"]
