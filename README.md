@@ -176,7 +176,6 @@
 │   │   └── ... # その他のファイルが格納
 │   │
 │   ├── infra # インフラ環境のパッケージ
-│   │   ├── docker-compose.yml # docker composeの設定ファイル
 │   │   ├── config # nginxの設定ファイルが格納
 │   │   │   └── nginx.conf # nginxの設定ファイル
 │   │   └── Dockerfiles # 利用するDockerfileが格納
@@ -188,6 +187,7 @@
 │       ├── operations # graphqlの操作ファイルが格納
 │       └── ... # その他のファイルが格納
 │
+├── docker-compose.yml # docker composeの設定ファイル
 ├── .gitignore # gitのignoreファイル
 ├── .prettierrc # prettierの設定ファイル
 ├── .prettieriignore # prettierのignoreファイル
@@ -224,12 +224,11 @@ devcontainer を利用することで、開発環境を立ち上げることが�
 
 docker compose を利用することで、本番環境を立ち上げることができます。
 
-1. env_files ディレクトリに、末尾.env の環境変数ファイルを例を参考に配置します。
-2. packages/infra/compose.yml のあるディレクトリに移動します。
-3. docker のインストールされている環境で、以下のコマンドを実行します。
+1. env_files ディレクトリに、末尾 prod.env の環境変数ファイルを例を参考に配置します。
+2. docker のインストールされている環境で、以下のコマンドを実行します。
 
 ```
-docker compose --env-file ../env_files/prod.env up
+docker compose --env-file env_files/prod.env up
 ```
 
 ## 今後の予定
