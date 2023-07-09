@@ -1,14 +1,5 @@
 version: "3.8"
 
-# ボリュームの作成
-volumes:
-  # バックエンドのパッケージキャッシュを格納するボリューム
-  # backend-vol:
-  # フロントエンドのパッケージキャッシュを格納するボリューム
-  # frontend-vol:
-  # データベースのデータを格納するボリューム
-  postgres-vol:
-
 # ネットワークの作成
 networks:
   # 内部ネットワーク
@@ -38,7 +29,7 @@ services:
     # バックエンドのDockerfileを指定
     build:
       context: .
-      dockerfile: Dockerfiles/Backend-Dockerfile
+      dockerfile: packages/infra/Dockerfiles/Backend-Dockerfile
       args:
         # バックエンドの環境変数を指定
         PACKAGE_PATH: ${BACKDIR}
@@ -59,7 +50,10 @@ services:
     build:
       context: .
       # フロントエンドのDockerfileを指定
-      dockerfile: Dockerfiles/Frontend-Dockerfile
+      dockerfile: packages/infra/Dockerfiles/Frontend-Dockerfile
+      args:
+        # フロントエンドの環境変数を指定
+        PACKAGE_PATH: ${FRONTDIR}
     # 内部ネットワークに接続
     networks:
       - docker-network
