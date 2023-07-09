@@ -1,11 +1,12 @@
-# パッケージの存在するパス
-ARG PACKAGE_PATH=../../packages/frontend
-
+# フェッチ用ステージ
 # nodeイメージを利用
 FROM node:latest as fetch-stage
 
 # 作業ディレクトリを指定
 WORKDIR /home
+
+# パッケージの存在するパス
+ARG PACKAGE_PATH=../../packages/frontend
 
 # pnpmに切り替える
 RUN corepack enable pnpm
@@ -20,6 +21,9 @@ FROM node:latest as build-stage
 
 # 作業ディレクトリを指定
 WORKDIR /home
+
+# パッケージの存在するパス
+ARG PACKAGE_PATH=../../packages/frontend
 
 # データの引継ぎ
 COPY --from=fetch-stage /home/node_modules ./node_modules
