@@ -26,6 +26,7 @@ WORKDIR /home
 ARG PACKAGE_PATH=packages/frontend
 
 # データの引継ぎ
+COPY --from=fetch-stage /root/.local/share/pnpm/store/v3 /root/.local/share/pnpm/store/v3
 COPY --from=fetch-stage /home/node_modules ./node_modules
 COPY --from=fetch-stage /home/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY ${PACKAGE_PATH}/ ./
