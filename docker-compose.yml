@@ -35,13 +35,13 @@ services:
       context: .
       dockerfile: packages/infra/Dockerfiles/Backend-Dockerfile
       args:
-        # バックエンドの環境変数を指定
+        # バックエンドのディレクトリを指定
         PACKAGE_PATH: ${BACKDIR}
-        # スキーマの環境変数を指定
+        # ビルド時のスキーマのパスを指定
         SCHEMA_PATH: ${SCHEMA_PATH}
     # バックエンドの環境変数を読み込む
     env_file: ${BACK_ENV}
-    # スキーマの環境変数を読み込む
+    # スキーマのパスを指定
     environment:
       - SCHEMA_PATH=${SCHEMA_PATH}
     # 内部ネットワークに接続
@@ -66,21 +66,18 @@ services:
       # フロントエンドのDockerfileを指定
       dockerfile: packages/infra/Dockerfiles/Frontend-Dockerfile
       args:
-        # フロントエンドの環境変数を指定
+        # フロントエンドのディレクトリを指定
         PACKAGE_PATH: ${FRONTDIR}
-        # スキーマの環境変数を指定
+        # ビルド時のスキーマのパスを指定
         SCHEMA_PATH: ${SCHEMA_PATH}
         # オペレーションの環境変数を指定
         OPERATION_PATH: ${OPERATION_PATH}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
-    volumes:
-      - type: bind
-        # フロントエンドのソースコードを格納するディレクトリを指定
-        source: ${FRONTDIR}/dist
-        target: /home/dist
     environment:
+      # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
+      # オペレーションの環境変数を指定
       - OPERATION_PATH=${OPERATION_PATH}
     # 内部ネットワークに接続
     networks:
