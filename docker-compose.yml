@@ -3,15 +3,25 @@ version: "3.8"
 # ネットワークの作成
 networks:
   # 内部ネットワーク
-  docker-network:
+  # バックエンドとlogtoコンテナ、リバースプロキシのみ接続
+  app-ins-network:
+  # バックエンドとそれに対応するデータベースのみ接続
+  app-db-network:
+  # logtoとそれに対応するデータベースのみ接続
+  logto-db-network:
 
 # データベースのデータを格納するボリューム
 volumes:
-  postgres-vol:
+  # バックエンドのデータを格納するボリューム
+  app-db-vol:
+  # logtoのデータを格納するボリューム
+  logto-db-vol:
+
 
 services:
-  postgres:
-    container_name: posgre-prod
+  # バックエンド用のデータベース
+  db-app:
+    container_name: db-app
     # ポスグレの最新イメージを使用
     image: postgres:latest
     # ポスグレの環境変数を読み込む
@@ -19,12 +29,31 @@ services:
     # ポスグレのデータを格納するボリュームを指定
     volumes:
       - type: volume
-        source: postgres-vol
+        source: app-db-vol
         # ポスグレのデータを格納するボリュームのマウント先を指定
         target: /var/lib/postgresql/data
     # 内部ネットワークに接続
     networks:
-      - docker-network
+      - app-db-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  # logto用のデータベース
+  db-logto:
+    container_name: db-logto
+    # ポスグレの最新イメージを使用
+    image: postgres:latest
+    # ポスグレの環境変数を読み込む
+    env_file: ${POSTGRES_ENV}
+    # ポスグレのデータを格納するボリュームを指定
+    volumes:
+      - type: volume
+        source: logto-db-vol
+        # ポスグレのデータを格納するボリュームのマウント先を指定
+        target: /var/lib/postgresql/data
+    # 内部ネットワークに接続
+    networks:
+      - logto-db-network
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -40,6 +69,10 @@ services:
       - TRUST_PROXY_HEADER=1
       - ENDPOINT
       - ADMIN_ENDPOINT
+    # 内部ネットワークに接続
+    networks:
+      app-ins-network:
+      logto-db-network:
 
   backend:
     container_name: backend-prod
@@ -62,7 +95,8 @@ services:
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
-      - docker-network
+      - app-ins-network
+      - app-db-network
     # 使用するシークレットを指定
     secrets:
       - private.key
@@ -99,7 +133,7 @@ services:
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
-      - docker-network
+      - app-ins-network
     # コンテナが停止したら再起動
     restart: on-failure
 
