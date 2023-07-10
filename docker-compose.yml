@@ -28,6 +28,19 @@ services:
     # コンテナが停止したら再起動
     restart: on-failure
 
+  # logtoコンテナ
+  logto:
+    image: svhd/logto:${TAG-latest}
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    ports:
+      - 3001:3001
+      - 3002:3002
+    env_file: ${LOGTO_ENV}
+    environment:
+      - TRUST_PROXY_HEADER=1
+      - ENDPOINT
+      - ADMIN_ENDPOINT
+
   backend:
     container_name: backend-prod
     # バックエンドのDockerfileを指定

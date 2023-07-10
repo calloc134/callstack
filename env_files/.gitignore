@@ -1,2 +1,3 @@
 !backend.dev.env
+!logto.dev.env
 !postgres.dev.env

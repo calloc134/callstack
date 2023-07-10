@@ -1,5 +1,11 @@
 version: "3.8"
 
+# app-networkを作成
+networks:
+  app-network:
+  app-db-network:
+  logto-db-network:
+
 services:
   app:
     build:
@@ -26,6 +32,9 @@ services:
         source: backend-data
         target: /workspaces/repo/packages/backend/node_modules
 
+    environment:
+      - SCHEMA_PATH=../graphql/schemas/*.graphql
+      - OPERATION_PATH=../graphql/operations/*.graphql
     # アプリケーションコンテナの環境変数を読み込む
     env_file: ${BACK_ENV}
 
@@ -33,10 +42,34 @@ services:
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
+    networks:
+      - app-network
+      - app-db-network
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  logto:
+    image: svhd/logto:latest
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    env_file: ${LOGTO_ENV}
+    environment:
+      - TRUST_PROXY_HEADER=1
+      - ENDPOINT
+      - ADMIN_ENDPOINT
+    networks:
+      - app-network
+      - logto-db-network
+    ports:
+      - 3000:3000
+      - 3001:3001
+    restart: unless-stopped
+    # depends_on:
+    #   db-logto:
+    #     condition: service_healthy
 
   db:
     image: postgres:latest
@@ -47,6 +80,30 @@ services:
         target: /var/lib/postgresql/data
     # ポスグレの環境変数を読み込む
     env_file: ${POSTGRES_ENV}
+    networks:
+      - app-db-network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
+    #   interval: 30s
+    #   timeout: 30s
+    #   retries: 5
+
+  db-logto:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+    # ポスグレの環境変数を読み込む
+    env_file: ${POSTGRES_ENV}
+    networks:
+      - logto-db-network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
+    #   interval: 30s
+    #   timeout: 30s
+    #   retries: 5
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
