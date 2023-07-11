@@ -12,9 +12,9 @@ networks:
 
 # データベースのデータを格納するボリューム
 volumes:
-  # バックエンドのデータを格納するボリューム
+  # バックエンドのデータベースデータを格納するボリューム
   app-db-vol:
-  # logtoのデータを格納するボリューム
+  # logtoのデータベースデータを格納するボリューム
   logto-db-vol:
 
 
@@ -59,20 +59,14 @@ services:
 
   # logtoコンテナ
   logto:
-    image: svhd/logto:${TAG-latest}
+    image: svhd/logto:latest
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
-    ports:
-      - 3001:3001
-      - 3002:3002
     env_file: ${LOGTO_ENV}
-    environment:
-      - TRUST_PROXY_HEADER=1
-      - ENDPOINT
-      - ADMIN_ENDPOINT
     # 内部ネットワークに接続
     networks:
       app-ins-network:
       logto-db-network:
+
 
   backend:
     container_name: backend-prod
@@ -131,6 +125,8 @@ services:
       - OPERATION_PATH=${OPERATION_PATH}
       # NODE_ENVをproductionに指定
       - NODE_ENV=production
+      # ホスト名を指定
+      - HOST=${HOST_NAME}
     # 内部ネットワークに接続
     networks:
       - app-ins-network
