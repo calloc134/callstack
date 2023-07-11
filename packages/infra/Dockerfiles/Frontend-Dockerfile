@@ -35,5 +35,4 @@ ARG INFRADIR=packages/infra
 # データを引き継ぐ
 COPY --from=build-stage /home/dist /usr/share/nginx/dist
 
-RUN echo hell5
 COPY ${INFRADIR}/config/nginx-prod /etc/nginx/conf.d 
