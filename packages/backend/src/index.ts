@@ -4,9 +4,14 @@ import { schema } from "./schema";
 import { PrismaClient } from "@prisma/client";
 import { useDisableIntrospection } from "@envelop/disable-introspection";
 import { armor } from "./armor";
+import { useAuth0 } from "@envelop/auth0";
+import { useAuthMock } from "./lib/plugins/useAuthMock";
 
 // 環境変数を取得し、開発環境かどうかを判定
 const isDev = process.env.NODE_ENV === "development";
+// 環境変数を取得し、Logtoコンテナのホスト名を取得
+const logto_endpoint = process.env.ENDPOINT || "http://auth.localhost";
+const audience = process.env.AUDIENCE || "dummy";
 
 // graphql-armorのプラグインを取得
 const enhancements = armor.protect();
@@ -38,6 +43,24 @@ const yoga = createYoga({
     ...(isDev ? [] : [useDisableIntrospection()]),
     // もし開発環境でなければ、graphql-armorを有効化
     ...(isDev ? [] : [...enhancements.plugins]),
+    // 開発環境であるならば、useAuthMockを利用
+    // そうでなければ、useAuth0を利用
+    isDev
+      ? useAuthMock({})
+      : useAuth0({
+          // ドメイン部分は上書きするためダミー
+          domain: "",
+          // audienceは環境変数から取得
+          audience: audience,
+          // オプションを上書き
+          jwksClientOptions: {
+            jwksUri: `${logto_endpoint}/oidc/jwks}`,
+          },
+          jwtVerifyOptions: {
+            algorithms: ["ES384"],
+            issuer: `${logto_endpoint}/oidc`,
+          },
+        }),
   ],
 });
 

@@ -62,6 +62,11 @@ services:
     image: svhd/logto:latest
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
     env_file: ${LOGTO_ENV}
+    environment:
+      # logtoコンテナのエンドポイントを指定
+      - ENDPOINT=${ENDPOINT}
+      - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
+      - AUDIENCE=${AUDIENCE}
     # 内部ネットワークに接続
     networks:
       app-ins-network:
@@ -83,8 +88,11 @@ services:
     env_file: ${BACK_ENV}
     # スキーマのパスを指定
     environment:
-    # スキーマのパスを指定
+      # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
+      # logtoコンテナのエンドポイントを指定
+      - ENDPOINT=${ENDPOINT}
+      - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
     # NODE_ENVをproductionに指定
       - NODE_ENV=production
     # 内部ネットワークに接続
@@ -132,12 +140,3 @@ services:
       - app-ins-network
     # コンテナが停止したら再起動
     restart: on-failure
-
-# 使用するシークレットを指定
-secrets:
-  # バックエンドの秘密鍵を指定
-  private.key:
-    file: ${PRIVATE_KEY_PATH}
-  # バックエンドの公開鍵を指定
-  public.key:
-    file: ${PUBLIC_KEY_PATH}

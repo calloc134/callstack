@@ -22,14 +22,9 @@
   // "features": {},
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // This can be used to network with other containers or with the host.
-  "forwardPorts": [
-    4000,
-    5173,
-    3001,
-    3002
-  ],
+  "forwardPorts": [4000, 5173],
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "pnpm install && pnpm tsx gen_jwtkey.ts && pnpm primig",
+  "postCreateCommand": "pnpm install && pnpm primig",
   // Configure tool-specific properties.
   "customizations": {
     "vscode": {
