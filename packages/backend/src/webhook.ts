@@ -2,6 +2,7 @@ import { createHmac } from "crypto";
 import { OnRequestEventPayload } from "graphql-yoga/typings/plugins/types";
 import { webhook_secret } from "./env";
 import { GraphQLContext } from "./context";
+import { GraphQLErrorWithCode } from "./error";
 
 type WebHookBodyType = {
   // hookId: string;
@@ -49,17 +50,10 @@ export const WebHookOnRequest = async ({ request, url, fetchAPI, endResponse, se
         status: 500,
       })
     );
+    throw new GraphQLErrorWithCode("unknown_error", "serverContext is undefined");
+
     // リクエストのパスが/api/loginWebHookEndPointの場合
   } else if (url.pathname === "/api/loginWebHookEndPoint") {
-    // もし送信元ホストがlogtoでない場合は、エラーを返す
-    if (request.headers.get("host") !== "logto.dev") {
-      return endResponse(
-        new fetchAPI.Response("Forbidden", {
-          status: 403,
-        })
-      );
-    }
-
     // rawBodyを取得
     const rawBody = await request.text();
 
@@ -82,18 +76,22 @@ export const WebHookOnRequest = async ({ request, url, fetchAPI, endResponse, se
       });
 
       // 署名が正しいため、200を返す
-      return endResponse(
+      endResponse(
         new fetchAPI.Response("OK", {
           status: 200,
         })
       );
+
+      return;
     } else {
       // 署名が正しくない場合は、403を返す
-      return endResponse(
+      endResponse(
         new fetchAPI.Response("Forbidden", {
           status: 403,
         })
       );
+
+      throw new GraphQLErrorWithCode("webhook_invalid_signature");
     }
   }
 };
