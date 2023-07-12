@@ -12,11 +12,11 @@ const error_code = {
   // JWTトークンのエラー
   jwt_web_token_error: "JWT_WEB_TOKEN_ERROR",
 
-  // JWTは有効であるが対応するユーザが存在しないエラー
-  authz_user_not_found: "AUTHZ_USER_NOT_FOUND",
-  // JWTは有効であるが認可に対応するロールが存在しないエラー
+  // 認可において対応するユーザが存在しないエラー(ログインしていない またはログインが無効)
+  authz_not_logged_in: "AUTHZ_NOT_LOGGED_IN",
+  // 認可ディレクティブで指定した引数に対応するロールが存在しないエラー
   authz_role_not_found: "AUTHZ_ROLE_NOT_FOUND",
-  // JWTは有効であるが認可に失敗したエラー
+  // ログインユーザでの認可に失敗したエラー
   authz_failed: "AUTHZ_FAILED",
 
   // 存在しないアイテムのエラー
@@ -40,7 +40,7 @@ const error_message: { [key in ErrorCode]: string } = {
   jwt_invalid_signature: "❌ JWT signature is invalid",
   jwt_not_before: "⏳ JWT is not before",
   jwt_web_token_error: "🚫 JWT is invalid",
-  authz_user_not_found: "👤 User not found",
+  authz_not_logged_in: "👤 Not logged in",
   authz_role_not_found: "🔍 Role not found",
   authz_failed: "🔐 Authorization failed",
   item_not_found: "🔎 Item not found",

@@ -34,7 +34,7 @@ const validateUserFn: ValidateUserFn<User> = ({ user, fieldAuthDirectiveNode }) 
   // ユーザが存在しない場合
   if (!user) {
     // 失敗とする
-    throw new GraphQLErrorWithCode("authz_user_not_found");
+    throw new GraphQLErrorWithCode("authz_not_logged_in");
   }
 
   // ディレクティブに引数が指定されていなければ
