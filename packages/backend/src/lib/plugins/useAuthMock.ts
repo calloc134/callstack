@@ -155,8 +155,6 @@ export const useAuthMock = <TOptions extends AuthMockPluginOptions>(options: TOp
         issuer: issuer, // 発行者を指定する,
       }) as { sub: string };
 
-      console.log(`🔐 JWT verified for user "${decoded.sub}"`);
-
       // デコードされたペイロードを返す
       return decoded;
     }

@@ -1,6 +1,7 @@
 import { GraphQLContext } from "src/context";
 import { QueryResolvers } from "src/lib/generated/resolver-types";
-import { GraphQLError } from "graphql";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { GraphQLErrorWithCode } from "src/error";
 
 // クエリのリゾルバーを定義
 export const Query: QueryResolvers<GraphQLContext> = {
@@ -24,8 +25,19 @@ export const Query: QueryResolvers<GraphQLContext> = {
       // 結果を返す
       return result;
     } catch (error) {
-      // エラーが発生した場合はGraphQLErrorとして返却
-      throw new GraphQLError(error as string);
+      if (error instanceof PrismaClientKnownRequestError) {
+        switch (error.code) {
+          // ユーザーが見つからない場合
+          case "P2003":
+            throw new GraphQLErrorWithCode("item_not_found");
+          default:
+            throw new GraphQLErrorWithCode("unknown_error", error.message);
+        }
+      } else if (error instanceof Error) {
+        throw new GraphQLErrorWithCode("unknown_error", error.message);
+      } else {
+        throw new GraphQLErrorWithCode("unknown_error");
+      }
     }
   },
 };
