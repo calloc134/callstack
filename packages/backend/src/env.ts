@@ -10,4 +10,7 @@ const audience = process.env.AUDIENCE || "dummy";
 // 環境変数が存在しなければ、../graphql/schema.graphqlから読み込み
 const schema_path = process.env.SCHEMA_PATH || "../graphql/schemas/*.graphql";
 
-export { isDev, logto_endpoint, audience, schema_path };
+// WebHookの署名検証用のシークレット
+const webhook_secret = process.env.WEBHOOK_SECRET || "dummy";
+
+export { isDev, logto_endpoint, audience, schema_path, webhook_secret };

@@ -23,7 +23,8 @@ import { authMockOption, authnOption } from "./security/authn";
 // 認可プラグインのオプション
 import { authzOption } from "./security/authz";
 // 開発環境かどうかを判断する変数
-import { isDev } from "./env";
+import { isDev, webhook_secret } from "./env";
+import { verifyWebHook } from "./webhook";
 
 // graphql-armorのプラグインを取得
 const enhancements = armor.protect();
@@ -63,7 +64,40 @@ const yoga = createYoga({
 });
 
 // yogaサーバーをnodeのhttpサーバーとして起動
-const server = createServer(yoga);
+const server = createServer((req, res) => {
+  // もし本番環境でかつ、リクエストがwebhookのエンドポイントであれば
+  if (!isDev && req.url === "/api/loginWebHookEndPoint") {
+    // webhook用のエンドポイントの処理を行う
+
+    // もしリクエスト送信元がlogtoでなければ、401を返す
+    if (req.headers.host !== "logto") {
+      res.writeHead(401);
+      res.end();
+      return;
+    }
+
+    // bodyを取得
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+
+    // bodyを受け取ったら、署名を検証してステータスを返す
+    res.writeHead(
+      verifyWebHook(
+        webhook_secret, // webhookのシークレット
+        body, // リクエストボディ
+        req.headers["logto-signature-sha-256"] as string, // リクエストヘッダーから署名を取得
+        prisma
+      )
+        ? 200
+        : 401
+    );
+    res.end();
+  } else {
+    return yoga;
+  }
+});
 
 server.listen(4000, () => {
   console.log(`
