@@ -42,7 +42,7 @@ const verifyWebHook = (signingKey: string, rawBody: string, expectedSignature: s
 
 // WebHookのリクエストを処理する関数
 export const WebHookOnRequest = async ({ request, url, fetchAPI, endResponse, serverContext }: OnRequestEventPayload<GraphQLContext>) => {
-  if (serverContext === undefined) {
+  if (serverContext === undefined || serverContext.prisma === undefined) {
     // serverContextが存在しない場合
     // 何もせず終了
     endResponse(
@@ -50,7 +50,7 @@ export const WebHookOnRequest = async ({ request, url, fetchAPI, endResponse, se
         status: 500,
       })
     );
-    throw new GraphQLErrorWithCode("unknown_error", "serverContext is undefined");
+    console.error("unknown_error", "serverContext is undefined");
 
     // リクエストのパスが/api/loginWebHookEndPointの場合
   } else if (url.pathname === "/api/loginWebHookEndPoint") {
@@ -91,7 +91,7 @@ export const WebHookOnRequest = async ({ request, url, fetchAPI, endResponse, se
         })
       );
 
-      throw new GraphQLErrorWithCode("webhook_invalid_signature");
+      console.error("🔐 Webhook signature is invalid");
     }
   }
 };

@@ -27,9 +27,6 @@ const error_code = {
   // アイテムのオーナが自分ではないエラー
   item_not_owned: "ITEM_NOT_OWNED",
 
-  // WebHookの署名が正しくないエラー
-  webhook_invalid_signature: "WEBHOOK_INVALID_SIGNATURE",
-
   // その他のエラー
   unknown_error: "UNKNOWN_ERROR",
 };
@@ -50,7 +47,6 @@ const error_message: { [key in ErrorCode]: string } = {
   item_already_exists: "🔄 Item already exists",
   item_not_owned: "🚷 Item is not owned",
   unknown_error: "❓ Unknown error",
-  webhook_invalid_signature: "🔐 Webhook signature is invalid",
 };
 
 // カスタムのエラークラス
