@@ -1,8 +1,8 @@
 import { createHmac } from "crypto";
-import { OnRequestEventPayload } from "graphql-yoga/typings/plugins/types";
 import { webhook_secret } from "./env";
 import { GraphQLContext } from "./context";
-import { GraphQLErrorWithCode } from "./error";
+import { Plugin } from "graphql-yoga/typings/plugins/types";
+import { PrismaClient } from "@prisma/client";
 
 type WebHookBodyType = {
   // hookId: string;
@@ -41,57 +41,48 @@ const verifyWebHook = (signingKey: string, rawBody: string, expectedSignature: s
 };
 
 // WebHookのリクエストを処理する関数
-export const WebHookOnRequest = async ({ request, url, fetchAPI, endResponse, serverContext }: OnRequestEventPayload<GraphQLContext>) => {
-  if (serverContext === undefined || serverContext.prisma === undefined) {
-    // serverContextが存在しない場合
-    // 何もせず終了
-    endResponse(
-      new fetchAPI.Response("Internal Server Error", {
-        status: 500,
-      })
-    );
-    console.error("unknown_error", "serverContext is undefined");
+export const useWebHook = (prisma: PrismaClient): Plugin => ({
+  async onRequest({ request, url, fetchAPI, endResponse }) {
+    if (url.pathname === "/api/loginWebHookEndPoint") {
+      // rawBodyを取得
+      const rawBody = await request.text();
 
-    // リクエストのパスが/api/loginWebHookEndPointの場合
-  } else if (url.pathname === "/api/loginWebHookEndPoint") {
-    // rawBodyを取得
-    const rawBody = await request.text();
+      // ヘッダより署名を取得
+      const expectedSignature = request.headers.get("logto-signature-sha-256") || "";
 
-    // ヘッダより署名を取得
-    const expectedSignature = request.headers.get("logto-signature-sha-256") || "";
+      // 署名検証
+      const isValid = verifyWebHook(webhook_secret, rawBody, expectedSignature);
 
-    // 署名検証
-    const isValid = verifyWebHook(webhook_secret, rawBody, expectedSignature);
+      if (isValid) {
+        // bodyのJSONをパース
+        const body = JSON.parse(rawBody) as WebHookBodyType;
 
-    if (isValid) {
-      // bodyのJSONをパース
-      const body = JSON.parse(rawBody) as WebHookBodyType;
+        // 適するユーザをデータベースに追加
+        prisma.user.create({
+          data: {
+            sub_auth: body.userId,
+            email: body.user.primaryEmail || "dummy@dummy.dummy",
+          },
+        });
 
-      // 適するユーザをデータベースに追加
-      serverContext.prisma.user.create({
-        data: {
-          sub_auth: body.userId,
-          email: body.user.primaryEmail || "dummy@dummy.dummy",
-        },
-      });
+        // 署名が正しいため、200を返す
+        endResponse(
+          new fetchAPI.Response("OK", {
+            status: 200,
+          })
+        );
 
-      // 署名が正しいため、200を返す
-      endResponse(
-        new fetchAPI.Response("OK", {
-          status: 200,
-        })
-      );
+        return;
+      } else {
+        // 署名が正しくない場合は、403を返す
+        endResponse(
+          new fetchAPI.Response("Forbidden", {
+            status: 403,
+          })
+        );
 
-      return;
-    } else {
-      // 署名が正しくない場合は、403を返す
-      endResponse(
-        new fetchAPI.Response("Forbidden", {
-          status: 403,
-        })
-      );
-
-      console.error("🔐 Webhook signature is invalid");
+        console.error("🔐 Webhook signature is invalid");
+      }
     }
-  }
-};
+  },
+});

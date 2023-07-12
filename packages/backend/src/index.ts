@@ -24,7 +24,7 @@ import { authMockOption, authnOption } from "./security/authn";
 import { authzOption } from "./security/authz";
 // 開発環境かどうかを判断する変数
 import { isDev } from "./env";
-import { WebHookOnRequest } from "./webhook";
+import { useWebHook } from "./webhook";
 
 // graphql-armorのプラグインを取得
 const enhancements = armor.protect();
@@ -53,13 +53,7 @@ const yoga = createYoga({
     : false,
   plugins: [
     // もし開発環境でなければ、webhookの検証を行う
-    ...(isDev
-      ? []
-      : [
-          {
-            onRequest: WebHookOnRequest,
-          },
-        ]),
+    ...(isDev ? [] : [useWebHook(prisma)]),
     // もし開発環境でなければ、introspectionを無効化
     ...(isDev ? [] : [useDisableIntrospection()]),
     // もし開発環境でなければ、graphql-armorを有効化
