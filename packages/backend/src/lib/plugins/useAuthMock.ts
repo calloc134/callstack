@@ -3,7 +3,7 @@
 /* eslint-disable dot-notation */
 
 // 必要なライブラリをインポートする
-import { sign, decode, verify, DecodeOptions, VerifyOptions } from "jsonwebtoken"; // JWTの生成と検証を行うライブラリ
+import { sign, decode, verify } from "jsonwebtoken"; // JWTの生成と検証を行うライブラリ
 import { Plugin } from "@envelop/core"; // GraphQLサーバーのプラグインシステムを提供するライブラリ
 import { generateKeyPairSync } from "crypto";
 
@@ -11,15 +11,14 @@ import { generateKeyPairSync } from "crypto";
 // これはテスト環境でのみ使用する
 const generateJWTKeyPair = () => {
   // 鍵ペアを生成
-  const { publicKey, privateKey } = generateKeyPairSync("rsa", {
-    // 鍵長を4096ビットに設定
-    modulusLength: 4096,
+  const { publicKey, privateKey } = generateKeyPairSync("ec", {
+    namedCurve: "secp384r1", // P-384 curve
     publicKeyEncoding: {
       type: "spki",
       format: "pem",
     },
     privateKeyEncoding: {
-      type: "pkcs1",
+      type: "pkcs8",
       format: "pem",
     },
   });
@@ -28,12 +27,9 @@ const generateJWTKeyPair = () => {
 };
 
 // プラグインの設定を定義する型
-export type MockPluginOptions = {
+export type AuthMockPluginOptions = {
   preventUnauthenticatedAccess?: boolean; // 認証されていないアクセスを防ぐかどうか
   onError?: (error: Error) => void; // エラーハンドリングの方法
-  extractTokenFn?: (context: unknown) => Promise<string> | string; // JWTの取得方法
-  jwtVerifyOptions?: VerifyOptions; // JWTの検証オプション
-  jwtDecodeOptions?: DecodeOptions; // JWTのデコードオプション
   extendContextField?: "_auth0" | string; // コンテキストに追加するフィールドの名前
   tokenType?: string; // トークンの種類
   headerName?: string; // JWTを含むヘッダーの名前
@@ -49,12 +45,12 @@ export type UserPayload = {
 };
 
 // GraphQLのコンテキストに追加するフィールドを定義する型
-type BuildContext<TOptions extends MockPluginOptions> = TOptions["extendContextField"] extends string
+type BuildContext<TOptions extends AuthMockPluginOptions> = TOptions["extendContextField"] extends string
   ? { [TName in TOptions["extendContextField"] as TOptions["extendContextField"]]: UserPayload }
   : { _auth0: UserPayload };
 
 // モックを使用した認証を行うGraphQLプラグインを作成するフック
-export const useAuthMock = <TOptions extends MockPluginOptions>(options: TOptions): Plugin<BuildContext<TOptions>> => {
+export const useAuthMock = <TOptions extends AuthMockPluginOptions>(options: TOptions): Plugin<BuildContext<TOptions>> => {
   // JWTの鍵ペアを生成する
   const { publicKey, privateKey } = generateJWTKeyPair();
 
@@ -97,6 +93,7 @@ export const useAuthMock = <TOptions extends MockPluginOptions>(options: TOption
       audience: audience, // オーディエンスを指定する
       issuer: issuer, // 発行者を指定する
       expiresIn: "1h", // 有効期限を指定する,
+      keyid: "dummy", // キーIDを指定する
     });
   });
 
@@ -106,67 +103,65 @@ export const useAuthMock = <TOptions extends MockPluginOptions>(options: TOption
   });
 
   // JWTの取得関数を設定する
-  const extractFn =
-    options.extractTokenFn ||
-    ((ctx: Record<string, any> = {}): string | null => {
-      const req = ctx["req"] || ctx["request"] || {};
-      const headers = req.headers || ctx["headers"] || null;
+  const extractFn = (ctx: Record<string, any> = {}): string | null => {
+    const req = ctx["req"] || ctx["request"] || {};
+    const headers = req.headers || ctx["headers"] || null;
 
-      if (!headers) {
-        console.warn(
-          `useAuthMock plugin unable to locate your request or headers on the execution context. Please make sure to pass that, or provide custom "extractTokenFn" function.`
-        );
-      } else {
-        let authHeader: string | null = null;
-        if (headers[headerName] && typeof headers[headerName] === "string") {
-          authHeader = headers[headerName] || null;
-        } else if (headers.get && headers.has && headers.has(headerName)) {
-          authHeader = headers.get(headerName) || null;
-        }
-        if (authHeader === null) {
-          return null;
-        }
-
-        const split = authHeader.split(" ");
-
-        if (split.length !== 2) {
-          throw new Error(`Invalid value provided for header "${headerName}"!`);
-        } else {
-          const [type, value] = split;
-
-          if (type !== tokenType) {
-            throw new Error(`Unsupported token type provided: "${type}"!`);
-          } else {
-            return value;
-          }
-        }
+    if (!headers) {
+      console.warn(
+        `useAuthMock plugin unable to locate your request or headers on the execution context. Please make sure to pass that, or provide custom "extractTokenFn" function.`
+      );
+    } else {
+      let authHeader: string | null = null;
+      if (headers[headerName] && typeof headers[headerName] === "string") {
+        authHeader = headers[headerName] || null;
+      } else if (headers.get && headers.has && headers.has(headerName)) {
+        authHeader = headers.get(headerName) || null;
+      }
+      if (authHeader === null) {
+        return null;
       }
 
-      return null;
-    });
+      const split = authHeader.split(" ");
+
+      if (split.length !== 2) {
+        throw new Error(`Invalid value provided for header "${headerName}"!`);
+      } else {
+        const [type, value] = split;
+
+        if (type !== tokenType) {
+          throw new Error(`Unsupported token type provided: "${type}"!`);
+        } else {
+          return value;
+        }
+      }
+    }
+
+    return null;
+  };
 
   // JWTの検証関数を定義する
   const verifyToken = async (token: string): Promise<unknown> => {
     // JWTをデコードする
-    const decodedToken = (decode(token, { complete: true, ...options.jwtDecodeOptions }) as Record<string, { kid?: string }>) || {};
+    // @ts-expect-error: 型エラーを無視
+    const decodedToken = (decode(token, { complete: true }) as Record<string, { kid?: string }>) || {};
 
     // デコードされたJWTにkidが存在する場合
     if (decodedToken && decodedToken.header && decodedToken.header.kid) {
-      // 公開鍵を取得する
-      const signingKey = publicKey;
       // JWTを検証する
-      const decoded = verify(token, signingKey, {
+      const decoded = verify(token, publicKey, {
         algorithms: ["ES384"], // 使用するアルゴリズム
         audience: audience, // オーディエンスを指定する
-        issuer: issuer, // 発行者を指定する
-        ...options.jwtVerifyOptions, // 追加のJWT検証オプションを適用する
+        issuer: issuer, // 発行者を指定する,
       }) as { sub: string };
+
+      console.log(`🔐 JWT verified for user "${decoded.sub}"`);
 
       // デコードされたペイロードを返す
       return decoded;
     }
     // JWTのデコードに失敗した場合、エラーをスローする
-    throw new Error(`Failed to decode authentication token!`);
+    throw new Error(`Failed to verify authentication token!`);
   };
 
   // プラグインの定義を返す

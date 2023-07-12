@@ -44,6 +44,9 @@ importers:
       '@envelop/disable-introspection':
         specifier: ^5.0.0
         version: 5.0.0(@envelop/core@4.0.0)(graphql@16.6.0)
+      '@envelop/generic-auth':
+        specifier: ^6.0.0
+        version: 6.0.0(@envelop/core@4.0.0)(graphql@16.6.0)
       '@escape.tech/graphql-armor':
         specifier: ^2.2.0
         version: 2.2.0
@@ -3244,6 +3247,32 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@envelop/core': 4.0.0
+      graphql: 16.6.0
+      tslib: 2.5.3
+    dev: false
+
+  /@envelop/extended-validation@3.0.0(@envelop/core@4.0.0)(graphql@16.6.0):
+    resolution: {integrity: sha512-nW3EjF27qghKszEbhSJFf7jTyoXZcU5XtWCHCuq+ghJOzkjMRQdMHkoiTWhScpAvJc0i26lyWTsZ/SZ0+xIRVA==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@envelop/core': ^4.0.0
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      '@envelop/core': 4.0.0
+      '@graphql-tools/utils': 10.0.1(graphql@16.6.0)
+      graphql: 16.6.0
+      tslib: 2.5.3
+    dev: false
+
+  /@envelop/generic-auth@6.0.0(@envelop/core@4.0.0)(graphql@16.6.0):
+    resolution: {integrity: sha512-retM3YQPuUyLzhFR7x1E3lzGW8uh/Rp4m9DmCfdP35mHKL8jijJP8KbvLZb5WmSkVemt2L9ilP5m3opOy/2BiQ==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@envelop/core': ^4.0.0
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      '@envelop/core': 4.0.0
+      '@envelop/extended-validation': 3.0.0(@envelop/core@4.0.0)(graphql@16.6.0)
       graphql: 16.6.0
       tslib: 2.5.3
     dev: false

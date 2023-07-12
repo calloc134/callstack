@@ -1,17 +1,29 @@
-import { createYoga } from "graphql-yoga";
+// node:httpサーバ
 import { createServer } from "node:http";
-import { schema } from "./schema";
-import { PrismaClient } from "@prisma/client";
-import { useDisableIntrospection } from "@envelop/disable-introspection";
-import { armor } from "./armor";
-import { useAuth0 } from "@envelop/auth0";
-import { useAuthMock } from "./lib/plugins/useAuthMock";
+// graphql-yogaサーバ
+import { createYoga } from "graphql-yoga";
 
-// 環境変数を取得し、開発環境かどうかを判定
-const isDev = process.env.NODE_ENV === "development";
-// 環境変数を取得し、Logtoコンテナのホスト名を取得
-const logto_endpoint = process.env.ENDPOINT || "http://auth.localhost";
-const audience = process.env.AUDIENCE || "dummy";
+// Prismaのクライアント
+import { PrismaClient } from "@prisma/client";
+// 開発環境でのJWT検証のモックプラグイン
+import { useAuthMock } from "./lib/plugins/useAuthMock";
+// 本番環境でJWTの検証等を行うプラグイン
+import { useAuth0 } from "@envelop/auth0";
+// 認可処理を行うプラグイン
+import { useGenericAuth } from "@envelop/generic-auth";
+// graphqlのインタロスペクションを無効化するプラグイン
+import { useDisableIntrospection } from "@envelop/disable-introspection";
+
+// graphqlスキーマ
+import { schema } from "./schema";
+// graphql-armorのプラグイン
+import { armor } from "./armor";
+// 認証プラグインのオプション
+import { authMockOption, authnOption } from "./authn";
+// 認可プラグインのオプション
+import { authzOption } from "./authz";
+// 開発環境かどうかを判断する変数
+import { isDev } from "./env";
 
 // graphql-armorのプラグインを取得
 const enhancements = armor.protect();
@@ -45,22 +57,8 @@ const yoga = createYoga({
     ...(isDev ? [] : [...enhancements.plugins]),
     // 開発環境であるならば、useAuthMockを利用
     // そうでなければ、useAuth0を利用
-    isDev
-      ? useAuthMock({})
-      : useAuth0({
-          // ドメイン部分は上書きするためダミー
-          domain: "",
-          // audienceは環境変数から取得
-          audience: audience,
-          // オプションを上書き
-          jwksClientOptions: {
-            jwksUri: `${logto_endpoint}/oidc/jwks}`,
-          },
-          jwtVerifyOptions: {
-            algorithms: ["ES384"],
-            issuer: `${logto_endpoint}/oidc`,
-          },
-        }),
+    isDev ? useAuthMock(authMockOption) : useAuth0(authnOption),
+    useGenericAuth(authzOption),
   ],
 });
 
