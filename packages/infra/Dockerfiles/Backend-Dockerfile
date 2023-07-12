@@ -54,4 +54,4 @@ USER node
 # コンテナ起動時に実行するコマンド
 # 依存パッケージのインストールとPrismaのマイグレーション、サーバーの起動を行う
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["sh", "-c", "pnpm prisma migrate deploy & pnpm start"]
+CMD ["sh", "-c", "pnpm prisma migrate deploy && pnpm start"]
