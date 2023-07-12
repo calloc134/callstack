@@ -3,7 +3,7 @@ import { GraphQLContext } from "../context";
 import { ResolveUserFn, ValidateUserFn } from "@envelop/generic-auth";
 import { Kind } from "graphql";
 import { GenericAuthPluginOptions } from "@envelop/generic-auth";
-import { GraphQLErrorWithCode } from "src/error";
+import { GraphQLErrorWithCode } from "../error";
 
 const resolveUserFn: ResolveUserFn<User, GraphQLContext> = async (context) => {
   // コンテキストからsubを取得

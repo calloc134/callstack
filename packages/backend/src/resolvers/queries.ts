@@ -1,7 +1,7 @@
 import { GraphQLContext } from "src/context";
 import { QueryResolvers } from "src/lib/generated/resolver-types";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { GraphQLErrorWithCode } from "src/error";
+import { GraphQLErrorWithCode } from "../error";
 
 // クエリのリゾルバーを定義
 export const Query: QueryResolvers<GraphQLContext> = {
