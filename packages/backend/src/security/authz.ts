@@ -1,5 +1,5 @@
 import { User, Role } from "@prisma/client";
-import { GraphQLContext } from "./context";
+import { GraphQLContext } from "../context";
 import { ResolveUserFn, ValidateUserFn } from "@envelop/generic-auth";
 import { GraphQLError, Kind } from "graphql";
 import { GenericAuthPluginOptions } from "@envelop/generic-auth";

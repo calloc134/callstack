@@ -1,6 +1,6 @@
 import { Auth0PluginOptions } from "@envelop/auth0";
-import { AuthMockPluginOptions } from "./lib/plugins/useAuthMock";
-import { audience, logto_endpoint } from "./env";
+import { AuthMockPluginOptions } from "../lib/plugins/useAuthMock";
+import { audience, logto_endpoint } from "../env";
 
 const authMockOption: AuthMockPluginOptions = {
   // 認証されていないリクエストも許可

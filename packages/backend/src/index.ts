@@ -17,11 +17,11 @@ import { useDisableIntrospection } from "@envelop/disable-introspection";
 // graphqlスキーマ
 import { schema } from "./schema";
 // graphql-armorのプラグイン
-import { armor } from "./armor";
+import { armor } from "./security/armor";
 // 認証プラグインのオプション
-import { authMockOption, authnOption } from "./authn";
+import { authMockOption, authnOption } from "./security/authn";
 // 認可プラグインのオプション
-import { authzOption } from "./authz";
+import { authzOption } from "./security/authz";
 // 開発環境かどうかを判断する変数
 import { isDev } from "./env";
 
@@ -73,9 +73,7 @@ server.listen(4000, () => {
 // SIGTERMを受け取ったら、プロセスを終了
 process.on("SIGTERM", async () => {
   console.log("✅ SIGTERM signal received: closing HTTP server");
-  server.close(() => {
-    console.log("HTTP server closed");
-  });
+  await server.close();
 
   try {
     console.log("🔥 Closing database connection");
