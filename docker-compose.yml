@@ -99,10 +99,6 @@ services:
     networks:
       - app-ins-network
       - app-db-network
-    # 使用するシークレットを指定
-    secrets:
-      - private.key
-      - public.key
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -133,8 +129,6 @@ services:
       - OPERATION_PATH=${OPERATION_PATH}
       # NODE_ENVをproductionに指定
       - NODE_ENV=production
-      # ホスト名を指定
-      - HOST=${HOST_NAME}
     # 内部ネットワークに接続
     networks:
       - app-ins-network
