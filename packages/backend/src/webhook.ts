@@ -1,6 +1,5 @@
 import { createHmac } from "crypto";
 import { webhook_secret } from "./env";
-import { GraphQLContext } from "./context";
 import { Plugin } from "graphql-yoga/typings/plugins/types";
 import { PrismaClient } from "@prisma/client";
 
