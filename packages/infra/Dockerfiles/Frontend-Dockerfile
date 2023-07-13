@@ -34,8 +34,25 @@ RUN pnpm build
 FROM nginx:latest as production-stage
 
 ARG INFRADIR=packages/infra
+ARG CERTBOT_EMAIL="dummy@dummy.dummy"
+ARG HOSTNAME="dummy.dummy"
+
+# certbotのインストール
+RUN apt-get update && apt-get install -y certbot python3-certbot-nginx
 
 # データを引き継ぐ
 COPY --from=build-stage /home/dist /usr/share/nginx/dist
 
-COPY ${INFRADIR}/config/nginx-prod /etc/nginx/conf.d 
+# COPY ${INFRADIR}/config/nginx-prod /etc/nginx/conf.d 
+COPY ${INFRADIR}/config/nginx-prod /etc/nginx/templates
+
+# 証明書を保存するディレクトリを作成する
+RUN mkdir -p /etc/letsencrypt/live/${HOSTNAME}
+
+# certbotの実行
+# 失敗した場合はopensslで秘密鍵と証明書を生成する
+# 以下のファイルに証明書が保存される
+# /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem;
+# /etc/letsencrypt/live/${HOSTNAME}/privkey.pem;
+RUN certbot --nginx --non-interactive --agree-tos --email ${CERTBOT_EMAIL} -d ${HOSTNAME} --redirect || \
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/letsencrypt/live/${HOSTNAME}/privkey.pem -out /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem -subj "/C=JP/ST=Tokyo/L=Tokyo/O=Example Ltd./CN=${HOSTNAME}"

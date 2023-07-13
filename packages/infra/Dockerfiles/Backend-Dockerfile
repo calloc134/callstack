@@ -42,11 +42,11 @@ WORKDIR /home
 # 4000ポートを開放している
 EXPOSE 4000
 
-# データを引き継ぐ
-COPY --from=build-stage --chown=node:node /home ./
-
 # tiniのインストール
 RUN apt-get update && apt-get install -y tini
+
+# データを引き継ぐ
+COPY --from=build-stage --chown=node:node /home ./
 
 # pnpmに切り替える
 RUN corepack enable pnpm

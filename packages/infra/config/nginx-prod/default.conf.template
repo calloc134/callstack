@@ -2,10 +2,16 @@
 server {
 
     # 80ポートでlistenする
-    listen 80;
+    # listen 80;
+    # 443ポートでlistenする
+    listen 443 ssl;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name auth.${HOSTNAME}
+    server_name auth.${HOSTNAME};
+
+    # SSL証明書の設定
+    ssl_certificate /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${HOSTNAME}/privkey.pem;
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
@@ -18,6 +24,7 @@ server {
         proxy_set_header    X-Forwarded-Host       $host;
         proxy_set_header    X-Forwarded-Server    $host;
         proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
 
         proxy_pass http://logto:3001/;
 
@@ -25,13 +32,20 @@ server {
 
 }
 
+# 管理者用認証コントロールパネルサーバの設定
 server {
 
     # 80ポートでlistenする
-    listen 80;
+    # listen 80;
+    # 443ポートでlistenする
+    listen 443 ssl;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name authadmin.${HOSTNAME}
+    server_name authadmin.${HOSTNAME};
+
+    # SSL証明書の設定
+    ssl_certificate /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${HOSTNAME}/privkey.pem;
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
@@ -44,6 +58,7 @@ server {
         proxy_set_header    X-Forwarded-Host       $host;
         proxy_set_header    X-Forwarded-Server    $host;
         proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
         proxy_pass http://logto:3002/;
 
     }
@@ -54,10 +69,16 @@ server {
 server {
 
     # 80ポートでlistenする
-    listen 80;
+    # listen 80;
+    # 443ポートでlistenする
+    listen 443 ssl;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name ${HOSTNAME}
+    server_name ${HOSTNAME};
+
+    # SSL証明書の設定
+    ssl_certificate /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${HOSTNAME}/privkey.pem;
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
@@ -84,9 +105,11 @@ server {
         proxy_set_header    X-Forwarded-Host       $host;
         proxy_set_header    X-Forwarded-Server    $host;
         proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
 
         proxy_pass http://backend:4000;
 
     }
+    
 
 }

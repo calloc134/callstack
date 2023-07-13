@@ -66,7 +66,6 @@ services:
       # logtoコンテナのエンドポイントを指定
       - ENDPOINT=${ENDPOINT}
       - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
-      - AUDIENCE=${AUDIENCE}
     # 内部ネットワークに接続
     networks:
       app-ins-network:
@@ -93,6 +92,8 @@ services:
       # logtoコンテナのエンドポイントを指定
       - ENDPOINT=${ENDPOINT}
       - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
+      # オーディエンスを指定
+      - AUDIENCE=${AUDIENCE}
     # NODE_ENVをproductionに指定
       - NODE_ENV=production
     # 内部ネットワークに接続
@@ -106,8 +107,12 @@ services:
     container_name: frontend-prod
     ports:
       # 80ポートを開放
-      - target: 80
-        published: 80
+      # - target: 80
+      #   published: 80
+      #   host_ip: localhost
+      # 443ポートを開放
+      - target: 443
+        published: 443
         host_ip: localhost
     build:
       context: .
@@ -122,6 +127,10 @@ services:
         OPERATION_PATH: ${OPERATION_PATH}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
+        # ホスト名を指定
+        HOSTNAME: ${HOSTNAME}
+        # 管理者のメールアドレスを指定
+        CERTBOT_EMAIL: ${CERTBOT_EMAIL}
     environment:
       # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
