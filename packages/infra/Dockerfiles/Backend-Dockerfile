@@ -9,9 +9,8 @@ ARG PACKAGE_PATH=packages/backend
 ARG SCHEMA_PATH=./graphql/schemas/*.graphql
 ARG OPERATION_PATH=/home/graphql/operations/*.graphql
 
-# データの引継ぎ
-COPY ${PACKAGE_PATH}/ ./
-COPY ${PACKAGE_PATH}/../graphql/ ./graphql/
+# package.jsonのみをコピーする
+COPY ${PACKAGE_PATH}/package.json ./
 
 # pnpmに切り替える
 RUN corepack enable pnpm
@@ -19,6 +18,10 @@ RUN corepack prepare pnpm@latest --activate
 
 # 依存関係をインストールする
 RUN pnpm install
+
+# データの引継ぎ
+COPY ${PACKAGE_PATH}/ ./
+COPY ${PACKAGE_PATH}/../graphql/ ./graphql/
 
 # graphql codegenを実行する
 RUN pnpm codegen
