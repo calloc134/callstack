@@ -37,9 +37,6 @@ ARG INFRADIR=packages/infra
 ARG CERTBOT_EMAIL="dummy@dummy.dummy"
 ARG HOSTNAME="dummy.dummy"
 
-# certbotのインストール
-RUN apt-get update && apt-get install -y certbot python3-certbot-nginx
-
 # データを引き継ぐ
 COPY --from=build-stage /home/dist /usr/share/nginx/dist
 
