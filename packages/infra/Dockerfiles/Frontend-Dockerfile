@@ -50,9 +50,10 @@ COPY ${INFRADIR}/config/nginx-prod /etc/nginx/templates
 RUN mkdir -p /etc/letsencrypt/live/${HOSTNAME}
 
 # certbotの実行
+# このcertbotではdns-01チャレンジで証明書を取得する
 # 失敗した場合はopensslで秘密鍵と証明書を生成する
 # 以下のファイルに証明書が保存される
 # /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem;
 # /etc/letsencrypt/live/${HOSTNAME}/privkey.pem;
-RUN certbot --nginx --non-interactive --agree-tos --email ${CERTBOT_EMAIL} -d ${HOSTNAME} --redirect || \
+RUN certbot certonly --agree-tos --email ${CERTBOT_EMAIL} --no-eff-email --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory --manual-public-ip-logging-ok -d ${HOSTNAME} -d *.${HOSTNAME} --manual-auth-hook "echo 'Please create TXT record in 30 seconds'; sleep 30" || \
   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/letsencrypt/live/${HOSTNAME}/privkey.pem -out /etc/letsencrypt/live/${HOSTNAME}/fullchain.pem -subj "/C=JP/ST=Tokyo/L=Tokyo/O=Example Ltd./CN=${HOSTNAME}"

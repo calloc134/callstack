@@ -35,7 +35,7 @@ export type QueryUserArgs = {
 };
 
 export enum Role {
-  Admin = "ADMIN",
+  Admin = "Admin",
   User = "USER",
 }
 
