@@ -72,6 +72,8 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
           })
         );
 
+        console.log("🔐 Webhook works correctly");
+
         return;
       } else {
         // 署名が正しくない場合は、403を返す
