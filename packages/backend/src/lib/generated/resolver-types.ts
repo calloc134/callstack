@@ -34,6 +34,11 @@ export type QueryUserArgs = {
   uuid: Scalars["UUID"]["input"];
 };
 
+export enum Role {
+  Admin = "ADMIN",
+  User = "USER",
+}
+
 export type User = {
   __typename?: "User";
   email: Scalars["String"]["output"];
@@ -113,6 +118,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
+  Role: Role;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   UUID: ResolverTypeWrapper<Scalars["UUID"]["output"]>;
   User: ResolverTypeWrapper<User>;
@@ -128,6 +134,17 @@ export type ResolversParentTypes = {
   UUID: Scalars["UUID"]["output"];
   User: User;
 };
+
+export type AuthDirectiveArgs = {
+  role?: Role;
+};
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = GraphQLContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<
+  Result,
+  Parent,
+  ContextType,
+  Args
+>;
 
 export type ProfileResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Profile"] = ResolversParentTypes["Profile"]> = {
   age?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -156,4 +173,8 @@ export type Resolvers<ContextType = GraphQLContext> = {
   Query?: QueryResolvers<ContextType>;
   UUID?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
+};
+
+export type DirectiveResolvers<ContextType = GraphQLContext> = {
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
 };

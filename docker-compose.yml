@@ -3,15 +3,25 @@ version: "3.8"
 # ネットワークの作成
 networks:
   # 内部ネットワーク
-  docker-network:
+  # バックエンドとlogtoコンテナ、リバースプロキシのみ接続
+  app-ins-network:
+  # バックエンドとそれに対応するデータベースのみ接続
+  app-db-network:
+  # logtoとそれに対応するデータベースのみ接続
+  logto-db-network:
 
 # データベースのデータを格納するボリューム
 volumes:
-  postgres-vol:
+  # バックエンドのデータベースデータを格納するボリューム
+  app-db-vol:
+  # logtoのデータベースデータを格納するボリューム
+  logto-db-vol:
+
 
 services:
-  postgres:
-    container_name: posgre-prod
+  # バックエンド用のデータベース
+  db-app:
+    container_name: db-app
     # ポスグレの最新イメージを使用
     image: postgres:latest
     # ポスグレの環境変数を読み込む
@@ -19,14 +29,49 @@ services:
     # ポスグレのデータを格納するボリュームを指定
     volumes:
       - type: volume
-        source: postgres-vol
+        source: app-db-vol
         # ポスグレのデータを格納するボリュームのマウント先を指定
         target: /var/lib/postgresql/data
     # 内部ネットワークに接続
     networks:
-      - docker-network
+      - app-db-network
     # コンテナが停止したら再起動
     restart: on-failure
+
+  # logto用のデータベース
+  db-logto:
+    container_name: db-logto
+    # ポスグレの最新イメージを使用
+    image: postgres:latest
+    # ポスグレの環境変数を読み込む
+    env_file: ${POSTGRES_ENV}
+    # ポスグレのデータを格納するボリュームを指定
+    volumes:
+      - type: volume
+        source: logto-db-vol
+        # ポスグレのデータを格納するボリュームのマウント先を指定
+        target: /var/lib/postgresql/data
+    # 内部ネットワークに接続
+    networks:
+      - logto-db-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  # logtoコンテナ
+  logto:
+    image: svhd/logto:latest
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    env_file: ${LOGTO_ENV}
+    environment:
+      # logtoコンテナのエンドポイントを指定
+      - ENDPOINT=${ENDPOINT}
+      - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
+      - AUDIENCE=${AUDIENCE}
+    # 内部ネットワークに接続
+    networks:
+      app-ins-network:
+      logto-db-network:
+
 
   backend:
     container_name: backend-prod
@@ -43,17 +88,17 @@ services:
     env_file: ${BACK_ENV}
     # スキーマのパスを指定
     environment:
-    # スキーマのパスを指定
+      # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
+      # logtoコンテナのエンドポイントを指定
+      - ENDPOINT=${ENDPOINT}
+      - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
     # NODE_ENVをproductionに指定
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
-      - docker-network
-    # 使用するシークレットを指定
-    secrets:
-      - private.key
-      - public.key
+      - app-ins-network
+      - app-db-network
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -86,15 +131,6 @@ services:
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
-      - docker-network
+      - app-ins-network
     # コンテナが停止したら再起動
     restart: on-failure
-
-# 使用するシークレットを指定
-secrets:
-  # バックエンドの秘密鍵を指定
-  private.key:
-    file: ${PRIVATE_KEY_PATH}
-  # バックエンドの公開鍵を指定
-  public.key:
-    file: ${PUBLIC_KEY_PATH}

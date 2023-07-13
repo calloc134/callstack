@@ -1,5 +1,9 @@
 version: "3.8"
 
+# ネットワークを作成
+networks:
+  app-db-network:
+
 services:
   app:
     build:
@@ -26,6 +30,9 @@ services:
         source: backend-data
         target: /workspaces/repo/packages/backend/node_modules
 
+    environment:
+      - SCHEMA_PATH=../graphql/schemas/*.graphql
+      - OPERATION_PATH=../graphql/operations/*.graphql
     # アプリケーションコンテナの環境変数を読み込む
     env_file: ${BACK_ENV}
 
@@ -33,7 +40,11 @@ services:
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
+    networks:
+      - app-db-network
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
@@ -47,6 +58,13 @@ services:
         target: /var/lib/postgresql/data
     # ポスグレの環境変数を読み込む
     env_file: ${POSTGRES_ENV}
+    networks:
+      - app-db-network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
+    #   interval: 30s
+    #   timeout: 30s
+    #   retries: 5
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)

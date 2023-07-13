@@ -1,6 +1,12 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// ロールを格納する列挙型を定義
+enum Role {
+  ADMIN
+  USER
+}
+
 // データベースソースの設定
 datasource db {
   provider = "postgresql"
@@ -15,9 +21,11 @@ generator client {
 // UUIDがプライマリキーの役割を果たす
 // ユーザとプロフィールは1対1の関係
 model User {
-  uuid    String   @id @default(uuid())
-  email   String   @unique
-  profile Profile?
+  uuid     String   @id @default(uuid())
+  email    String   @unique
+  sub_auth String   @unique
+  profile  Profile?
+  role     Role     @default(USER)
 }
 
 // プロフィールのモデルを定義

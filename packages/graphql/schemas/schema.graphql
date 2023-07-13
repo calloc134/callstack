@@ -1,5 +1,13 @@
+# ユーザの権限を定義
+enum Role {
+  Admin
+  USER
+}
+
 # UUIDスカラー型を利用するための定義
 scalar UUID
+# authディレクティブを利用するための定義
+directive @auth(role: Role! = USER) on FIELD_DEFINITION
 
 # クエリのスキーマ定義
 schema {
@@ -8,7 +16,7 @@ schema {
 
 # クエリの定義
 type Query {
-  user(uuid: UUID!): User!
+  user(uuid: UUID!): User! @auth(role: USER)
 }
 
 # ユーザ型の定義

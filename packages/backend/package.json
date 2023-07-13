@@ -16,7 +16,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@envelop/auth0": "^5.0.0",
+    "@envelop/core": "^4.0.0",
     "@envelop/disable-introspection": "^5.0.0",
+    "@envelop/generic-auth": "^6.0.0",
     "@escape.tech/graphql-armor": "^2.2.0",
     "@graphql-tools/load-files": "^7.0.0",
     "@graphql-tools/merge": "^9.0.0",
@@ -30,6 +33,7 @@
     "graphql-shield": "^7.6.5",
     "graphql-yoga": "^4.0.1",
     "jsonwebtoken": "^9.0.0",
+    "jwks-rsa": "^3.0.1",
     "prisma": "^4.15.0",
     "tsx": "^3.12.7"
   },

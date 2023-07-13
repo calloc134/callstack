@@ -1,12 +1,30 @@
-import { createYoga } from "graphql-yoga";
+// node:httpサーバ
 import { createServer } from "node:http";
-import { schema } from "./schema";
-import { PrismaClient } from "@prisma/client";
-import { useDisableIntrospection } from "@envelop/disable-introspection";
-import { armor } from "./armor";
+// graphql-yogaサーバ
+import { createYoga } from "graphql-yoga";
 
-// 環境変数を取得し、開発環境かどうかを判定
-const isDev = process.env.NODE_ENV === "development";
+// Prismaのクライアント
+import { PrismaClient } from "@prisma/client";
+// 開発環境でのJWT検証のモックプラグイン
+import { useAuthMock } from "./lib/plugins/useAuthMock";
+// 本番環境でJWTの検証等を行うプラグイン
+import { useAuth0 } from "@envelop/auth0";
+// 認可処理を行うプラグイン
+import { useGenericAuth } from "@envelop/generic-auth";
+// graphqlのインタロスペクションを無効化するプラグイン
+import { useDisableIntrospection } from "@envelop/disable-introspection";
+
+// graphqlスキーマ
+import { schema } from "./schema";
+// graphql-armorのプラグイン
+import { armor } from "./security/armor";
+// 認証プラグインのオプション
+import { authMockOption, authnOption } from "./security/authn";
+// 認可プラグインのオプション
+import { authzOption } from "./security/authz";
+// 開発環境かどうかを判断する変数
+import { isDev } from "./env";
+import { useWebHook } from "./webhook";
 
 // graphql-armorのプラグインを取得
 const enhancements = armor.protect();
@@ -34,10 +52,16 @@ const yoga = createYoga({
       }
     : false,
   plugins: [
+    // もし開発環境でなければ、webhookの検証を行う
+    ...(isDev ? [] : [useWebHook(prisma)]),
     // もし開発環境でなければ、introspectionを無効化
     ...(isDev ? [] : [useDisableIntrospection()]),
     // もし開発環境でなければ、graphql-armorを有効化
     ...(isDev ? [] : [...enhancements.plugins]),
+    // 開発環境であるならば、useAuthMockを利用
+    // そうでなければ、useAuth0を利用
+    isDev ? useAuthMock(authMockOption) : useAuth0(authnOption),
+    useGenericAuth(authzOption),
   ],
 });
 
@@ -52,9 +76,7 @@ server.listen(4000, () => {
 // SIGTERMを受け取ったら、プロセスを終了
 process.on("SIGTERM", async () => {
   console.log("✅ SIGTERM signal received: closing HTTP server");
-  server.close(() => {
-    console.log("HTTP server closed");
-  });
+  await server.close();
 
   try {
     console.log("🔥 Closing database connection");
