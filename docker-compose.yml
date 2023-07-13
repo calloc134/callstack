@@ -129,6 +129,8 @@ services:
       - OPERATION_PATH=${OPERATION_PATH}
       # NODE_ENVをproductionに指定
       - NODE_ENV=production
+      # ホストネームを指定
+      - HOSTNAME=${HOSTNAME}
     # 内部ネットワークに接続
     networks:
       - app-ins-network

@@ -5,7 +5,7 @@ server {
     listen 80;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name auth.localhost
+    server_name auth.${HOSTNAME}
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
@@ -31,7 +31,7 @@ server {
     listen 80;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name authadmin.localhost
+    server_name authadmin.${HOSTNAME}
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
@@ -57,7 +57,7 @@ server {
     listen 80;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name localhost
+    server_name ${HOSTNAME}
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
