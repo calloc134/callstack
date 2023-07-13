@@ -140,6 +140,10 @@ services:
       - NODE_ENV=production
       # ホストネームを指定
       - HOSTNAME=${HOSTNAME}
+    volumes:
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
     # 内部ネットワークに接続
     networks:
       - app-ins-network
