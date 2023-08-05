@@ -25,6 +25,7 @@ import { authzOption } from "./security/authz";
 // 開発環境かどうかを判断する変数
 import { isDev } from "./env";
 import { useWebHook } from "./webhook";
+import { useGraphQlJit } from "@envelop/graphql-jit";
 
 // graphql-armorのプラグインを取得
 const enhancements = armor.protect();
@@ -61,7 +62,10 @@ const yoga = createYoga({
     // 開発環境であるならば、useAuthMockを利用
     // そうでなければ、useAuth0を利用
     isDev ? useAuthMock(authMockOption) : useAuth0(authnOption),
+    // 一般的な認可処理のプラグインを追加
     useGenericAuth(authzOption),
+    // JITプラグインを利用
+    useGraphQlJit(),
   ],
 });
 

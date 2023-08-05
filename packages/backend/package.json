@@ -20,6 +20,7 @@
     "@envelop/core": "^4.0.0",
     "@envelop/disable-introspection": "^5.0.0",
     "@envelop/generic-auth": "^6.0.0",
+    "@envelop/graphql-jit": "^6.0.1",
     "@escape.tech/graphql-armor": "^2.2.0",
     "@graphql-tools/load-files": "^7.0.0",
     "@graphql-tools/merge": "^9.0.0",
