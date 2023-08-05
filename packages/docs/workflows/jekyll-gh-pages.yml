@@ -5,8 +5,6 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-  pull_request:
-    types: [opened, synchronize]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,14 +16,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Build job
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    
-    # 環境変数の読み込み
-    env:
-      SCHEMA_PATH: ../graphql/schemas/*.graphql
-      OPERATION_PATH: ../graphql/operations/*.graphql
 
     # 実行ステップ
     steps:
@@ -41,7 +34,6 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
-
       # 依存関係のインストール
       - name: install dependencies
         run: pnpm install --frozen-lockfile
@@ -49,13 +41,11 @@ jobs:
       - name: Build
         run: |
           pnpm run build
-        working-directory: ./docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: docs/build
-          
+          path: build
 
   # Deployment job
   deploy:
