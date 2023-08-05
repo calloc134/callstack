@@ -4,7 +4,7 @@ name: Deploy Docusaurus with GitHub Pages dependencies preinstalled
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["master"]
   pull_request:
     types: [opened, synchronize]
 
@@ -21,7 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     # 環境変数の読み込み
     env:
       SCHEMA_PATH: ../graphql/schemas/*.graphql
@@ -41,7 +41,6 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
-
       # 依存関係のインストール
       - name: install dependencies
         run: pnpm install --frozen-lockfile
@@ -55,13 +54,12 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           path: packages/docs/build
-          
 
   # Deployment job
   deploy:
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write 
+      pages: write # to deploy to Pages
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
