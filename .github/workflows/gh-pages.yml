@@ -38,6 +38,10 @@ jobs:
       - name: install dependencies
         run: pnpm install --frozen-lockfile
 
+      # カレントディレクトリの移動
+      - name: Move to docs directory
+        run: cd packages/docs
+
       - name: Build
         run: |
           pnpm run build
