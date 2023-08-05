@@ -36,22 +36,23 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
-      # カレントディレクトリの移動
-      - name: Move to docs directory
-        run: cd docs
 
       # 依存関係のインストール
       - name: install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: ./docs
+
 
       - name: Build
         run: |
           pnpm run build
+        working-directory: ./docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: build
+          path: docs/build
+          
 
   # Deployment job
   deploy:
