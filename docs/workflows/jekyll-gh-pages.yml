@@ -5,8 +5,6 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-  pull_request:
-    types: [opened, synchronize]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,10 +33,6 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
-
-      # カレントディレクトリの移動
-      - name: Move to docs directory
-        run: cd docs
 
       # 依存関係のインストール
       - name: install dependencies
