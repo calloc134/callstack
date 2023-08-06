@@ -13,6 +13,7 @@ const PanelPageQuery = graphql(`
 `);
 
 export const PanelPage = () => {
+  // graphqlに対してクエリを実行
   const [result, reexecuteQuery] = useQuery({
     query: PanelPageQuery,
     variables: {
@@ -20,7 +21,10 @@ export const PanelPage = () => {
     },
   });
 
-  // const { data, fetching, error } = result;
+  const { data, fetching, error } = result;
+
+  // とりあえず表示させる
+  console.log(result, reexecuteQuery, data, fetching, error);
 
   return (
     <div>
