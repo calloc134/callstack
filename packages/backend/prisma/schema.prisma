@@ -28,8 +28,8 @@ model User {
   bio         String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  posts       Post[]
   role        Role     @default(USER)
+  posts       Post[]
 }
 
 // 投稿のモデルを定義

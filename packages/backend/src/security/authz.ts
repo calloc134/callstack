@@ -19,7 +19,7 @@ const resolveUserFn: ResolveUserFn<User, GraphQLContext> = async (context) => {
     // 対応するユーザーを取得
     const user = await context.prisma.user.findUniqueOrThrow({
       where: {
-        sub_auth: sub,
+        auth_sub: sub,
       },
     });
 

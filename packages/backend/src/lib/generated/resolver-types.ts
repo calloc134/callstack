@@ -67,7 +67,7 @@ export type Post = {
   post_uuid: Scalars["UUID"]["output"];
   title: Scalars["String"]["output"];
   updated_at: Scalars["DateTime"]["output"];
-  user_uuid: Scalars["UUID"]["output"];
+  user: User;
 };
 
 export type Query = {
@@ -220,7 +220,7 @@ export type PostResolvers<ContextType = GraphQLContext, ParentType extends Resol
   post_uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   updated_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
-  user_uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
