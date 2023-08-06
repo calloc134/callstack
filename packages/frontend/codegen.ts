@@ -13,11 +13,13 @@ const config: CodegenConfig = {
         // "typescript-validation-schema"
       ],
       config: {
-        withHooks: true,
         strictScalars: true,
         scalars: {
           UUID: "string",
         },
+        enumsAsTypes: true,
+        skipTypename: true,
+        useTypeImports: true,
         // schema: "zod",
         // scalarSchemas: {
         //   UUID: "z.string().uuid()",

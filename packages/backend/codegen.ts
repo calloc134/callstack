@@ -8,6 +8,13 @@ const config: CodegenConfig = {
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         contextType: "../../context#GraphQLContext",
+        strictScalars: true,
+        scalars: {
+          UUID: "string",
+        },
+        enumsAsTypes: true,
+        skipTypename: true,
+        useTypeImports: true,
       },
     },
   },
