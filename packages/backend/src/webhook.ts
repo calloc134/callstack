@@ -13,7 +13,7 @@ type WebHookBodyType = {
   userId: string;
   user: {
     // id: string;
-    // username: string | null;
+    username: string | null;
     primaryEmail: string | null;
     // primaryPhone: string | null;
     // name: string | null;
@@ -59,8 +59,10 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
         // 適するユーザをデータベースに追加
         prisma.user.create({
           data: {
-            sub_auth: body.userId,
-            email: body.user.primaryEmail || "dummy@dummy.dummy",
+            auth_sub: body.userId,
+            handle: body.user.username || "johndoe",
+            screen_name: body.user.username || "John Doe",
+            bio: "",
           },
         });
 
