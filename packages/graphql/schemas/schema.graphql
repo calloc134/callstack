@@ -1,11 +1,12 @@
 # ユーザの権限を定義
 enum Role {
-  Admin
+  ADMIN
   USER
 }
 
 # UUIDスカラー型を利用するための定義
 scalar UUID
+scalar DateTime
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
 
@@ -14,24 +15,64 @@ schema {
   query: Query
 }
 
-# クエリの定義
+# クエリのスキーマ定義
 type Query {
+  # ユーザ一覧を取得するクエリ
+  users: [User!]! @auth(role: USER)
+  # ユーザを取得するクエリ
   user(uuid: UUID!): User! @auth(role: USER)
+
+  # 投稿一覧を取得するクエリ
+  posts: [Post!]! @auth(role: USER)
+  # 投稿を取得するクエリ
+  post(uuid: UUID!): Post! @auth(role: USER)
+}
+
+# ミューテーションのスキーマ定義
+type Mutation {
+  # ユーザを更新するミューテーション 管理者用
+  updateUser(user_uuid: UUID!, handle: String, screen_name: String, bio: String): User! @auth(role: ADMIN)
+
+  # ユーザを削除するミューテーション 管理者用
+  deleteUser(user_uuid: UUID!): User! @auth(role: ADMIN)
+
+  # 自分のユーザの情報を更新するミューテーション
+  updateMyUser(handle: String, screen_name: String, bio: String): User! @auth(role: USER)
+
+  # 自分のユーザを削除するミューテーション
+  deleteMyUser: User! @auth(role: USER)
+
+  # 投稿を作成するミューテーション
+  createPost(title: String!, body: String!): Post! @auth(role: USER)
+
+  # 投稿を更新するミューテーション
+  updatePost(post_uuid: UUID!, title: String!, body: String!): Post! @auth(role: USER)
+
+  # 投稿を削除するミューテーション
+  deletePost(post_uuid: UUID!): Post! @auth(role: USER)
 }
 
 # ユーザ型の定義
 # uuidがプライマリキーの役割を果たす
-# profileはUserと1対1の関係
 type User {
-  uuid: UUID!
-  email: String!
-  profile: Profile
+  user_uuid: UUID!
+  handle: String!
+  screen_name: String!
+  bio: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  role: Role!
+  posts: [Post!]!
 }
 
-# プロフィール型の定義
+# 投稿型の定義
 # uuidがプライマリキーの役割を果たす
-type Profile {
-  uuid: UUID!
-  age: Int!
-  name: String!
+# userとは1対多の関係
+type Post {
+  post_uuid: UUID!
+  user_uuid: UUID!
+  title: String!
+  body: String!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
