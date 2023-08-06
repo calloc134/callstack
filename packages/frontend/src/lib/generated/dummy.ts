@@ -19,14 +19,12 @@ export type Scalars = {
 };
 
 export type Profile = {
-  __typename?: "Profile";
   age: Scalars["Int"]["output"];
   name: Scalars["String"]["output"];
   uuid: Scalars["UUID"]["output"];
 };
 
 export type Query = {
-  __typename?: "Query";
   user: User;
 };
 
@@ -34,25 +32,21 @@ export type QueryUserArgs = {
   uuid: Scalars["UUID"]["input"];
 };
 
-export enum Role {
-  Admin = "Admin",
-  User = "USER",
-}
+export type Role = "Admin" | "USER";
 
 export type User = {
-  __typename?: "User";
   email: Scalars["String"]["output"];
   profile?: Maybe<Profile>;
   uuid: Scalars["UUID"]["output"];
 };
 
-export type UserFieldsFragment = { __typename?: "User"; uuid: string; email: string };
+export type UserFieldsFragment = { uuid: string; email: string };
 
 export type FindUserQueryVariables = Exact<{
   uuid: Scalars["UUID"]["input"];
 }>;
 
-export type FindUserQuery = { __typename?: "Query"; user: { __typename?: "User"; uuid: string; email: string } };
+export type FindUserQuery = { user: { uuid: string; email: string } };
 
 export const UserFieldsFragmentDoc = gql`
   fragment UserFields on User {

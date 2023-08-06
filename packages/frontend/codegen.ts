@@ -3,15 +3,10 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   overwrite: true,
   schema: process.env.SCHEMA_PATH,
-  documents: process.env.OPERATION_PATH,
+  documents: ["src/features/**/components/**/*.tsx", "src/features/**/pages/**/*.tsx"],
   generates: {
-    "src/lib/generated/dummy.ts": {
-      plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-urql",
-        // "typescript-validation-schema"
-      ],
+    "src/lib/generated/": {
+      preset: "client",
       config: {
         strictScalars: true,
         scalars: {

@@ -21,19 +21,25 @@ generator client {
 // UUIDがプライマリキーの役割を果たす
 // ユーザとプロフィールは1対1の関係
 model User {
-  uuid     String   @id @default(uuid())
-  email    String   @unique
-  sub_auth String   @unique
-  profile  Profile?
-  role     Role     @default(USER)
+  user_uuid   String   @id @default(uuid())
+  auth_sub    String   @unique
+  handle      String
+  screen_name String
+  bio         String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  posts       Post[]
+  role        Role     @default(USER)
 }
 
-// プロフィールのモデルを定義
+// 投稿のモデルを定義
 // UUIDがプライマリキーの役割を果たす
-model Profile {
-  uuid   String @id @unique @default(uuid())
-  age    Int
-  name   String
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [uuid])
+model Post {
+  post_uuid  String   @id @default(uuid()) // UUIDはPrismaのデフォルトの関数を使用
+  user       User     @relation(fields: [userUuid], references: [user_uuid])
+  userUuid   String
+  title      String
+  body       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

@@ -1,5 +1,5 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
-import { GraphQLContext } from "../../context";
+import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
+import type { GraphQLContext } from "../../context";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -15,18 +15,16 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  UUID: { input: any; output: any };
+  UUID: { input: string; output: string };
 };
 
 export type Profile = {
-  __typename?: "Profile";
   age: Scalars["Int"]["output"];
   name: Scalars["String"]["output"];
   uuid: Scalars["UUID"]["output"];
 };
 
 export type Query = {
-  __typename?: "Query";
   user: User;
 };
 
@@ -34,13 +32,9 @@ export type QueryUserArgs = {
   uuid: Scalars["UUID"]["input"];
 };
 
-export enum Role {
-  Admin = "Admin",
-  User = "USER",
-}
+export type Role = "Admin" | "USER";
 
 export type User = {
-  __typename?: "User";
   email: Scalars["String"]["output"];
   profile?: Maybe<Profile>;
   uuid: Scalars["UUID"]["output"];
