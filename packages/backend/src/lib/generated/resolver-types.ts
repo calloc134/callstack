@@ -64,6 +64,7 @@ export type MutationUpdateUserArgs = {
 export type Post = {
   body: Scalars["String"]["output"];
   created_at: Scalars["DateTime"]["output"];
+  is_public: Scalars["Boolean"]["output"];
   post_uuid: Scalars["UUID"]["output"];
   title: Scalars["String"]["output"];
   updated_at: Scalars["DateTime"]["output"];
@@ -217,6 +218,7 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 export type PostResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Post"] = ResolversParentTypes["Post"]> = {
   body?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  is_public?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   post_uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   updated_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;

@@ -49,6 +49,71 @@ export const PanelQuery: QueryResolvers<GraphQLContext> = {
 
     return await safeUser(user_uuid, prisma);
   },
+
+  // usersクエリのリゾルバー
+  // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  users: async (_parent, _args, context) => {
+    const safeUsers = withErrorHandling(async (prisma: PrismaClient) => {
+      const result = await prisma.user.findMany();
+      return result;
+    });
+
+    const { prisma } = context;
+
+    return await safeUsers(prisma);
+  },
+
+  // postクエリのリゾルバー
+  // @ts-expect-error userフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  post: async (_parent, args, context) => {
+    const safePost = withErrorHandling(async (post_uuid: string, prisma: PrismaClient) => {
+      const result = await prisma.post.findUniqueOrThrow({
+        where: {
+          post_uuid: post_uuid,
+        },
+      });
+      return result;
+    });
+
+    const { uuid: post_uuid } = args;
+    const { prisma, currentUser } = context;
+
+    const result = await safePost(post_uuid, prisma);
+
+    // もし投稿者が自分でない かつ 投稿が非公開の場合はエラーを返す
+    // TODO: 投稿が非公開の処理を追加
+    if (result.userUuid !== currentUser.user_uuid) {
+      throw new GraphQLErrorWithCode("item_not_owned");
+    }
+
+    return result;
+  },
+
+  // postsクエリのリゾルバー
+  // @ts-expect-error userフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  posts: async (_parent, _args, context) => {
+    const safePosts = withErrorHandling(async (prisma: PrismaClient) => {
+      const result = await prisma.post.findMany({
+        // 投稿が自分でない かつ 非公開のものは除外する
+        // つまり、投稿が自分 または 公開のもののみ取得する
+        where: {
+          OR: [
+            {
+              userUuid: context.currentUser.user_uuid,
+            },
+            {
+              is_public: true,
+            },
+          ],
+        },
+      });
+      return result;
+    });
+
+    const { prisma } = context;
+
+    return await safePosts(prisma);
+  },
 };
 
 const User: UserResolvers<GraphQLContext> = {
@@ -62,7 +127,20 @@ const User: UserResolvers<GraphQLContext> = {
             user_uuid: user_uuid,
           },
         })
-        .posts();
+        .posts({
+          where: {
+            // 投稿者が自分でない かつ 非公開のものは除外する
+            // つまり、投稿が自分 または 公開のもののみ取得する
+            OR: [
+              {
+                userUuid: context.currentUser.user_uuid,
+              },
+              {
+                is_public: true,
+              },
+            ],
+          },
+        });
       return result;
     });
 

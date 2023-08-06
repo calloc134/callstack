@@ -70,9 +70,10 @@ type User {
 # userとは1対多の関係
 type Post {
   post_uuid: UUID!
-  user_uuid: UUID!
   title: String!
   body: String!
   created_at: DateTime!
   updated_at: DateTime!
+  user: User!
+  is_public: Boolean!
 }

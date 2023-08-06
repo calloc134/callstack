@@ -42,4 +42,5 @@ model Post {
   body       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  is_public  Boolean  @default(false)
 }
