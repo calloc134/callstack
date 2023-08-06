@@ -158,7 +158,9 @@ const User: UserResolvers<GraphQLContext> = {
       return result;
     });
 
+    // ペアレントオブジェクトから現在ログインしているユーザーのデータを取得
     const { user_uuid } = parent;
+    // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
     const { prisma, currentUser } = context;
 
     return await safePosts(currentUser.user_uuid, user_uuid, prisma);
@@ -182,7 +184,9 @@ const Post: PostResolvers<GraphQLContext> = {
       return result;
     });
 
+    // ペアレントオブジェクトから投稿のUUIDを取得
     const { post_uuid } = parent;
+    // コンテキストからPrismaクライアントを取得
     const { prisma } = context;
 
     return await safeUser(post_uuid, prisma);
