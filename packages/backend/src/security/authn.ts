@@ -1,8 +1,8 @@
 import { Auth0PluginOptions } from "@envelop/auth0";
 import { AuthMockPluginOptions } from "../lib/plugins/useAuthMock";
-import { audience, logto_endpoint } from "../env";
+import { audience, logto_endpoint } from "src/env";
 import { TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
-import { GraphQLErrorWithCode } from "../error";
+import { GraphQLErrorWithCode } from "src/error";
 
 // エラー処理を行う関数
 const onError = (error: Error) => {
