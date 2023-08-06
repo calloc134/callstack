@@ -20,7 +20,7 @@ export const PanelPage = () => {
     },
   });
 
-  const { data, fetching, error } = result;
+  // const { data, fetching, error } = result;
 
   return (
     <div>
