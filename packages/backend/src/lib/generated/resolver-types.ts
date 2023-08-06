@@ -15,29 +15,87 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  DateTime: { input: Date; output: Date };
   UUID: { input: string; output: string };
 };
 
-export type Profile = {
-  age: Scalars["Int"]["output"];
-  name: Scalars["String"]["output"];
-  uuid: Scalars["UUID"]["output"];
+export type Mutation = {
+  createPost: Post;
+  deleteMyUser: User;
+  deletePost: Post;
+  deleteUser: User;
+  updateMyUser: User;
+  updatePost: Post;
+  updateUser: User;
+};
+
+export type MutationCreatePostArgs = {
+  body: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type MutationDeletePostArgs = {
+  post_uuid: Scalars["UUID"]["input"];
+};
+
+export type MutationDeleteUserArgs = {
+  user_uuid: Scalars["UUID"]["input"];
+};
+
+export type MutationUpdateMyUserArgs = {
+  bio?: InputMaybe<Scalars["String"]["input"]>;
+  handle?: InputMaybe<Scalars["String"]["input"]>;
+  screen_name?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type MutationUpdatePostArgs = {
+  body: Scalars["String"]["input"];
+  post_uuid: Scalars["UUID"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type MutationUpdateUserArgs = {
+  bio?: InputMaybe<Scalars["String"]["input"]>;
+  handle?: InputMaybe<Scalars["String"]["input"]>;
+  screen_name?: InputMaybe<Scalars["String"]["input"]>;
+  user_uuid: Scalars["UUID"]["input"];
+};
+
+export type Post = {
+  body: Scalars["String"]["output"];
+  created_at: Scalars["DateTime"]["output"];
+  post_uuid: Scalars["UUID"]["output"];
+  title: Scalars["String"]["output"];
+  updated_at: Scalars["DateTime"]["output"];
+  user_uuid: Scalars["UUID"]["output"];
 };
 
 export type Query = {
+  post: Post;
+  posts: Array<Post>;
   user: User;
+  users: Array<User>;
+};
+
+export type QueryPostArgs = {
+  uuid: Scalars["UUID"]["input"];
 };
 
 export type QueryUserArgs = {
   uuid: Scalars["UUID"]["input"];
 };
 
-export type Role = "Admin" | "USER";
+export type Role = "ADMIN" | "USER";
 
 export type User = {
-  email: Scalars["String"]["output"];
-  profile?: Maybe<Profile>;
-  uuid: Scalars["UUID"]["output"];
+  bio: Scalars["String"]["output"];
+  created_at: Scalars["DateTime"]["output"];
+  handle: Scalars["String"]["output"];
+  posts: Array<Post>;
+  role: Role;
+  screen_name: Scalars["String"]["output"];
+  updated_at: Scalars["DateTime"]["output"];
+  user_uuid: Scalars["UUID"]["output"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -109,8 +167,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
-  Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
-  Profile: ResolverTypeWrapper<Profile>;
+  DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   Role: Role;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
@@ -121,8 +180,9 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"]["output"];
-  Int: Scalars["Int"]["output"];
-  Profile: Profile;
+  DateTime: Scalars["DateTime"]["output"];
+  Mutation: {};
+  Post: Post;
   Query: {};
   String: Scalars["String"]["output"];
   UUID: Scalars["UUID"]["output"];
@@ -140,15 +200,35 @@ export type AuthDirectiveResolver<Result, Parent, ContextType = GraphQLContext, 
   Args
 >;
 
-export type ProfileResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Profile"] = ResolversParentTypes["Profile"]> = {
-  age?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
+  name: "DateTime";
+}
+
+export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
+  createPost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationCreatePostArgs, "body" | "title">>;
+  deleteMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  deletePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationDeletePostArgs, "post_uuid">>;
+  deleteUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, "user_uuid">>;
+  updateMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, Partial<MutationUpdateMyUserArgs>>;
+  updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "body" | "post_uuid" | "title">>;
+  updateUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, "user_uuid">>;
+};
+
+export type PostResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Post"] = ResolversParentTypes["Post"]> = {
+  body?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  post_uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  updated_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  user_uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
+  post?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<QueryPostArgs, "uuid">>;
+  posts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryUserArgs, "uuid">>;
+  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
 export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["UUID"], any> {
@@ -156,14 +236,21 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]> = {
-  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  profile?: Resolver<Maybe<ResolversTypes["Profile"]>, ParentType, ContextType>;
-  uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
+  bio?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  handle?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  posts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>;
+  screen_name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  updated_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  user_uuid?: Resolver<ResolversTypes["UUID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {
-  Profile?: ProfileResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
+  Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UUID?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
