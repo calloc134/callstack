@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { GraphQLContext } from "src/context";
 import { QueryResolvers, UserResolvers, PostResolvers } from "src/lib/generated/resolver-types";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { GraphQLErrorWithCode } from "src/error";
 
 type AsyncFunction<T extends unknown[], R> = (...args: T) => Promise<R>;
