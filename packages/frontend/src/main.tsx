@@ -7,6 +7,7 @@ import { LogtoProvider, LogtoConfig } from "@logto/react";
 
 import { Document } from "./_document";
 import { Index } from "./features/index/pages/Index";
+import { ProtectedRouter } from "./ProtectedRouter";
 
 export const Main = () => {
   // const { isLoading, signIn } = useLogto()
@@ -31,7 +32,13 @@ export const Main = () => {
     component: () => <Index />,
   });
 
-  const routeTree = rootRoute.addChildren([indexRoute]);
+  const protectedRoute = new Route({
+    getParentRoute: () => rootRoute,
+    path: "auth",
+    component: () => <ProtectedRouter />,
+  });
+
+  const routeTree = rootRoute.addChildren([indexRoute, protectedRoute]);
 
   return (
     <LogtoProvider config={config}>
