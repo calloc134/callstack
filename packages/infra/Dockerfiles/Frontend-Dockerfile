@@ -7,7 +7,15 @@ WORKDIR /home
 # パッケージの存在するパス
 ARG PACKAGE_PATH=packages/frontend
 ARG SCHEMA_PATH=./graphql/schemas/*.graphql
-ARG OPERATION_PATH=/home/graphql/operations/*.graphql
+# ARG OPERATION_PATH=/home/graphql/operations/*.graphql
+
+# logtoのエンドポイントを指定
+ARG ENDPOINT=https://auth.localhost
+# logtoのアプリケーションIDを指定
+ARG APPID=dummy
+
+# ホスト名(バックエンドへのフェッチに必須)
+ARG HOSTNAME=dummy.dummy
 
 # package.jsonのみをコピーする
 COPY ${PACKAGE_PATH}/package.json ./
@@ -27,14 +35,14 @@ COPY ${PACKAGE_PATH}/../graphql/ ./graphql/
 RUN pnpm codegen
 
 # ビルドする
-RUN pnpm build
+# 環境変数としてホスト名、エンドポイント、アプリケーションIDを渡す
+RUN HOSTNAME=${HOSTNAME} ENDPOINT=${ENDPOINT} APPID=${APPID} pnpm build
 
 # 本番用ステージ
 # nginxイメージを利用
 FROM nginx:latest as production-stage
 
 ARG INFRADIR=packages/infra
-ARG CERTBOT_EMAIL="dummy@dummy.dummy"
 ARG HOSTNAME="dummy.dummy"
 
 # データを引き継ぐ

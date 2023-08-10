@@ -17,7 +17,6 @@ volumes:
   # logtoのデータベースデータを格納するボリューム
   logto-db-vol:
 
-
 services:
   # バックエンド用のデータベース
   db-app:
@@ -71,7 +70,6 @@ services:
       app-ins-network:
       logto-db-network:
 
-
   backend:
     container_name: backend-prod
     # バックエンドのDockerfileを指定
@@ -94,7 +92,7 @@ services:
       - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
       # オーディエンスを指定
       - AUDIENCE=${AUDIENCE}
-    # NODE_ENVをproductionに指定
+      # NODE_ENVをproductionに指定
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
@@ -124,18 +122,18 @@ services:
         # ビルド時のスキーマのパスを指定
         SCHEMA_PATH: ${SCHEMA_PATH}
         # オペレーションの環境変数を指定
-        OPERATION_PATH: ${OPERATION_PATH}
+        # OPERATION_PATH: ${OPERATION_PATH}
+        # logtoコンテナのエンドポイントを指定
+        ENDPOINT: ${ENDPOINT}
+        # logtoコンテナのアプリケーションIDを指定
+        APPID: ${APPID}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
         # ホスト名を指定
         HOSTNAME: ${HOSTNAME}
-        # 管理者のメールアドレスを指定
-        CERTBOT_EMAIL: ${CERTBOT_EMAIL}
     environment:
-      # スキーマのパスを指定
-      - SCHEMA_PATH=${SCHEMA_PATH}
       # オペレーションの環境変数を指定
-      - OPERATION_PATH=${OPERATION_PATH}
+      # - OPERATION_PATH=${OPERATION_PATH}
       # NODE_ENVをproductionに指定
       - NODE_ENV=production
       # ホストネームを指定

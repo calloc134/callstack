@@ -25,7 +25,7 @@ jobs:
     # 環境変数の読み込み
     env:
       SCHEMA_PATH: ../graphql/schemas/*.graphql
-      OPERATION_PATH: ../graphql/operations/*.graphql
+      # OPERATION_PATH: ../graphql/operations/*.graphql
 
     # 実行ステップ
     steps:
