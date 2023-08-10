@@ -3,20 +3,25 @@ import { useLogto, InteractionMode, LogtoProvider } from "@logto/react";
 import { isDev, dev_jwt_token } from "src/env";
 import { logto_config } from "src/config";
 
+// コンテキストの型をあらかじめ定義
+type AuthnContext = {
+  isAuthenticated: boolean;
+  signIn: (redirectUrl: string, interactionMode?: InteractionMode) => Promise<void>;
+  getAccessToken: (redirectUrl?: string) => Promise<string | undefined>;
+};
+
 // Authnで利用するコンテキストの作成
-const AuthnContext = createContext({});
+// ダミーの値を設定
+const AuthnContext = createContext<AuthnContext>({
+  isAuthenticated: false,
+  signIn: async () => void {},
+  getAccessToken: async () => "",
+});
 
 // Authnコンテキストのプロバイダー
 const AuthnProvider = ({ children }: { children: ReactNode }) => {
   // 本番環境において、Logtoのフックより利用する要素を取得
   const { isAuthenticated, signIn, getAccessToken } = useLogto();
-
-  // コンテキストの型をあらかじめ定義
-  type AuthnContext = {
-    isAuthenticated: boolean;
-    signIn: (redirectUrl: string, interactionMode?: InteractionMode) => Promise<void>;
-    getAccessToken: (redirectUrl?: string) => Promise<string | undefined>;
-  };
 
   // 開発環境においてのコンテキストの定義
   // isAuthenticatedは環境変数から取得したJWTトークンの文字列の種類を確認
@@ -26,7 +31,7 @@ const AuthnProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: dev_jwt_token !== "" ? true : false,
     signIn: async () => void {},
     getAccessToken: async () => {
-      return dev_jwt_token !== "" ? "" : dev_jwt_token;
+      return dev_jwt_token !== "" ? dev_jwt_token : undefined;
     },
   };
 

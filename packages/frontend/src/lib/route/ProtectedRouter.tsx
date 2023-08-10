@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { useLogto } from "@logto/react";
 import { Outlet } from "@tanstack/react-router";
-import { logto_endpoint } from "../../env";
+import { useAuthn } from "./useAuthn";
+import { logto_endpoint } from "src/env";
 
 export const ProtectedRouter = () => {
   // Logtoフックより認証状態とログイン関数を取得
-  const { isAuthenticated, signIn } = useLogto();
+  const { isAuthenticated, signIn, getAccessToken } = useAuthn();
 
   // 認証していない場合はsignIn関数でログインリダイレクト
   useEffect(() => {
