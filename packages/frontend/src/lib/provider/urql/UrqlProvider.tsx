@@ -5,6 +5,7 @@ import { authExchange, AuthUtilities, AuthConfig } from "@urql/exchange-auth";
 import { isDev, hostname } from "src/env";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
 
+// TODO: エラーハンドリングをMapExchangeで行う
 const UrqlProvider = ({ children }: { children: ReactNode }) => {
   // urqlクライアントの設定
   const { isAuthenticated, getAccessToken } = useAuthn();
@@ -15,11 +16,12 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     async (utils) => {
       return {
         willAuthError() {
-          // e.g. check for expiration, existence of auth etc
+          // 認証されていない場合は認証エラーとして処理する
           return !isAuthenticated;
         },
         didAuthError(error) {
           // GraphQLのエラー
+          // TODO: 実際のエラーを確認してから修正
           return error.graphQLErrors.some((e) => e.extensions?.code === "UNAUTHENTICATED");
         },
         async refreshAuth() {

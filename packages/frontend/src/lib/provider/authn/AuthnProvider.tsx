@@ -18,16 +18,13 @@ const AuthnContext = createContext<AuthnContext>({
   getAccessToken: async () => "",
 });
 
-// Authnコンテキストのプロバイダー
-const AuthnProvider = ({ children }: { children: ReactNode }) => {
-  // 本番環境において、Logtoのフックより利用する要素を取得
-  const { isAuthenticated, signIn, getAccessToken } = useLogto();
-
+// 開発環境においてのAuthnコンテキストのプロバイダー
+const DevelopmentAuthnProvider = ({ children }: { children: ReactNode }) => {
   // 開発環境においてのコンテキストの定義
   // isAuthenticatedは環境変数から取得したJWTトークンの文字列の種類を確認
   // signInはダミーの関数を定義
   // getAccessTokenは環境変数から取得したJWTトークンを返す
-  const developmentAuthnContext: AuthnContext = {
+  const context: AuthnContext = {
     isAuthenticated: dev_jwt_token !== "" ? true : false,
     signIn: async () => void {},
     getAccessToken: async () => {
@@ -35,18 +32,31 @@ const AuthnProvider = ({ children }: { children: ReactNode }) => {
     },
   };
 
+  return <AuthnContext.Provider value={context}>{children}</AuthnContext.Provider>;
+};
+
+// 本番環境においてのAuthnコンテキストのプロバイダー
+const ProductionAuthnProvider = ({ children }: { children: ReactNode }) => {
+  // 本番環境において、Logtoのフックより利用する要素を取得
+  const { isAuthenticated, signIn, getAccessToken } = useLogto();
+
   // 本番環境においてのコンテキストの定義
   // Logtoのフックより取得した要素をそのまま利用
-  const productionAuthnContext: AuthnContext = {
+  const context: AuthnContext = {
     isAuthenticated,
     signIn,
     getAccessToken,
   };
 
+  return <AuthnContext.Provider value={context}>{children}</AuthnContext.Provider>;
+};
+
+// Authnコンテキストのプロバイダー
+const AuthnProvider = ({ children }: { children: ReactNode }) => {
   return (
     // 開発環境か本番環境かでコンテキストを切り替える
     <LogtoProvider config={logto_config}>
-      <AuthnContext.Provider value={isDev ? developmentAuthnContext : productionAuthnContext}>{children}</AuthnContext.Provider>
+      {isDev ? <DevelopmentAuthnProvider>{children}</DevelopmentAuthnProvider> : <ProductionAuthnProvider>{children}</ProductionAuthnProvider>}
     </LogtoProvider>
   );
 };

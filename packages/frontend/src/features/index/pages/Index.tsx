@@ -1,5 +1,4 @@
 import { Button } from "@nextui-org/react";
-import "src/index.css";
 
 export const Index = () => {
   return (

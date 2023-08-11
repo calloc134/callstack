@@ -5,20 +5,24 @@ import { NextUIProvider } from "@nextui-org/react";
 
 import { router } from "./route";
 import { AuthnProvider } from "./lib/provider/authn/AuthnProvider";
+import { UrqlProvider } from "./lib/provider/urql/UrqlProvider";
+import "src/index.css";
 
 export const Main = () => {
   return (
     // NextUI用のprovider
-    <NextUIProvider>
-      <RouterProvider router={router} />
-    </NextUIProvider>
+    <RouterProvider router={router} />
   );
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <AuthnProvider>
-      <Main />
+      <UrqlProvider>
+        <NextUIProvider>
+          <Main />
+        </NextUIProvider>
+      </UrqlProvider>
     </AuthnProvider>
   </React.StrictMode>
 );
