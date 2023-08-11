@@ -72,7 +72,7 @@ const yoga = createYoga({
 // yogaサーバーをnodeのhttpサーバーとして起動
 const server = createServer(yoga);
 
-server.listen(4000, () => {
+server.listen(6173, () => {
   console.log("🚀 Server is running");
 });
 

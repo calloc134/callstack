@@ -39,8 +39,8 @@ FROM node:latest as production-stage
 # 作業ディレクトリを指定
 WORKDIR /home
 
-# 4000ポートを開放している
-EXPOSE 4000
+# 6173ポートを開放している
+EXPOSE 6173
 
 # tiniのインストール
 RUN apt-get update && apt-get install -y tini
