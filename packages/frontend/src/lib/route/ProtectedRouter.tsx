@@ -9,6 +9,7 @@ export const ProtectedRouter = () => {
 
   // 認証していない場合はsignIn関数でログインリダイレクト
   useEffect(() => {
+    console.debug("ProtectedRouter", isAuthenticated);
     if (!isAuthenticated) {
       signIn(`${logto_endpoint}/callback`);
     }

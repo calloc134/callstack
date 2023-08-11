@@ -22,7 +22,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
         didAuthError(error) {
           // GraphQLのエラー
           // TODO: 実際のエラーを確認してから修正
-          return error.graphQLErrors.some((e) => e.extensions?.code === "UNAUTHENTICATED");
+          return error.graphQLErrors.some((e) => e.extensions?.code === "authz_not_logged_in");
         },
         async refreshAuth() {
           if (!isAuthenticated) {

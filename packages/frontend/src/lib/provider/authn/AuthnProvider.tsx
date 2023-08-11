@@ -4,9 +4,11 @@ import { isDev, dev_jwt_token } from "src/env";
 import { logto_config } from "src/config";
 
 // コンテキストの型をあらかじめ定義
+// fetchUserInfoやgetIdTokenClaimsは利用しない方針
 type AuthnContext = {
   isAuthenticated: boolean;
   signIn: (redirectUrl: string, interactionMode?: InteractionMode) => Promise<void>;
+  signOut: (postLogoutRedirectUri?: string) => Promise<void>;
   getAccessToken: (redirectUrl?: string) => Promise<string | undefined>;
 };
 
@@ -15,6 +17,7 @@ type AuthnContext = {
 const AuthnContext = createContext<AuthnContext>({
   isAuthenticated: false,
   signIn: async () => void {},
+  signOut: async () => void {},
   getAccessToken: async () => "",
 });
 
@@ -27,6 +30,7 @@ const DevelopmentAuthnProvider = ({ children }: { children: ReactNode }) => {
   const context: AuthnContext = {
     isAuthenticated: dev_jwt_token !== "" ? true : false,
     signIn: async () => void {},
+    signOut: async () => void {},
     getAccessToken: async () => {
       return dev_jwt_token !== "" ? dev_jwt_token : undefined;
     },
@@ -38,13 +42,14 @@ const DevelopmentAuthnProvider = ({ children }: { children: ReactNode }) => {
 // 本番環境においてのAuthnコンテキストのプロバイダー
 const ProductionAuthnProvider = ({ children }: { children: ReactNode }) => {
   // 本番環境において、Logtoのフックより利用する要素を取得
-  const { isAuthenticated, signIn, getAccessToken } = useLogto();
+  const { isAuthenticated, signIn, signOut, getAccessToken } = useLogto();
 
   // 本番環境においてのコンテキストの定義
   // Logtoのフックより取得した要素をそのまま利用
   const context: AuthnContext = {
     isAuthenticated,
     signIn,
+    signOut,
     getAccessToken,
   };
 

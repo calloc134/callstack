@@ -21,14 +21,14 @@ export const PanelPage = () => {
     },
   });
 
-  const { data, fetching, error } = result;
+  console.log("result", result);
 
-  // とりあえず表示させる
-  console.log(result, reexecuteQuery, data, fetching, error);
+  const { data, fetching, error } = result;
 
   return (
     <div>
-      <h1>Panel</h1>
+      {data?.post.title}
+      HELLOEHHHEHHHEHEHEH
     </div>
   );
 };

@@ -13,9 +13,12 @@ const logto_endpoint = isDev ? "" : import.meta.env.VITE_LOGTO_ENDPOINT || "";
 // 本番環境であれば、LogtoのアプリケーションIDを設定
 const logto_app_id = isDev ? "" : import.meta.env.VITE_LOGTO_APPID || "";
 
+// 上記と同様の理由でAPIリソースを設定
+const logto_api_resource = isDev ? "" : import.meta.env.VITE_LOGTO_API_RESOURCE || "";
+
 // ホスト名を取得
 // 開発環境であれば、localhostを設定
 // 本番環境であれば、環境変数から取得
-const hostname = isDev ? "localhost" : process.env.VITE_HOSTNAME || "";
+const hostname = isDev ? "localhost:6173" : process.env.VITE_HOSTNAME || "";
 
-export { isDev, dev_jwt_token, logto_endpoint, logto_app_id, hostname };
+export { isDev, dev_jwt_token, logto_endpoint, logto_app_id, logto_api_resource, hostname };

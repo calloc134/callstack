@@ -4,9 +4,9 @@ import { Outlet } from "@tanstack/react-router";
 export const Document = () => {
   return (
     <>
-      // タイトル
+      {/* タイトル */}
       <h1>Document</h1>
-      // ここに内側のコンポーネントが入る
+      {/* ここに内側のコンポーネントが入る */}
       <Outlet />
     </>
   );
