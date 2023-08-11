@@ -13,7 +13,8 @@ const logto_endpoint = isDev ? "" : import.meta.env.VITE_LOGTO_ENDPOINT || "";
 // 本番環境であれば、LogtoのアプリケーションIDを設定
 const logto_app_id = isDev ? "" : import.meta.env.VITE_LOGTO_APPID || "";
 
-// 上記と同様の理由でAPIリソースを設定
+// 開発環境であれば、空文字を設定
+// 本番環境であれば、Logtoのapiリソースを設定
 const logto_api_resource = isDev ? "" : import.meta.env.VITE_LOGTO_API_RESOURCE || "";
 
 // ホスト名を取得
