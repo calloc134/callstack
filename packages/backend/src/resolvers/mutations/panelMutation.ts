@@ -3,6 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import { MutationResolvers } from "src/lib/generated/resolver-types";
 import { GraphQLContext } from "src/context";
 import { withErrorHandling } from "src/lib/error/handling";
+import { GraphQLErrorWithCode } from "src/lib/error/error";
+
+// prismaのupdateは、undefinedな値を渡すと、そのフィールドを更新しないことに留意する
 
 const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // updateUserForAdminフィールドのリゾルバー
@@ -145,6 +148,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
         // UUIDからユーザーを取得
         const result = await prisma.post.update({
           where: {
+            userUuid: user_uuid,
             post_uuid: post_uuid,
           },
           data: {
@@ -152,6 +156,12 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
             body: body,
           },
         });
+
+        // もし削除した投稿が存在しなかった場合はエラーを投げる
+        if (!result) {
+          throw new GraphQLErrorWithCode("item_not_owned");
+        }
+
         return result;
       }
     );
@@ -171,22 +181,29 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // deletePostフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   deletePost: async (_parent, args, context) => {
-    const safePost = withErrorHandling(async (prisma: PrismaClient, post_uuid: string) => {
+    const safePost = withErrorHandling(async (user_uuid: string, prisma: PrismaClient, post_uuid: string) => {
       // UUIDからユーザーを取得
       const result = await prisma.post.delete({
         where: {
+          userUuid: user_uuid,
           post_uuid: post_uuid,
         },
       });
+
+      // もし削除した投稿が存在しなかった場合はエラーを投げる
+      if (!result) {
+        throw new GraphQLErrorWithCode("item_not_owned");
+      }
+
       return result;
     });
 
     // 引数からユーザーのUUIDを取得
     const { post_uuid } = args;
     // コンテキストからPrismaクライアントを取得
-    const { prisma } = context;
+    const { prisma, currentUser } = context;
 
-    return await safePost(prisma, post_uuid);
+    return await safePost(currentUser.user_uuid, prisma, post_uuid);
   },
 };
 
