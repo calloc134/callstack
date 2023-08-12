@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link } from "@tanstack/react-router";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar } from "@nextui-org/react";
-import { Sun } from "tabler-icons-react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar, Tooltip, Spacer } from "@nextui-org/react";
+import { Login, Sun } from "tabler-icons-react";
 import { useAuthn } from "./lib/provider/authn/useAuthn";
 
 // 外枠のコンポーネント
@@ -20,42 +20,48 @@ export const Document = () => {
     <div className={`${darkMode ? "dark" : ""} text-foreground bg-background`}>
       <div className="h-screen flex flex-col">
         {/* ここで全画面の高さを設定 */}
-        <Navbar className="flex-shrink-0 bg-slate-300">
+        {/* 透明度50% すりガラス風にして影を付ける */}
+        <Navbar className="flex-shrink-0 bg-primary/30 backdrop-blur-sm shadow-xl rounded-b-lg" shouldHideOnScroll>
           {/* ナビゲーションバーの高さを固定 */}
           <NavbarBrand>
-            <p className="font-bold text-inherit">callstack</p>
+            <Tooltip content="タイトル" color="secondary">
+              <p className="font-bold text-inherit">callstack</p>
+            </Tooltip>
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4" justify="start">
             <NavbarItem>
-              <Link to="/">Features</Link>
+              <Link to="/">見る</Link>
             </NavbarItem>
             <NavbarItem isActive>
-              <Link to="/">Customers</Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link to="/">Integrations</Link>
+              <Link to="/">出品する</Link>
             </NavbarItem>
           </NavbarContent>
           <NavbarContent justify="end">
-            <Button color="secondary" variant="flat" onClick={toggleDarkMode}>
-              <Sun size={20} />
-            </Button>
-            <NavbarItem>
-              {isAuthenticated ? (
-                <Avatar
-                  isBordered
-                  as="button"
-                  className="transition-transform"
-                  color="secondary"
-                  name="Jason Hughes"
-                  size="sm"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-              ) : (
-                <Button color="primary" variant="flat">
-                  <Link to="/">Login</Link>
+            <NavbarItem className="sm:flex gap-4">
+              <Tooltip content="スタイル切替" color="secondary">
+                <Button color="secondary" variant="shadow" onClick={toggleDarkMode}>
+                  <Sun size={20} />
                 </Button>
-              )}
+              </Tooltip>
+              <Tooltip content="ログイン/登録" color="secondary">
+                {isAuthenticated ? (
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    color="secondary"
+                    name="Jason Hughes"
+                    size="sm"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  />
+                ) : (
+                  <Button color="primary" variant="shadow">
+                    <Link to="/">
+                      <Login size={20} />
+                    </Link>
+                  </Button>
+                )}
+              </Tooltip>
             </NavbarItem>
           </NavbarContent>
         </Navbar>

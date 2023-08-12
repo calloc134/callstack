@@ -1,10 +1,23 @@
-import { Button } from "@nextui-org/react";
+import { Button, Spacer } from "@nextui-org/react";
+import { Link } from "@tanstack/react-router";
 
 export const Index = () => {
   return (
     <>
-      <h1>Index</h1>
-      <Button color="primary">AAAAAAAAAAAAAAAAAAAAAA</Button>
+      <div className="flex flex-col items-center justify-start h-screen">
+        <Spacer y={12} />
+        <img src="/callstack.png" alt="callstack" className="w-unit-4xl" />
+        <h1 className="text-4xl font-bold">callstack</h1>
+        <p className="text-xl">callstackボイラープレートのサンプルです。</p>
+        <Spacer y={4} />
+        <Button color="primary" variant="shadow">
+          <Link to="/auth/panel">ログイン/登録する</Link>
+        </Button>
+
+        <Spacer y={4} />
+
+        <Spacer y={4} />
+      </div>
     </>
   );
 };
