@@ -19,15 +19,13 @@ export const Document = () => {
   return (
     <div className={`${darkMode ? "dark" : ""} text-foreground bg-background`}>
       <div className="h-screen flex flex-col">
-        {" "}
         {/* ここで全画面の高さを設定 */}
         <Navbar className="flex-shrink-0 bg-slate-300">
-          {" "}
           {/* ナビゲーションバーの高さを固定 */}
           <NavbarBrand>
             <p className="font-bold text-inherit">callstack</p>
           </NavbarBrand>
-          <NavbarContent className="hidden sm:flex gap-4" justify="center">
+          <NavbarContent className="hidden sm:flex gap-4" justify="start">
             <NavbarItem>
               <Link to="/">Features</Link>
             </NavbarItem>
@@ -37,11 +35,11 @@ export const Document = () => {
             <NavbarItem>
               <Link to="/">Integrations</Link>
             </NavbarItem>
+          </NavbarContent>
+          <NavbarContent justify="end">
             <Button color="secondary" variant="flat" onClick={toggleDarkMode}>
               <Sun size={20} />
             </Button>
-          </NavbarContent>
-          <NavbarContent justify="end">
             <NavbarItem>
               {isAuthenticated ? (
                 <Avatar
