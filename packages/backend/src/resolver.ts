@@ -4,6 +4,7 @@ import { resolvers as scalarResolvers } from "graphql-scalars";
 import { UserTypeResolver } from "./resolvers/types/userType";
 import { PostTypeResolver } from "./resolvers/types/postType";
 import { PanelQueryResolver } from "./resolvers/queries/panelQuery";
+import { PanelMutationResolver } from "./resolvers/mutations/panelMutation";
 
 // リゾルバーの定義
 export const resolvers: Resolvers<GraphQLContext> = {
@@ -13,6 +14,11 @@ export const resolvers: Resolvers<GraphQLContext> = {
   // クエリのリゾルバー
   Query: {
     ...PanelQueryResolver,
+  },
+
+  // ミューテーションのリゾルバー
+  Mutation: {
+    ...PanelMutationResolver,
   },
   // ユーザ型のリゾルバー
   User: {
