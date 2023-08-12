@@ -1,6 +1,7 @@
 import { ReactNode, useState, useCallback } from "react";
-import { Provider, Client, cacheExchange, fetchExchange } from "urql";
+import { Provider, Client, cacheExchange, fetchExchange, mapExchange, MapExchangeOpts } from "urql";
 import { authExchange, AuthUtilities, AuthConfig } from "@urql/exchange-auth";
+import toast, { Toaster } from "react-hot-toast";
 
 import { isDev, hostname } from "src/env";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
@@ -57,16 +58,37 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     [isAuthenticated, getAccessToken, jwt]
   );
 
+  const mapInit: MapExchangeOpts = {
+    onResult(result) {
+      // エラーの場合はトーストを表示
+      if (result.error) {
+        toast.error(result.error.message, {
+          icon: "❌",
+        });
+      }
+    },
+  };
+
   const urql_client = new Client({
     // 開発環境であればhttp、本番環境であればhttpsを使う
     // ホストネームよりフェッチ先のURLを生成
     url: `${isDev ? "http" : "https"}://${hostname}/api/graphql`,
-    exchanges: [cacheExchange, authExchange(authInit), fetchExchange],
+    exchanges: [cacheExchange, authExchange(authInit), mapExchange(mapInit), fetchExchange],
   });
 
   return (
     // urql用のprovider
-    <Provider value={urql_client}>{children}</Provider>
+    <Provider value={urql_client}>
+      <>
+        {children}
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            duration: 5000,
+          }}
+        />
+      </>
+    </Provider>
   );
 };
 
