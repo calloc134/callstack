@@ -10,9 +10,11 @@ ARG SCHEMA_PATH=./graphql/schemas/*.graphql
 # ARG OPERATION_PATH=/home/graphql/operations/*.graphql
 
 # logtoのエンドポイントを指定
-ARG ENDPOINT=https://auth.localhost
+ARG LOGTO_ENDPOINT=https://auth.localhost
 # logtoのアプリケーションIDを指定
-ARG APPID=dummy
+ARG LOGTO_APPID=dummy
+# logtoのAPIリソースを指定
+ARG LOGTO_API_RESOURCE=https://dummy
 
 # ホスト名(バックエンドへのフェッチに必須)
 ARG HOSTNAME=dummy.dummy
@@ -35,14 +37,16 @@ COPY ${PACKAGE_PATH}/../graphql/ ./graphql/
 RUN pnpm codegen
 
 # ビルドする
-# 環境変数としてホスト名、エンドポイント、アプリケーションIDを渡す
-RUN HOSTNAME=${HOSTNAME} ENDPOINT=${ENDPOINT} APPID=${APPID} pnpm build
+# 環境変数としてホスト名、エンドポイント、アプリケーションID、APIリソースを渡す
+RUN HOSTNAME=${HOSTNAME} ENDPOINT=${LOGTO_ENDPOINT} APPID=${LOGTO_APPID} API_RESOURCE=${LOGTO_API_RESOURCE} pnpm build
 
 # 本番用ステージ
 # nginxイメージを利用
 FROM nginx:latest as production-stage
 
+# nginx構成ファイルのディレクトリ
 ARG INFRADIR=packages/infra
+# ホスト名(このホストでnginxを構成)
 ARG HOSTNAME="dummy.dummy"
 
 # データを引き継ぐ

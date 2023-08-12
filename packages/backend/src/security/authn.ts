@@ -1,6 +1,6 @@
 import { Auth0PluginOptions } from "@envelop/auth0";
 import { AuthMockPluginOptions } from "../lib/plugins/useAuthMock";
-import { audience, logto_endpoint } from "src/env";
+import { logto_audience, logto_endpoint } from "src/env";
 import { TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
 import { GraphQLErrorWithCode } from "src/error";
 
@@ -30,7 +30,7 @@ const authnOption: Auth0PluginOptions = {
   // ドメイン部分は上書きするためダミー
   domain: "",
   // audienceは環境変数から取得
-  audience: audience,
+  audience: logto_audience,
   // オプションを上書き
   // logtoのjwksUriと指定
   jwksClientOptions: {

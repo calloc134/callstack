@@ -1,5 +1,5 @@
 import { createHmac } from "crypto";
-import { webhook_secret } from "./env";
+import { logto_webhook_secret } from "./env";
 import { Plugin } from "graphql-yoga/typings/plugins/types";
 import { PrismaClient } from "@prisma/client";
 
@@ -50,7 +50,7 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
       const expectedSignature = request.headers.get("logto-signature-sha-256") || "";
 
       // 署名検証
-      const isValid = verifyWebHook(webhook_secret, rawBody, expectedSignature);
+      const isValid = verifyWebHook(logto_webhook_secret, rawBody, expectedSignature);
 
       if (isValid) {
         // bodyのJSONをパース

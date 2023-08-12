@@ -11,10 +11,10 @@ const logto_endpoint = isDev ? "" : process.env.LOGTO_ENDPOINT || "";
 
 // 開発環境であれば、空文字を設定
 // 本番環境であれば、Logtoのオーディエンスを設定
-const audience = isDev ? "" : process.env.LOGTO_AUDIENCE || "";
+const logto_audience = isDev ? "" : process.env.LOGTO_AUDIENCE || "";
 
 // 開発環境であれば、空文字を設定
 // 本番環境であれば、Logtoのwebhookの検証用シークレットを設定
-const webhook_secret = isDev ? "" : process.env.LOGTO_WEBHOOK_SECRET || "";
+const logto_webhook_secret = isDev ? "" : process.env.LOGTO_WEBHOOK_SECRET || "";
 
-export { isDev, logto_endpoint, audience, schema_path, webhook_secret };
+export { isDev, logto_endpoint, logto_audience, schema_path, logto_webhook_secret };
