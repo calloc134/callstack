@@ -36,10 +36,10 @@ type Query {
 # ミューテーションのスキーマ定義
 type Mutation {
   # ユーザを更新するミューテーション 管理者用
-  updateUser(user_uuid: UUID!, handle: String, screen_name: String, bio: String): User! @auth(role: ADMIN)
+  updateUserForAdmin(user_uuid: UUID!, handle: String, screen_name: String, bio: String): User! @auth(role: ADMIN)
 
   # ユーザを削除するミューテーション 管理者用
-  deleteUser(user_uuid: UUID!): User! @auth(role: ADMIN)
+  deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
   # 自分のユーザの情報を更新するミューテーション
   updateMyUser(handle: String, screen_name: String, bio: String): User! @auth(role: USER)

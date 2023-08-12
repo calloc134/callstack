@@ -5,9 +5,9 @@ import { GraphQLContext } from "src/context";
 import { withErrorHandling } from "src/lib/error/handling";
 
 const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
-  // updateUserフィールドのリゾルバー
+  // updateUserForAdminフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
-  updateUser: async (_parent, args, context) => {
+  updateUserForAdmin: async (_parent, args, context) => {
     const safeUser = withErrorHandling(
       async (user_uuid: string, prisma: PrismaClient, { bio, handle, screen_name }: { bio?: string; handle?: string; screen_name?: string }) => {
         // UUIDからユーザーを取得
@@ -35,6 +35,27 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     const screen_name = maybeScreenName ?? undefined;
 
     return await safeUser(user_uuid, prisma, { bio, handle, screen_name });
+  },
+
+  // deleteUserForAdminフィールドのリゾルバー
+  // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  deleteUserForAdmin: async (_parent, args, context) => {
+    const safeUser = withErrorHandling(async (user_uuid: string, prisma: PrismaClient) => {
+      // UUIDからユーザーを取得
+      const result = await prisma.user.delete({
+        where: {
+          user_uuid: user_uuid,
+        },
+      });
+      return result;
+    });
+
+    // 引数からユーザーのUUIDを取得
+    const { user_uuid } = args;
+    // コンテキストからPrismaクライアントを取得
+    const { prisma } = context;
+
+    return await safeUser(user_uuid, prisma);
   },
 
   // updateMyUserフィールドのリゾルバー
@@ -68,27 +89,6 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     const screen_name = maybeScreenName ?? undefined;
 
     return await safeUser(currentUser.user_uuid, prisma, { bio, handle, screen_name });
-  },
-
-  // deleteUserフィールドのリゾルバー
-  // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
-  deleteUser: async (_parent, args, context) => {
-    const safeUser = withErrorHandling(async (user_uuid: string, prisma: PrismaClient) => {
-      // UUIDからユーザーを取得
-      const result = await prisma.user.delete({
-        where: {
-          user_uuid: user_uuid,
-        },
-      });
-      return result;
-    });
-
-    // 引数からユーザーのUUIDを取得
-    const { user_uuid } = args;
-    // コンテキストからPrismaクライアントを取得
-    const { prisma } = context;
-
-    return await safeUser(user_uuid, prisma);
   },
 
   // deleteMyUserフィールドのリゾルバー

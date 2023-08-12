@@ -24,10 +24,10 @@ export type Mutation = {
   createPost: Post;
   deleteMyUser: User;
   deletePost: Post;
-  deleteUser: User;
+  deleteUserForAdmin: User;
   updateMyUser: User;
   updatePost: Post;
-  updateUser: User;
+  updateUserForAdmin: User;
 };
 
 export type MutationCreatePostArgs = {
@@ -39,7 +39,7 @@ export type MutationDeletePostArgs = {
   post_uuid: Scalars["UUID"]["input"];
 };
 
-export type MutationDeleteUserArgs = {
+export type MutationDeleteUserForAdminArgs = {
   user_uuid: Scalars["UUID"]["input"];
 };
 
@@ -55,7 +55,7 @@ export type MutationUpdatePostArgs = {
   title: Scalars["String"]["input"];
 };
 
-export type MutationUpdateUserArgs = {
+export type MutationUpdateUserForAdminArgs = {
   bio?: InputMaybe<Scalars["String"]["input"]>;
   handle?: InputMaybe<Scalars["String"]["input"]>;
   screen_name?: InputMaybe<Scalars["String"]["input"]>;
@@ -227,10 +227,10 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   createPost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationCreatePostArgs, "body" | "title">>;
   deleteMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   deletePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationDeletePostArgs, "post_uuid">>;
-  deleteUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, "user_uuid">>;
+  deleteUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserForAdminArgs, "user_uuid">>;
   updateMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, Partial<MutationUpdateMyUserArgs>>;
   updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "body" | "post_uuid" | "title">>;
-  updateUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, "user_uuid">>;
+  updateUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserForAdminArgs, "user_uuid">>;
 };
 
 export interface PositiveIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["PositiveInt"], any> {
