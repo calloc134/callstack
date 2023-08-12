@@ -34,6 +34,10 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
       const result = await prisma.user.findMany({
         skip: offset,
         take: limit,
+        // ユーザを新しい順に並び替える
+        orderBy: {
+          created_at: "desc",
+        },
       });
       return result;
     });
@@ -94,6 +98,10 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
         },
         skip: offset,
         take: limit,
+        // 投稿を新しい順に並び替える
+        orderBy: {
+          created_at: "desc",
+        },
       });
       return result;
     });

@@ -32,6 +32,10 @@ const UserTypeResolver: UserResolvers<GraphQLContext> = {
             },
             skip: offset,
             take: limit,
+            // 投稿を新しい順に並び替える
+            orderBy: {
+              created_at: "desc",
+            },
           });
         return result;
       }
