@@ -13,6 +13,7 @@ const config: CodegenConfig = {
         scalars: {
           UUID: "string",
           DateTime: "Date",
+          PositiveInt: "number",
         },
         enumsAsTypes: true,
         skipTypename: true,

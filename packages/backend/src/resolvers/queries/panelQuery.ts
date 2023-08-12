@@ -28,17 +28,22 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
 
   // usersクエリのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
-  getAllUsers: async (_parent, _args, context) => {
-    const safeUsers = withErrorHandling(async (prisma: PrismaClient) => {
+  getAllUsers: async (_parent, args, context) => {
+    const safeUsers = withErrorHandling(async (prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
       // ユーザーを全件取得
-      const result = await prisma.user.findMany();
+      const result = await prisma.user.findMany({
+        skip: offset,
+        take: limit,
+      });
       return result;
     });
 
+    // 引数からページネーションのoffsetとlimitを取得
+    const { offset, limit } = args;
     // コンテキストからPrismaクライアントを取得
     const { prisma } = context;
 
-    return await safeUsers(prisma);
+    return await safeUsers(prisma, { limit, offset });
   },
 
   // postクエリのリゾルバー
@@ -72,8 +77,8 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
 
   // postsクエリのリゾルバー
   // @ts-expect-error userフィールドが存在しないためエラーが出るが、実際には存在するので無視
-  getAllPosts: async (_parent, _args, context) => {
-    const safePosts = withErrorHandling(async (user_uuid: string, prisma: PrismaClient) => {
+  getAllPosts: async (_parent, args, context) => {
+    const safePosts = withErrorHandling(async (user_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
       const result = await prisma.post.findMany({
         // 投稿が自分でない かつ 非公開のものは除外する
         // つまり、投稿が自分 または 公開のもののみ取得する
@@ -87,14 +92,19 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
             },
           ],
         },
+        skip: offset,
+        take: limit,
       });
       return result;
     });
 
+    // 引数からページネーションのoffsetとlimitを取得
+    const { offset, limit } = args;
+
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
     const { prisma, currentUser } = context;
 
-    return await safePosts(currentUser.user_uuid, prisma);
+    return await safePosts(currentUser.user_uuid, prisma, { limit, offset });
   },
 };
 

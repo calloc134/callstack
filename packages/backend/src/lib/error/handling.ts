@@ -14,9 +14,12 @@ const withErrorHandling =
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         switch (error.code) {
-          // ユーザーが見つからない場合
+          // アイテムが見つからない場合
           case "P2025":
             throw new GraphQLErrorWithCode("item_not_found");
+          // アイテムが存在している場合
+          case "P2002":
+            throw new GraphQLErrorWithCode("item_already_exists");
           // ここにエラーの種類を追加していく
           // その他のエラー
           default:

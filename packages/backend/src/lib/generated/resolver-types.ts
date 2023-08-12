@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number };
   Float: { input: number; output: number };
   DateTime: { input: Date; output: Date };
+  PositiveInt: { input: number; output: number };
   UUID: { input: string; output: string };
 };
 
@@ -78,6 +79,16 @@ export type Query = {
   getUserByUUID: User;
 };
 
+export type QueryGetAllPostsArgs = {
+  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+};
+
+export type QueryGetAllUsersArgs = {
+  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+};
+
 export type QueryGetPostByUuidArgs = {
   uuid: Scalars["UUID"]["input"];
 };
@@ -97,6 +108,11 @@ export type User = {
   screen_name: Scalars["String"]["output"];
   updated_at: Scalars["DateTime"]["output"];
   user_uuid: Scalars["UUID"]["output"];
+};
+
+export type UserPostsArgs = {
+  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -170,6 +186,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
+  PositiveInt: ResolverTypeWrapper<Scalars["PositiveInt"]["output"]>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   Role: Role;
@@ -183,6 +200,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"]["output"];
   DateTime: Scalars["DateTime"]["output"];
   Mutation: {};
+  PositiveInt: Scalars["PositiveInt"]["output"];
   Post: Post;
   Query: {};
   String: Scalars["String"]["output"];
@@ -215,6 +233,10 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   updateUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, "user_uuid">>;
 };
 
+export interface PositiveIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["PositiveInt"], any> {
+  name: "PositiveInt";
+}
+
 export type PostResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Post"] = ResolversParentTypes["Post"]> = {
   body?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
@@ -227,8 +249,8 @@ export type PostResolvers<ContextType = GraphQLContext, ParentType extends Resol
 };
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
-  getAllPosts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType>;
-  getAllUsers?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
+  getAllPosts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType, RequireFields<QueryGetAllPostsArgs, "limit" | "offset">>;
+  getAllUsers?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType, RequireFields<QueryGetAllUsersArgs, "limit" | "offset">>;
   getPostByUUID?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<QueryGetPostByUuidArgs, "uuid">>;
   getUserByUUID?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryGetUserByUuidArgs, "uuid">>;
 };
@@ -241,7 +263,7 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
   bio?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   handle?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  posts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType>;
+  posts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType, RequireFields<UserPostsArgs, "limit" | "offset">>;
   role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>;
   screen_name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   updated_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
@@ -252,6 +274,7 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 export type Resolvers<ContextType = GraphQLContext> = {
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  PositiveInt?: GraphQLScalarType;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UUID?: GraphQLScalarType;

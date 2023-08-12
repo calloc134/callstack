@@ -6,26 +6,31 @@ enum Role {
 
 # UUIDスカラー型を利用するための定義
 scalar UUID
+# DateTimeスカラー型を利用するための定義
 scalar DateTime
+# 正の整数スカラー型を利用するための定義
+scalar PositiveInt
+
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
 
 # クエリのスキーマ定義
 schema {
   query: Query
+  mutation: Mutation
 }
 
 # クエリのスキーマ定義
 type Query {
   # ユーザ一覧を取得するクエリ
-  users: [User!]! @auth(role: USER)
+  getAllUsers(offset: PositiveInt = 0, limit: PositiveInt = 10): [User!]! @auth(role: USER)
   # ユーザを取得するクエリ
-  user(uuid: UUID!): User! @auth(role: USER)
+  getUserByUUID(uuid: UUID!): User! @auth(role: USER)
 
   # 投稿一覧を取得するクエリ
-  posts: [Post!]! @auth(role: USER)
+  getAllPosts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]! @auth(role: USER)
   # 投稿を取得するクエリ
-  post(uuid: UUID!): Post! @auth(role: USER)
+  getPostByUUID(uuid: UUID!): Post! @auth(role: USER)
 }
 
 # ミューテーションのスキーマ定義
@@ -62,7 +67,7 @@ type User {
   created_at: DateTime!
   updated_at: DateTime!
   role: Role!
-  posts: [Post!]!
+  posts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]!
 }
 
 # 投稿型の定義
@@ -74,6 +79,6 @@ type Post {
   body: String!
   created_at: DateTime!
   updated_at: DateTime!
-  user: User!
   is_public: Boolean!
+  user: User!
 }
