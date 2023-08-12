@@ -3,6 +3,7 @@ import { Outlet } from "@tanstack/react-router";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
 import { logto_endpoint } from "src/env";
 import { Spinner } from "@nextui-org/react";
+import toast, { Toaster } from "react-hot-toast";
 
 export const ProtectedRouter = () => {
   // Logtoフックより認証状態とログイン関数を取得
@@ -10,8 +11,10 @@ export const ProtectedRouter = () => {
 
   // 認証していない場合はsignIn関数でログインリダイレクト
   useEffect(() => {
-    console.debug("ProtectedRouter", isAuthenticated);
     if (!isAuthenticated) {
+      toast("認証を行います...", {
+        icon: "🔑",
+      });
       signIn(`${logto_endpoint}/callback`);
     }
   }, [isAuthenticated, signIn]);
@@ -21,6 +24,12 @@ export const ProtectedRouter = () => {
     return (
       <div className="flex flex-col items-center justify-center">
         <Spinner label="認証中..." color="warning" />
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            duration: 5000,
+          }}
+        />
       </div>
     );
   }
