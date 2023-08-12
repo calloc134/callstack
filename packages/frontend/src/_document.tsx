@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link } from "@tanstack/react-router";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar } from "@nextui-org/react";
+import { Sun } from "tabler-icons-react";
 import { useAuthn } from "./lib/provider/authn/useAuthn";
 
 // 外枠のコンポーネント
@@ -20,7 +21,7 @@ export const Document = () => {
       <div className="h-screen flex flex-col">
         {" "}
         {/* ここで全画面の高さを設定 */}
-        <Navbar className="flex-shrink-0">
+        <Navbar className="flex-shrink-0 bg-slate-300">
           {" "}
           {/* ナビゲーションバーの高さを固定 */}
           <NavbarBrand>
@@ -37,7 +38,7 @@ export const Document = () => {
               <Link to="/">Integrations</Link>
             </NavbarItem>
             <Button color="secondary" variant="flat" onClick={toggleDarkMode}>
-              {darkMode ? "Light" : "Dark"}
+              <Sun size={20} />
             </Button>
           </NavbarContent>
           <NavbarContent justify="end">
