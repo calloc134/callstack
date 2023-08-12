@@ -16,5 +16,8 @@ export const ProtectedRouter = () => {
   }, [isAuthenticated, signIn]);
 
   // 認証されている場合は子コンポーネントを表示
+  if (!isAuthenticated) {
+    return <div>認証中...</div>;
+  }
   return <Outlet />;
 };

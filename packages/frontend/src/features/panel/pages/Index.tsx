@@ -14,7 +14,7 @@ const PanelPageQuery = graphql(`
 
 export const PanelPage = () => {
   // graphqlに対してクエリを実行
-  const [result, reexecuteQuery] = useQuery({
+  const [result] = useQuery({
     query: PanelPageQuery,
     variables: {
       uuid: "3d5e1bde-19fa-4f56-819a-decd1e422ea9",
@@ -23,7 +23,7 @@ export const PanelPage = () => {
 
   console.log("result", result);
 
-  const { data, fetching, error } = result;
+  const { data } = result;
 
   return (
     <div>
