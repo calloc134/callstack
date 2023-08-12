@@ -169,6 +169,9 @@ importers:
       '@tanstack/react-router':
         specifier: 0.0.1-beta.145
         version: 0.0.1-beta.145(react-dom@18.2.0)(react@18.2.0)
+      '@urql/devtools':
+        specifier: ^2.0.3
+        version: 2.0.3(@urql/core@4.1.1)(graphql@16.7.1)
       '@urql/exchange-auth':
         specifier: ^2.1.6
         version: 2.1.6(graphql@16.7.1)
@@ -9461,6 +9464,17 @@ packages:
       wonka: 6.3.4
     transitivePeerDependencies:
       - graphql
+    dev: false
+
+  /@urql/devtools@2.0.3(@urql/core@4.1.1)(graphql@16.7.1):
+    resolution: {integrity: sha512-TktPLiBS9LcBPHD6qcnb8wqOVcg3Bx0iCtvQ80uPpfofwwBGJmqnQTjUdEFU6kwaLOFZULQ9+Uo4831G823mQw==}
+    peerDependencies:
+      '@urql/core': '>= 1.14.0'
+      graphql: '>= 0.11.0'
+    dependencies:
+      '@urql/core': 4.1.1(graphql@16.7.1)
+      graphql: 16.7.1
+      wonka: 6.3.4
     dev: false
 
   /@urql/exchange-auth@2.1.6(graphql@16.7.1):

@@ -2,6 +2,7 @@ import { ReactNode, useState, useCallback } from "react";
 import { Provider, Client, cacheExchange, fetchExchange, mapExchange, MapExchangeOpts } from "urql";
 import { authExchange, AuthUtilities, AuthConfig } from "@urql/exchange-auth";
 import toast, { Toaster } from "react-hot-toast";
+import { devtoolsExchange } from "@urql/devtools";
 
 import { isDev, hostname } from "src/env";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
@@ -73,7 +74,14 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     // 開発環境であればhttp、本番環境であればhttpsを使う
     // ホストネームよりフェッチ先のURLを生成
     url: `${isDev ? "http" : "https"}://${hostname}/api/graphql`,
-    exchanges: [cacheExchange, authExchange(authInit), mapExchange(mapInit), fetchExchange],
+    exchanges: [
+      // 開発環境であればdevtoolsを使う
+      ...(isDev ? [devtoolsExchange] : []),
+      cacheExchange,
+      authExchange(authInit),
+      mapExchange(mapInit),
+      fetchExchange,
+    ],
   });
 
   return (
