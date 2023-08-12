@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link } from "@tanstack/react-router";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar, Tooltip, Spacer } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar, Tooltip } from "@nextui-org/react";
 import { Login, Sun } from "tabler-icons-react";
 import { useAuthn } from "./lib/provider/authn/useAuthn";
 
@@ -25,12 +25,12 @@ export const Document = () => {
           {/* ナビゲーションバーの高さを固定 */}
           <NavbarBrand>
             <Tooltip content="callstack" color="secondary">
-              <p className="font-bold text-inherit">callstack</p>
+              <Link to="/">callstack</Link>
             </Tooltip>
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4" justify="start">
             <NavbarItem>
-              <Link to="/">見る</Link>
+              <Link to="/auth/panel">見る</Link>
             </NavbarItem>
             <NavbarItem isActive>
               <Link to="/">出品する</Link>
@@ -43,25 +43,25 @@ export const Document = () => {
                   <Sun size={20} />
                 </Button>
               </Tooltip>
-              <Tooltip content="ログイン/登録" color="secondary">
-                {isAuthenticated ? (
-                  <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform hover:-translate-y-1"
-                    color="secondary"
-                    name="Jason Hughes"
-                    size="sm"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
-                ) : (
+              {isAuthenticated ? (
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform hover:-translate-y-1"
+                  color="secondary"
+                  name="Jason Hughes"
+                  size="sm"
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+              ) : (
+                <Tooltip content="ログイン/登録" color="secondary">
                   <Button color="primary" variant="shadow" className="hover:-translate-y-1">
                     <Link to="/">
                       <Login size={20} />
                     </Link>
                   </Button>
-                )}
-              </Tooltip>
+                </Tooltip>
+              )}
             </NavbarItem>
           </NavbarContent>
         </Navbar>

@@ -42,7 +42,7 @@ module.exports = {
             background: "#2e2b49", // ダークテーマ背景
             foreground: "#f4f6f8", // ダークテーマの読みやすいフォント色
             primary: "#df6bfd", // メインの紫、深みと複雑さを示す
-            secondary: "#a9a1b1", // 補助的な紫、主要色との対比を提供
+            secondary: "#4d4b79", // 補助的な紫、主要色との対比を提供
             success: "#6f42c1", // 成功を示す紫、安定感を与える
             warning: "#e83e8c", // 警告に使用、紫ピンクで視認性を保つ
             danger: "#d6336c", // 危険を示す色で、緊急性を強調
