@@ -3,7 +3,7 @@ import { graphql } from "src/lib/generated/gql";
 
 const PanelPageQuery = graphql(`
   query PanelPageQuery($uuid: UUID!) {
-    post(uuid: $uuid) {
+    getPostByUUID(uuid: $uuid) {
       user {
         screen_name
       }
@@ -27,7 +27,7 @@ export const PanelPage = () => {
 
   return (
     <div>
-      {data?.post.title}
+      {data?.getPostByUUID?.title}
       HELLOEHHHEHHHEHEHEH
     </div>
   );
