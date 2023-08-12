@@ -5,7 +5,6 @@ export const Index = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-start h-screen">
-        <Spacer y={12} />
         <img src="/callstack.png" alt="callstack" className="w-unit-4xl" />
         <h1 className="text-4xl font-bold">callstack</h1>
         <p className="text-xl">callstackボイラープレートのサンプルです。</p>

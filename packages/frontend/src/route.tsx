@@ -4,6 +4,7 @@ import { Index } from "./features/index/pages/Index";
 import { NotFoundPage } from "./404";
 import { ProtectedRouter } from "./lib/route/ProtectedRouter";
 import { PanelPage } from "./features/panel/pages/Index";
+import { CallBackPage } from "./callback";
 
 // 以下、ルーティングの設定
 const rootRoute = new RootRoute({
@@ -29,6 +30,15 @@ const notFoundRoute = new Route({
   component: () => <NotFoundPage />,
 });
 
+// コールバックページの設定
+const callbackRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => rootRoute,
+  path: "auth/callback",
+  // ここに内側のコンポーネントを指定
+  component: () => <CallBackPage />,
+});
+
 // authルートの設定
 const protectedRoute = new Route({
   // 親ルートを指定
@@ -48,7 +58,7 @@ const panelRoute = new Route({
 });
 
 const router = new Router({
-  routeTree: rootRoute.addChildren([indexRoute, notFoundRoute, protectedRoute.addChildren([panelRoute])]),
+  routeTree: rootRoute.addChildren([indexRoute, notFoundRoute, callbackRoute, protectedRoute.addChildren([panelRoute])]),
 });
 
 // tanstack routerを型安全に利用するための型定義

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link } from "@tanstack/react-router";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar, Tooltip } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar, Tooltip, Spacer } from "@nextui-org/react";
 import { Login, Sun } from "tabler-icons-react";
 import { useAuthn } from "./lib/provider/authn/useAuthn";
 
@@ -68,6 +68,7 @@ export const Document = () => {
         <div className="flex-grow overflow-auto">
           {" "}
           {/* ここで内側のコンポーネントを伸縮させる */}
+          <Spacer y={40} />
           <Outlet />
         </div>
       </div>
