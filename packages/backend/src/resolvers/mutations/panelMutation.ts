@@ -65,11 +65,11 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   updateMyUser: async (_parent, args, context) => {
     const safeUser = withErrorHandling(
-      async (user_uuid: string, prisma: PrismaClient, { bio, handle, screen_name }: { bio?: string; handle?: string; screen_name?: string }) => {
+      async (current_user_uuid: string, prisma: PrismaClient, { bio, handle, screen_name }: { bio?: string; handle?: string; screen_name?: string }) => {
         // UUIDからユーザーを取得
         const result = await prisma.user.update({
           where: {
-            user_uuid: user_uuid,
+            user_uuid: current_user_uuid,
           },
           data: {
             bio: bio,
@@ -97,11 +97,11 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // deleteMyUserフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   deleteMyUser: async (_parent, _args, context) => {
-    const safeUser = withErrorHandling(async (user_uuid: string, prisma: PrismaClient) => {
+    const safeUser = withErrorHandling(async (current_user_uuid: string, prisma: PrismaClient) => {
       // UUIDからユーザーを取得
       const result = await prisma.user.delete({
         where: {
-          user_uuid: user_uuid,
+          user_uuid: current_user_uuid,
         },
       });
       return result;
@@ -116,7 +116,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // createPostフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   createPost: async (_parent, args, context) => {
-    const safePost = withErrorHandling(async (user_uuid: string, prisma: PrismaClient, { title, body }: { title: string; body: string }) => {
+    const safePost = withErrorHandling(async (current_user_uuid: string, prisma: PrismaClient, { title, body }: { title: string; body: string }) => {
       // UUIDからユーザーを取得
       const result = await prisma.post.create({
         data: {
@@ -124,7 +124,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
           body: body,
           user: {
             connect: {
-              user_uuid: user_uuid,
+              user_uuid: current_user_uuid,
             },
           },
         },
@@ -144,11 +144,11 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   updatePost: async (_parent, args, context) => {
     const safePost = withErrorHandling(
-      async (user_uuid: string, prisma: PrismaClient, post_uuid: string, { title, body }: { title?: string; body?: string }) => {
+      async (current_user_uuid: string, prisma: PrismaClient, post_uuid: string, { title, body }: { title?: string; body?: string }) => {
         // UUIDからユーザーを取得
         const result = await prisma.post.update({
           where: {
-            userUuid: user_uuid,
+            userUuid: current_user_uuid,
             post_uuid: post_uuid,
           },
           data: {
@@ -181,11 +181,11 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // deletePostフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   deletePost: async (_parent, args, context) => {
-    const safePost = withErrorHandling(async (user_uuid: string, prisma: PrismaClient, post_uuid: string) => {
+    const safePost = withErrorHandling(async (current_user_uuid: string, prisma: PrismaClient, post_uuid: string) => {
       // UUIDからユーザーを取得
       const result = await prisma.post.delete({
         where: {
-          userUuid: user_uuid,
+          userUuid: current_user_uuid,
           post_uuid: post_uuid,
         },
       });
