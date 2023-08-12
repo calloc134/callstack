@@ -8,7 +8,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
   // userクエリのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   getUserByUUID: async (_parent, args, context) => {
-    const safeUser = withErrorHandling(async (user_uuid: string, prisma: PrismaClient) => {
+    const safeUser = withErrorHandling(async (prisma: PrismaClient, user_uuid: string) => {
       // UUIDからユーザーを取得
       const result = await prisma.user.findUniqueOrThrow({
         where: {
@@ -23,7 +23,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     // コンテキストからPrismaクライアントを取得
     const { prisma } = context;
 
-    return await safeUser(user_uuid, prisma);
+    return await safeUser(prisma, user_uuid);
   },
 
   // usersクエリのリゾルバー
@@ -78,14 +78,14 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
   // postsクエリのリゾルバー
   // @ts-expect-error userフィールドが存在しないためエラーが出るが、実際には存在するので無視
   getAllPosts: async (_parent, args, context) => {
-    const safePosts = withErrorHandling(async (user_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
+    const safePosts = withErrorHandling(async (current_user_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
       const result = await prisma.post.findMany({
         // 投稿が自分でない かつ 非公開のものは除外する
         // つまり、投稿が自分 または 公開のもののみ取得する
         where: {
           OR: [
             {
-              userUuid: user_uuid,
+              userUuid: current_user_uuid,
             },
             {
               is_public: true,
