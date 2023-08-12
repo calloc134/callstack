@@ -17,7 +17,7 @@ export const PanelPage = () => {
   const [result, reexecuteQuery] = useQuery({
     query: PanelPageQuery,
     variables: {
-      uuid: "b374ca3b-d580-4b01-b350-2025abfb62ad",
+      uuid: "3d5e1bde-19fa-4f56-819a-decd1e422ea9",
     },
   });
 

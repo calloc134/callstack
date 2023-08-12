@@ -124,14 +124,14 @@ services:
         # オペレーションの環境変数を指定
         # OPERATION_PATH: ${OPERATION_PATH}
         # logtoコンテナのエンドポイントを指定
-        LOGTO_ENDPOINT: ${LOGTO_ENDPOINT}
+        VITE_LOGTO_ENDPOINT: ${LOGTO_ENDPOINT}
         # logtoのアプリケーションIDを指定
-        LOGTO_APPID: ${LOGTO_APPID}
+        VITE_LOGTO_APPID: ${LOGTO_APPID}
         # logtoのアプリケーションIDを指定
-        LOGTO_API_RESOURCE: ${LOGTO_API_RESOURCE}
+        VITE_LOGTO_API_RESOURCE: ${LOGTO_API_RESOURCE}
         # viteとnginx両方で利用する環境変数ここから
         # ホスト名を指定
-        HOSTNAME: ${HOSTNAME}
+        VITE_HOSTNAME: ${HOSTNAME}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
     volumes:

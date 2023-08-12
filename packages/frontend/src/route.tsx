@@ -19,6 +19,7 @@ const indexRoute = new Route({
   component: () => <Index />,
 });
 
+// authルートの設定
 const protectedRoute = new Route({
   // 親ルートを指定
   getParentRoute: () => rootRoute,
@@ -27,7 +28,8 @@ const protectedRoute = new Route({
   component: () => <ProtectedRouter />,
 });
 
-const PanelRoute = new Route({
+// auth/panelルートの設定
+const panelRoute = new Route({
   // 親ルートを指定
   getParentRoute: () => protectedRoute,
   path: "panel",
@@ -36,7 +38,14 @@ const PanelRoute = new Route({
 });
 
 const router = new Router({
-  routeTree: rootRoute.addChildren([indexRoute, protectedRoute.addChildren([PanelRoute])]),
+  routeTree: rootRoute.addChildren([indexRoute, protectedRoute.addChildren([panelRoute])]),
 });
+
+// tanstack routerを型安全に利用するための型定義
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export { router };
