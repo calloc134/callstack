@@ -1,6 +1,7 @@
 import { RootRoute, Route, Router } from "@tanstack/react-router";
 import { Document } from "./_document";
 import { Index } from "./features/index/pages/Index";
+import { NotFoundPage } from "./404";
 import { ProtectedRouter } from "./lib/route/ProtectedRouter";
 import { PanelPage } from "./features/panel/pages/Index";
 
@@ -17,6 +18,15 @@ const indexRoute = new Route({
   path: "/",
   // ここに内側のコンポーネントを指定
   component: () => <Index />,
+});
+
+// 404ルートの設定
+const notFoundRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => rootRoute,
+  path: "*",
+  // ここに内側のコンポーネントを指定
+  component: () => <NotFoundPage />,
 });
 
 // authルートの設定
@@ -38,7 +48,7 @@ const panelRoute = new Route({
 });
 
 const router = new Router({
-  routeTree: rootRoute.addChildren([indexRoute, protectedRoute.addChildren([panelRoute])]),
+  routeTree: rootRoute.addChildren([indexRoute, notFoundRoute, protectedRoute.addChildren([panelRoute])]),
 });
 
 // tanstack routerを型安全に利用するための型定義
