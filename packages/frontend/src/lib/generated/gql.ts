@@ -13,8 +13,7 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  query PanelPageQuery($uuid: UUID!) {\n    getPostByUUID(uuid: $uuid) {\n      user {\n        screen_name\n      }\n      title\n    }\n  }\n":
-    types.PanelPageQueryDocument,
+  "\n  query PanelPageQuery {\n    getAllPosts(limit:10){\n      post_uuid\n      title\n      body\n    }\n  }\n": types.PanelPageQueryDocument,
 };
 
 /**
@@ -35,8 +34,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query PanelPageQuery($uuid: UUID!) {\n    getPostByUUID(uuid: $uuid) {\n      user {\n        screen_name\n      }\n      title\n    }\n  }\n"
-): (typeof documents)["\n  query PanelPageQuery($uuid: UUID!) {\n    getPostByUUID(uuid: $uuid) {\n      user {\n        screen_name\n      }\n      title\n    }\n  }\n"];
+  source: "\n  query PanelPageQuery {\n    getAllPosts(limit:10){\n      post_uuid\n      title\n      body\n    }\n  }\n"
+): (typeof documents)["\n  query PanelPageQuery {\n    getAllPosts(limit:10){\n      post_uuid\n      title\n      body\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

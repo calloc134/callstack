@@ -114,11 +114,9 @@ export type UserPostsArgs = {
   offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
 };
 
-export type PanelPageQueryQueryVariables = Exact<{
-  uuid: Scalars["UUID"]["input"];
-}>;
+export type PanelPageQueryQueryVariables = Exact<{ [key: string]: never }>;
 
-export type PanelPageQueryQuery = { getPostByUUID: { title: string; user: { screen_name: string } } };
+export type PanelPageQueryQuery = { getAllPosts: Array<{ post_uuid: string; title: string; body: string }> };
 
 export const PanelPageQueryDocument = {
   kind: "Document",
@@ -127,29 +125,19 @@ export const PanelPageQueryDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "PanelPageQuery" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "uuid" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } } },
-        },
-      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "getPostByUUID" },
-            arguments: [{ kind: "Argument", name: { kind: "Name", value: "uuid" }, value: { kind: "Variable", name: { kind: "Name", value: "uuid" } } }],
+            name: { kind: "Name", value: "getAllPosts" },
+            arguments: [{ kind: "Argument", name: { kind: "Name", value: "limit" }, value: { kind: "IntValue", value: "10" } }],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "user" },
-                  selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "screen_name" } }] },
-                },
+                { kind: "Field", name: { kind: "Name", value: "post_uuid" } },
                 { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "body" } },
               ],
             },
           },

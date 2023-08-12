@@ -24,7 +24,7 @@ export const Document = () => {
         <Navbar className="flex-shrink-0 bg-primary/30 backdrop-blur-sm shadow-xl rounded-b-lg" shouldHideOnScroll>
           {/* ナビゲーションバーの高さを固定 */}
           <NavbarBrand>
-            <Tooltip content="タイトル" color="secondary">
+            <Tooltip content="callstack" color="secondary">
               <p className="font-bold text-inherit">callstack</p>
             </Tooltip>
           </NavbarBrand>
@@ -39,7 +39,7 @@ export const Document = () => {
           <NavbarContent justify="end">
             <NavbarItem className="sm:flex gap-4">
               <Tooltip content="スタイル切替" color="secondary">
-                <Button color="secondary" variant="shadow" onClick={toggleDarkMode}>
+                <Button color="secondary" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1 ">
                   <Sun size={20} />
                 </Button>
               </Tooltip>
@@ -48,14 +48,14 @@ export const Document = () => {
                   <Avatar
                     isBordered
                     as="button"
-                    className="transition-transform"
+                    className="transition-transform hover:-translate-y-1"
                     color="secondary"
                     name="Jason Hughes"
                     size="sm"
                     src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
                   />
                 ) : (
-                  <Button color="primary" variant="shadow">
+                  <Button color="primary" variant="shadow" className="hover:-translate-y-1">
                     <Link to="/">
                       <Login size={20} />
                     </Link>

@@ -1,13 +1,13 @@
 import { useQuery } from "urql";
 import { graphql } from "src/lib/generated/gql";
+import { PostCard } from "../components/PostCard";
 
 const PanelPageQuery = graphql(`
-  query PanelPageQuery($uuid: UUID!) {
-    getPostByUUID(uuid: $uuid) {
-      user {
-        screen_name
-      }
+  query PanelPageQuery {
+    getAllPosts(limit: 10) {
+      post_uuid
       title
+      body
     }
   }
 `);
@@ -16,9 +16,6 @@ export const PanelPage = () => {
   // graphqlに対してクエリを実行
   const [result] = useQuery({
     query: PanelPageQuery,
-    variables: {
-      uuid: "3d5e1bde-19fa-4f56-819a-decd1e422ea9",
-    },
   });
 
   console.log("result", result);
@@ -26,9 +23,10 @@ export const PanelPage = () => {
   const { data } = result;
 
   return (
-    <div>
-      {data?.getPostByUUID?.title}
-      HELLOEHHHEHHHEHEHEH
+    <div className="flex flex-col items-center justify-between">
+      {data?.getAllPosts.map((post) => (
+        <PostCard key={post.post_uuid} post={post} />
+      ))}
     </div>
   );
 };
