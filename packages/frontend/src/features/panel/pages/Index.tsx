@@ -36,4 +36,5 @@ export const IndexPanelPage = () => {
       </div>
     </div>
   );
+  // graphqlのフラグメントマスキングでやむを得ずmapのkeyでiを使っているので、少し心配
 };

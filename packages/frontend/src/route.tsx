@@ -5,6 +5,7 @@ import { NotFoundPage } from "./404";
 import { ProtectedRouter } from "./lib/route/ProtectedRouter";
 import { IndexPanelPage } from "./features/panel/pages/Index";
 import { CallBackPage } from "./callback";
+import { PostUuid } from "./features/panel/pages/PostUuid";
 
 // 以下、ルーティングの設定
 const rootRoute = new RootRoute({
@@ -45,6 +46,7 @@ const protectedRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "auth",
   // 保護された外枠コンポーネントを指定
+  // Outletが指定されているので、このコンポーネントの中に子ルートが表示される
   component: () => <ProtectedRouter />,
 });
 
@@ -53,12 +55,32 @@ const panelRoute = new Route({
   // 親ルートを指定
   getParentRoute: () => protectedRoute,
   path: "panel",
+});
+
+const indexPanelRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => panelRoute,
+  path: "/",
   // 保護された外枠コンポーネントを指定
   component: () => <IndexPanelPage />,
 });
 
+// auth/panel/$post_uuidルートの設定
+const postRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => panelRoute,
+  path: "$post_uuid",
+  // 保護された外枠コンポーネントを指定
+  component: () => <PostUuid />,
+});
+
 const router = new Router({
-  routeTree: rootRoute.addChildren([indexRoute, notFoundRoute, callbackRoute, protectedRoute.addChildren([panelRoute])]),
+  routeTree: rootRoute.addChildren([
+    indexRoute,
+    notFoundRoute,
+    callbackRoute,
+    protectedRoute.addChildren([panelRoute.addChildren([indexPanelRoute, postRoute])]),
+  ]),
 });
 
 // tanstack routerを型安全に利用するための型定義

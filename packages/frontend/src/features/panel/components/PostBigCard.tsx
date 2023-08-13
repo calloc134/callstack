@@ -1,24 +1,27 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
 import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserCard } from "./UserCard";
 
 // 利用される投稿のフラグメントの定義
-const PostFragment = graphql(`
-  fragment PostFragment on Post {
+const PostByUUIDPostFragment = graphql(`
+  fragment PostByUUIDPostFragment on Post {
     post_uuid
     title
     body
+    created_at
+    updated_at
+    is_public
     user {
       ...UserFragment
     }
   }
 `);
 
-const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment> }) => {
+const PostBigCard = ({ post: post_frag }: { post: FragmentType<typeof PostByUUIDPostFragment> }) => {
   // フラグメントから投稿の情報を取得
-  const post = useFragment(PostFragment, post_frag);
+  const post = useFragment(PostByUUIDPostFragment, post_frag);
 
   return (
     <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
@@ -46,13 +49,10 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-            <Link to={`/auth/panel/${post.post_uuid}`}>詳細を見る</Link>
-          </Button>
         </div>
       </CardFooter>
     </Card>
   );
 };
 
-export { PostCard };
+export { PostBigCard };
