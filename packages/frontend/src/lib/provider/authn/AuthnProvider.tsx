@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { useState, createContext, ReactNode } from "react";
 import { useLogto, InteractionMode, LogtoProvider } from "@logto/react";
 import { isDev, dev_jwt_token } from "src/env";
 import { logto_config } from "src/config";
@@ -23,14 +23,20 @@ const AuthnContext = createContext<AuthnContext>({
 
 // 開発環境においてのAuthnコンテキストのプロバイダー
 const DevelopmentAuthnProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
   // 開発環境においてのコンテキストの定義
   // isAuthenticatedは環境変数から取得したJWTトークンの文字列の種類を確認
   // signInはダミーの関数を定義
   // getAccessTokenは環境変数から取得したJWTトークンを返す
   const context: AuthnContext = {
-    isAuthenticated: dev_jwt_token !== "" ? true : false,
-    signIn: async () => void {},
-    signOut: async () => void {},
+    isAuthenticated: isAuthenticated,
+    signIn: async () => {
+      setIsAuthenticated(true);
+    },
+    signOut: async () => {
+      setIsAuthenticated(false);
+    },
     getAccessToken: async () => {
       return dev_jwt_token !== "" ? dev_jwt_token : undefined;
     },

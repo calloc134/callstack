@@ -56,7 +56,7 @@ export const Document = () => {
               ) : (
                 <Tooltip content="ログイン/登録" color="secondary">
                   <Button color="primary" variant="shadow" className="hover:-translate-y-1">
-                    <Link to="/">
+                    <Link to="/auth/panel">
                       <Login size={20} />
                     </Link>
                   </Button>
