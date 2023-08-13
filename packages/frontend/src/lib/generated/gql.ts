@@ -13,7 +13,9 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  query PanelPageQuery {\n    getAllPosts(limit: 10) {\n      post_uuid\n      title\n      body\n    }\n  }\n": types.PanelPageQueryDocument,
+  "\n  fragment PostFragment on Post {\n    post_uuid\n    title\n    body\n    user {\n      ...UserFragment\n    }\n  }\n": types.PostFragmentFragmentDoc,
+  "\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n  }\n": types.UserFragmentFragmentDoc,
+  "\n  query PanelPageQuery {\n    getAllPosts(limit: 10) {\n      ...PostFragment\n    }\n  }\n": types.PanelPageQueryDocument,
 };
 
 /**
@@ -34,8 +36,20 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query PanelPageQuery {\n    getAllPosts(limit: 10) {\n      post_uuid\n      title\n      body\n    }\n  }\n"
-): (typeof documents)["\n  query PanelPageQuery {\n    getAllPosts(limit: 10) {\n      post_uuid\n      title\n      body\n    }\n  }\n"];
+  source: "\n  fragment PostFragment on Post {\n    post_uuid\n    title\n    body\n    user {\n      ...UserFragment\n    }\n  }\n"
+): (typeof documents)["\n  fragment PostFragment on Post {\n    post_uuid\n    title\n    body\n    user {\n      ...UserFragment\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n  }\n"
+): (typeof documents)["\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query PanelPageQuery {\n    getAllPosts(limit: 10) {\n      ...PostFragment\n    }\n  }\n"
+): (typeof documents)["\n  query PanelPageQuery {\n    getAllPosts(limit: 10) {\n      ...PostFragment\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

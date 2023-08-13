@@ -3,7 +3,7 @@ import { Document } from "./_document";
 import { Index } from "./features/index/pages/Index";
 import { NotFoundPage } from "./404";
 import { ProtectedRouter } from "./lib/route/ProtectedRouter";
-import { PanelPage } from "./features/panel/pages/Index";
+import { IndexPanelPage } from "./features/panel/pages/Index";
 import { CallBackPage } from "./callback";
 
 // 以下、ルーティングの設定
@@ -54,7 +54,7 @@ const panelRoute = new Route({
   getParentRoute: () => protectedRoute,
   path: "panel",
   // 保護された外枠コンポーネントを指定
-  component: () => <PanelPage />,
+  component: () => <IndexPanelPage />,
 });
 
 const router = new Router({

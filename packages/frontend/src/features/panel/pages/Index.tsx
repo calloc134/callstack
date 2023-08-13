@@ -3,20 +3,19 @@ import { graphql } from "src/lib/generated/gql";
 import { PostCard } from "../components/PostCard";
 import { Spinner } from "@nextui-org/react";
 
-const PanelPageQuery = graphql(`
+// 利用されるクエリの定義
+const IndexPanelPageQuery = graphql(`
   query PanelPageQuery {
     getAllPosts(limit: 10) {
-      post_uuid
-      title
-      body
+      ...PostFragment
     }
   }
 `);
 
-export const PanelPage = () => {
+export const IndexPanelPage = () => {
   // graphqlに対してクエリを実行
   const [result] = useQuery({
-    query: PanelPageQuery,
+    query: IndexPanelPageQuery,
   });
 
   const { data, fetching } = result;
@@ -31,8 +30,8 @@ export const PanelPage = () => {
   return (
     <div className="flex flex-col items-center justify-between h-screen">
       <div className="flex flex-col w-8/12">
-        {data?.getAllPosts.map((post) => (
-          <PostCard key={post.post_uuid} post={post} />
+        {data?.getAllPosts.map((post, i) => (
+          <PostCard key={i} post={post} />
         ))}
       </div>
     </div>

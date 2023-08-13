@@ -114,10 +114,75 @@ export type UserPostsArgs = {
   offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
 };
 
+export type PostFragmentFragment = {
+  post_uuid: string;
+  title: string;
+  body: string;
+  user: { " $fragmentRefs"?: { UserFragmentFragment: UserFragmentFragment } };
+} & { " $fragmentName"?: "PostFragmentFragment" };
+
+export type UserFragmentFragment = { user_uuid: string; handle: string; screen_name: string; bio: string } & { " $fragmentName"?: "UserFragmentFragment" };
+
 export type PanelPageQueryQueryVariables = Exact<{ [key: string]: never }>;
 
-export type PanelPageQueryQuery = { getAllPosts: Array<{ post_uuid: string; title: string; body: string }> };
+export type PanelPageQueryQuery = { getAllPosts: Array<{ " $fragmentRefs"?: { PostFragmentFragment: PostFragmentFragment } }> };
 
+export const UserFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UserFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "handle" } },
+          { kind: "Field", name: { kind: "Name", value: "screen_name" } },
+          { kind: "Field", name: { kind: "Name", value: "bio" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserFragmentFragment, unknown>;
+export const PostFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Post" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "post_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "UserFragment" } }] },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UserFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "handle" } },
+          { kind: "Field", name: { kind: "Name", value: "screen_name" } },
+          { kind: "Field", name: { kind: "Name", value: "bio" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PostFragmentFragment, unknown>;
 export const PanelPageQueryDocument = {
   kind: "Document",
   definitions: [
@@ -132,14 +197,39 @@ export const PanelPageQueryDocument = {
             kind: "Field",
             name: { kind: "Name", value: "getAllPosts" },
             arguments: [{ kind: "Argument", name: { kind: "Name", value: "limit" }, value: { kind: "IntValue", value: "10" } }],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "post_uuid" } },
-                { kind: "Field", name: { kind: "Name", value: "title" } },
-                { kind: "Field", name: { kind: "Name", value: "body" } },
-              ],
-            },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "PostFragment" } }] },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UserFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "handle" } },
+          { kind: "Field", name: { kind: "Name", value: "screen_name" } },
+          { kind: "Field", name: { kind: "Name", value: "bio" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Post" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "post_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "UserFragment" } }] },
           },
         ],
       },
