@@ -133,15 +133,15 @@ export type PostByUuidPostFragmentFragment = {
 
 export type UserFragmentFragment = { user_uuid: string; handle: string; screen_name: string; bio: string } & { " $fragmentName"?: "UserFragmentFragment" };
 
-export type PanelPageQueryQueryVariables = Exact<{ [key: string]: never }>;
-
-export type PanelPageQueryQuery = { getAllPosts: Array<{ " $fragmentRefs"?: { PostFragmentFragment: PostFragmentFragment } }> };
-
-export type PostByUuidPanelPageQueryQueryVariables = Exact<{
+export type GetPostDetailQueryQueryVariables = Exact<{
   uuid: Scalars["UUID"]["input"];
 }>;
 
-export type PostByUuidPanelPageQueryQuery = { getPostByUUID: { " $fragmentRefs"?: { PostByUuidPostFragmentFragment: PostByUuidPostFragmentFragment } } };
+export type GetPostDetailQueryQuery = { getPostByUUID: { " $fragmentRefs"?: { PostByUuidPostFragmentFragment: PostByUuidPostFragmentFragment } } };
+
+export type GetAllPostsQUeryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllPostsQUeryQuery = { getAllPosts: Array<{ " $fragmentRefs"?: { PostFragmentFragment: PostFragmentFragment } }> };
 
 export const UserFragmentFragmentDoc = {
   kind: "Document",
@@ -239,66 +239,13 @@ export const PostByUuidPostFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<PostByUuidPostFragmentFragment, unknown>;
-export const PanelPageQueryDocument = {
+export const GetPostDetailQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "PanelPageQuery" },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "getAllPosts" },
-            arguments: [{ kind: "Argument", name: { kind: "Name", value: "limit" }, value: { kind: "IntValue", value: "10" } }],
-            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "PostFragment" } }] },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "UserFragment" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
-          { kind: "Field", name: { kind: "Name", value: "handle" } },
-          { kind: "Field", name: { kind: "Name", value: "screen_name" } },
-          { kind: "Field", name: { kind: "Name", value: "bio" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "PostFragment" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Post" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "post_uuid" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "body" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "user" },
-            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "UserFragment" } }] },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<PanelPageQueryQuery, PanelPageQueryQueryVariables>;
-export const PostByUuidPanelPageQueryDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "PostByUUIDPanelPageQuery" },
+      name: { kind: "Name", value: "GetPostDetailQuery" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -354,4 +301,57 @@ export const PostByUuidPanelPageQueryDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<PostByUuidPanelPageQueryQuery, PostByUuidPanelPageQueryQueryVariables>;
+} as unknown as DocumentNode<GetPostDetailQueryQuery, GetPostDetailQueryQueryVariables>;
+export const GetAllPostsQUeryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllPostsQUery" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getAllPosts" },
+            arguments: [{ kind: "Argument", name: { kind: "Name", value: "limit" }, value: { kind: "IntValue", value: "10" } }],
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "PostFragment" } }] },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UserFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "handle" } },
+          { kind: "Field", name: { kind: "Name", value: "screen_name" } },
+          { kind: "Field", name: { kind: "Name", value: "bio" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Post" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "post_uuid" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "UserFragment" } }] },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllPostsQUeryQuery, GetAllPostsQUeryQueryVariables>;

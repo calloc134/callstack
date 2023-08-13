@@ -29,11 +29,11 @@ export const Document = () => {
             </Tooltip>
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4" justify="start">
-            <NavbarItem>
-              <Link to="/auth/panel">見る</Link>
+            <NavbarItem isActive>
+              <Link to="/">ユーザ一覧</Link>
             </NavbarItem>
             <NavbarItem isActive>
-              <Link to="/">出品する</Link>
+              <Link to="/auth/posts">投稿一覧</Link>
             </NavbarItem>
           </NavbarContent>
           <NavbarContent justify="end">
@@ -56,7 +56,7 @@ export const Document = () => {
               ) : (
                 <Tooltip content="ログイン/登録" color="secondary">
                   <Button color="primary" variant="shadow" className="hover:-translate-y-1">
-                    <Link to="/auth/panel">
+                    <Link to="/auth/posts">
                       <Login size={20} />
                     </Link>
                   </Button>

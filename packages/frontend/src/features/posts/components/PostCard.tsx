@@ -47,7 +47,14 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
             </DropdownMenu>
           </Dropdown>
           <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-            <Link to={`/auth/panel/${post.post_uuid}`}>詳細を見る</Link>
+            <Link
+              to="/auth/posts/$post_uuid"
+              params={{
+                post_uuid: post.post_uuid,
+              }}
+            >
+              詳細を見る
+            </Link>
           </Button>
         </div>
       </CardFooter>

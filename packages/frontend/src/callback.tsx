@@ -9,7 +9,7 @@ const CallBackPage = () => {
 
   const { isLoading } = useHandleSignInCallback(() => {
     navigate({
-      to: "/auth/panel",
+      to: "/auth/posts",
     });
   });
 

@@ -10,7 +10,7 @@ export const Index = () => {
         <p className="text-xl">callstackボイラープレートのサンプルです。</p>
         <Spacer y={4} />
         <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-          <Link to="/auth/panel">ログイン/登録する</Link>
+          <Link to="/auth/posts">投稿一覧の表示</Link>
         </Button>
 
         <Spacer y={4} />

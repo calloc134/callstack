@@ -32,7 +32,7 @@ const UserCard = ({ user: user_frag }: { user: FragmentType<typeof UserFragment>
       <CardFooter className="flex flex-col justify-end items-end">
         <div>
           <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-            <Link to={`/auth/panel/user/${user.handle}`}>詳細を見る</Link>
+            <Link to={`/auth/user/${user.handle}`}>詳細を見る</Link>
           </Button>
         </div>
       </CardFooter>

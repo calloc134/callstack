@@ -1,6 +1,6 @@
 import { useQuery } from "urql";
 import { graphql } from "src/lib/generated/gql";
-import { PostDetailCard } from "../components/PostBigCard";
+import { PostDetailCard } from "../components/PostDetailCard";
 import { Spinner } from "@nextui-org/react";
 import { useParams } from "@tanstack/react-router";
 
@@ -16,7 +16,7 @@ const GetPostDetailQuery = graphql(`
 const PostDetailPage = () => {
   // パスパラメータの内容を取得
   const post_uuid = useParams({
-    from: "/auth/post/$post_uuid",
+    from: "/auth/posts/$post_uuid",
   })?.post_uuid;
 
   // graphqlに対してクエリを実行

@@ -12,5 +12,5 @@ export type GraphQLContext = {
   // リクエストの型定義
   req: IncomingMessage;
   // 現在ログインしているユーザーのUUID
-  current_user: User;
+  currentUser: User;
 };

@@ -66,7 +66,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     // 引数から投稿のUUIDを取得
     const { uuid: post_uuid } = args;
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, current_user: currentUser } = context;
+    const { prisma, currentUser } = context;
 
     const result = await safePost(post_uuid, prisma);
 
@@ -82,14 +82,14 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
   // postsクエリのリゾルバー
   // @ts-expect-error userフィールドが存在しないためエラーが出るが、実際には存在するので無視
   getAllPosts: async (_parent, args, context) => {
-    const safePosts = withErrorHandling(async (current_user_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
+    const safePosts = withErrorHandling(async (currentUser_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
       const result = await prisma.post.findMany({
         // 投稿が自分でない かつ 非公開のものは除外する
         // つまり、投稿が自分 または 公開のもののみ取得する
         where: {
           OR: [
             {
-              userUuid: current_user_uuid,
+              userUuid: currentUser_uuid,
             },
             {
               is_public: true,
@@ -110,7 +110,9 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     const { offset, limit } = args;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, current_user: currentUser } = context;
+    const { prisma, currentUser, ...hoge } = context;
+
+    console.log(hoge);
 
     return await safePosts(currentUser.user_uuid, prisma, { limit, offset });
   },

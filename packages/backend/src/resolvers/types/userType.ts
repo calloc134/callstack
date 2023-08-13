@@ -8,7 +8,7 @@ const UserTypeResolver: UserResolvers<GraphQLContext> = {
   // @ts-expect-error 返却されるuserにpostsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   posts: async (parent, args, context) => {
     const safePosts = withErrorHandling(
-      async (current_user_uuid: string, user_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
+      async (currentUser_uuid: string, user_uuid: string, prisma: PrismaClient, { offset, limit }: { offset: number; limit: number }) => {
         // UUIDからユーザーを取得
         const result = await prisma.user
           .findUniqueOrThrow({
@@ -23,7 +23,7 @@ const UserTypeResolver: UserResolvers<GraphQLContext> = {
               // つまり、投稿が自分 または 公開のもののみ取得する
               OR: [
                 {
-                  userUuid: current_user_uuid,
+                  userUuid: currentUser_uuid,
                 },
                 {
                   is_public: true,
@@ -46,7 +46,7 @@ const UserTypeResolver: UserResolvers<GraphQLContext> = {
     // 引数からページネーションのoffsetとlimitを取得
     const { offset, limit } = args;
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, current_user: currentUser } = context;
+    const { prisma, currentUser } = context;
 
     return await safePosts(currentUser.user_uuid, user_uuid, prisma, { limit, offset });
   },
