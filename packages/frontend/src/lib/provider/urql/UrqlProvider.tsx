@@ -4,7 +4,7 @@ import { authExchange, AuthUtilities, AuthConfig } from "@urql/exchange-auth";
 import toast, { Toaster } from "react-hot-toast";
 import { devtoolsExchange } from "@urql/devtools";
 
-import { isDev, hostname } from "src/env";
+import { is_dev, hostname } from "src/env";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
 
 // TODO: エラーハンドリングをMapExchangeで行う
@@ -73,10 +73,10 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
   const urql_client = new Client({
     // 開発環境であればhttp、本番環境であればhttpsを使う
     // ホストネームよりフェッチ先のURLを生成
-    url: `${isDev ? "http" : "https"}://${hostname}/api/graphql`,
+    url: `${is_dev ? "http" : "https"}://${hostname}/api/graphql`,
     exchanges: [
       // 開発環境であればdevtoolsを使う
-      ...(isDev ? [devtoolsExchange] : []),
+      ...(is_dev ? [devtoolsExchange] : []),
       cacheExchange,
       authExchange(authInit),
       mapExchange(mapInit),

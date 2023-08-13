@@ -85,7 +85,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     const { bio: maybeBio, handle: maybeHandle, screen_name: maybeScreenName } = args;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     const bio = maybeBio ?? undefined;
     const handle = maybeHandle ?? undefined;
@@ -108,7 +108,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     });
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     return await safeUser(currentUser.user_uuid, prisma);
   },
@@ -135,7 +135,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     // 引数からミューテーションの引数を取得
     const { title, body } = args;
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     return await safePost(currentUser.user_uuid, prisma, { title, body });
   },
@@ -170,7 +170,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     const { post_uuid, title: maybeTitle, body: maybeBody } = args;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     const title = maybeTitle ?? undefined;
     const body = maybeBody ?? undefined;
@@ -201,7 +201,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     // 引数からユーザーのUUIDを取得
     const { post_uuid } = args;
     // コンテキストからPrismaクライアントを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     return await safePost(currentUser.user_uuid, prisma, post_uuid);
   },

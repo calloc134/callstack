@@ -19,7 +19,7 @@ const PostByUUIDPostFragment = graphql(`
   }
 `);
 
-const PostBigCard = ({ post: post_frag }: { post: FragmentType<typeof PostByUUIDPostFragment> }) => {
+const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostByUUIDPostFragment> }) => {
   // フラグメントから投稿の情報を取得
   const post = useFragment(PostByUUIDPostFragment, post_frag);
 
@@ -55,4 +55,4 @@ const PostBigCard = ({ post: post_frag }: { post: FragmentType<typeof PostByUUID
   );
 };
 
-export { PostBigCard };
+export { PostDetailCard };

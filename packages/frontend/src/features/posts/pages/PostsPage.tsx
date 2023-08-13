@@ -4,18 +4,18 @@ import { PostCard } from "../components/PostCard";
 import { Spinner } from "@nextui-org/react";
 
 // 利用されるクエリの定義
-const IndexPanelPageQuery = graphql(`
-  query PanelPageQuery {
+const GetAllPostsQUery = graphql(`
+  query GetAllPostsQUery {
     getAllPosts(limit: 10) {
       ...PostFragment
     }
   }
 `);
 
-export const IndexPanelPage = () => {
+export const PostsPage = () => {
   // graphqlに対してクエリを実行
   const [result] = useQuery({
-    query: IndexPanelPageQuery,
+    query: GetAllPostsQUery,
   });
 
   const { data, fetching } = result;

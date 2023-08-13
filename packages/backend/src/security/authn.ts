@@ -17,7 +17,7 @@ const onError = (error: Error) => {
   }
 };
 
-const authMockOption: AuthMockPluginOptions = {
+const AuthMockOption: AuthMockPluginOptions = {
   // 認証されていないリクエストも許可
   preventUnauthenticatedAccess: false,
   // ペイロードを格納するフィールド名を指定
@@ -26,7 +26,7 @@ const authMockOption: AuthMockPluginOptions = {
   onError: onError,
 };
 
-const authnOption: Auth0PluginOptions = {
+const AuthnOption: Auth0PluginOptions = {
   // ドメイン部分は上書きするためダミー
   domain: "",
   // audienceは環境変数から取得
@@ -49,4 +49,4 @@ const authnOption: Auth0PluginOptions = {
   onError: onError,
 };
 
-export { authMockOption, authnOption };
+export { AuthMockOption , AuthnOption };

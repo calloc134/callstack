@@ -17,18 +17,18 @@ import { useDisableIntrospection } from "@envelop/disable-introspection";
 // graphqlスキーマ
 import { schema } from "./schema";
 // graphql-armorのプラグイン
-import { armor } from "./security/armor";
+import { Armor } from "./security/armor";
 // 認証プラグインのオプション
-import { authMockOption, authnOption } from "./security/authn";
+import { AuthMockOption, AuthnOption } from "./security/authn";
 // 認可プラグインのオプション
 import { authzOption } from "./security/authz";
 // 開発環境かどうかを判断する変数
-import { isDev } from "./env";
+import { is_dev } from "./env";
 import { useWebHook } from "./webhook";
 import { useGraphQlJit } from "@envelop/graphql-jit";
 
 // graphql-armorのプラグインを取得
-const enhancements = armor.protect();
+const enhancements = Armor.protect();
 
 // Prismaクライアントを作成
 const prisma = new PrismaClient();
@@ -44,24 +44,24 @@ const yoga = createYoga({
     prisma,
   },
   // 開発環境の場合はplaygroundを有効化
-  graphiql: isDev,
+  graphiql: is_dev,
   // 開発環境のときはCORSをすべて許可
   // そうでないときはすべて拒否
-  cors: isDev
+  cors: is_dev
     ? {
         origin: "*",
       }
     : false,
   plugins: [
     // もし開発環境でなければ、webhookの検証を行う
-    ...(isDev ? [] : [useWebHook(prisma)]),
+    ...(is_dev ? [] : [useWebHook(prisma)]),
     // もし開発環境でなければ、introspectionを無効化
-    ...(isDev ? [] : [useDisableIntrospection()]),
+    ...(is_dev ? [] : [useDisableIntrospection()]),
     // もし開発環境でなければ、graphql-armorを有効化
-    ...(isDev ? [] : [...enhancements.plugins]),
+    ...(is_dev ? [] : [...enhancements.plugins]),
     // 開発環境であるならば、useAuthMockを利用
     // そうでなければ、useAuth0を利用
-    isDev ? useAuthMock(authMockOption) : useAuth0(authnOption),
+    is_dev ? useAuthMock(AuthMockOption) : useAuth0(AuthnOption),
     // 一般的な認可処理のプラグインを追加
     useGenericAuth(authzOption),
     // JITプラグインを利用

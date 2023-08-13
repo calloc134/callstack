@@ -7,7 +7,7 @@ import { router } from "./route";
 import { AuthnProvider } from "./lib/provider/authn/AuthnProvider";
 import { UrqlProvider } from "./lib/provider/urql/UrqlProvider";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { isDev } from "./env";
+import { is_dev } from "./env";
 import "src/index.css";
 
 export const Main = () => {
@@ -16,7 +16,7 @@ export const Main = () => {
       <RouterProvider router={router} />
       {
         // @ts-expect-error routerの型のエラーを無視
-        isDev && <TanStackRouterDevtools router={router} />
+        is_dev && <TanStackRouterDevtools router={router} />
       }
     </>
   );

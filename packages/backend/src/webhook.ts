@@ -47,12 +47,12 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
       const rawBody = await request.text();
 
       // ヘッダより署名を取得
-      const expectedSignature = request.headers.get("logto-signature-sha-256") || "";
+      const expected_signature = request.headers.get("logto-signature-sha-256") || "";
 
       // 署名検証
-      const isValid = verifyWebHook(logto_webhook_secret, rawBody, expectedSignature);
+      const is_valid = verifyWebHook(logto_webhook_secret, rawBody, expected_signature);
 
-      if (isValid) {
+      if (is_valid) {
         // bodyのJSONをパース
         const body = JSON.parse(rawBody) as WebHookBodyType;
 

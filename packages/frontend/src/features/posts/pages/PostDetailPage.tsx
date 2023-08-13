@@ -1,27 +1,27 @@
 import { useQuery } from "urql";
 import { graphql } from "src/lib/generated/gql";
-import { PostBigCard } from "../components/PostBigCard";
+import { PostDetailCard } from "../components/PostBigCard";
 import { Spinner } from "@nextui-org/react";
 import { useParams } from "@tanstack/react-router";
 
 // 利用されるクエリの定義
-const PostByUUIDPanelPageQuery = graphql(`
-  query PostByUUIDPanelPageQuery($uuid: UUID!) {
+const GetPostDetailQuery = graphql(`
+  query GetPostDetailQuery($uuid: UUID!) {
     getPostByUUID(uuid: $uuid) {
       ...PostByUUIDPostFragment
     }
   }
 `);
 
-const PostUuid = () => {
+const PostDetailPage = () => {
   // パスパラメータの内容を取得
   const post_uuid = useParams({
-    from: "/auth/panel/post/$post_uuid",
+    from: "/auth/post/$post_uuid",
   })?.post_uuid;
 
   // graphqlに対してクエリを実行
   const [result] = useQuery({
-    query: PostByUUIDPanelPageQuery,
+    query: GetPostDetailQuery,
     variables: {
       uuid: post_uuid,
     },
@@ -38,9 +38,9 @@ const PostUuid = () => {
 
   return (
     <div className="flex flex-col items-center justify-between h-screen">
-      <div className="flex flex-col w-8/12">{data ? <PostBigCard post={data.getPostByUUID} /> : <div>投稿が見つかりませんでした</div>}</div>
+      <div className="flex flex-col w-8/12">{data ? <PostDetailCard post={data.getPostByUUID} /> : <div>投稿が見つかりませんでした</div>}</div>
     </div>
   );
 };
 
-export { PostUuid };
+export { PostDetailPage };

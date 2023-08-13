@@ -66,7 +66,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     // 引数から投稿のUUIDを取得
     const { uuid: post_uuid } = args;
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     const result = await safePost(post_uuid, prisma);
 
@@ -110,7 +110,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     const { offset, limit } = args;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     return await safePosts(currentUser.user_uuid, prisma, { limit, offset });
   },

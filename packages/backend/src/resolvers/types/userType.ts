@@ -46,7 +46,7 @@ const UserTypeResolver: UserResolvers<GraphQLContext> = {
     // 引数からページネーションのoffsetとlimitを取得
     const { offset, limit } = args;
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser } = context;
+    const { prisma, current_user: currentUser } = context;
 
     return await safePosts(currentUser.user_uuid, user_uuid, prisma, { limit, offset });
   },

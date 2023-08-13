@@ -1,6 +1,6 @@
 import { useState, createContext, ReactNode } from "react";
 import { useLogto, InteractionMode, LogtoProvider } from "@logto/react";
-import { isDev, dev_jwt_token } from "src/env";
+import { is_dev, dev_jwt_token } from "src/env";
 import { logto_config } from "src/config";
 
 // コンテキストの型をあらかじめ定義
@@ -67,7 +67,7 @@ const AuthnProvider = ({ children }: { children: ReactNode }) => {
   return (
     // 開発環境か本番環境かでコンテキストを切り替える
     <LogtoProvider config={logto_config}>
-      {isDev ? <DevelopmentAuthnProvider>{children}</DevelopmentAuthnProvider> : <ProductionAuthnProvider>{children}</ProductionAuthnProvider>}
+      {is_dev ? <DevelopmentAuthnProvider>{children}</DevelopmentAuthnProvider> : <ProductionAuthnProvider>{children}</ProductionAuthnProvider>}
     </LogtoProvider>
   );
 };
