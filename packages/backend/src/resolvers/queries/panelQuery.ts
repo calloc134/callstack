@@ -110,9 +110,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     const { offset, limit } = args;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
-    const { prisma, currentUser, ...hoge } = context;
-
-    console.log(hoge);
+    const { prisma, currentUser } = context;
 
     return await safePosts(currentUser.user_uuid, prisma, { limit, offset });
   },

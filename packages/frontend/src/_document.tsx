@@ -30,7 +30,7 @@ export const Document = () => {
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4" justify="start">
             <NavbarItem isActive>
-              <Link to="/">ユーザ一覧</Link>
+              <Link to="/auth/users">ユーザ一覧</Link>
             </NavbarItem>
             <NavbarItem isActive>
               <Link to="/auth/posts">投稿一覧</Link>

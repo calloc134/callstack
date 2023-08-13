@@ -8,7 +8,7 @@ import { useParams } from "@tanstack/react-router";
 const GetPostDetailQuery = graphql(`
   query GetPostDetailQuery($uuid: UUID!) {
     getPostByUUID(uuid: $uuid) {
-      ...PostByUUIDPostFragment
+      ...PostDetailFragment
     }
   }
 `);

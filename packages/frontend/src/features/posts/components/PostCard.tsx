@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
-import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
-import { UserCard } from "./UserCard";
+import { UserCardForPost } from "./UserCardForPost";
+import { graphql } from "src/lib/generated/gql";
 
 // 利用される投稿のフラグメントの定義
 const PostFragment = graphql(`
@@ -11,7 +11,7 @@ const PostFragment = graphql(`
     title
     body
     user {
-      ...UserFragment
+      ...UserPopupFragment
     }
   }
 `);
@@ -42,7 +42,7 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
             </DropdownTrigger>
             <DropdownMenu>
               <DropdownItem>
-                <UserCard user={post.user} />
+                <UserCardForPost user={post.user} />
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>

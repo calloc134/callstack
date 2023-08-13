@@ -3,6 +3,8 @@ import { Document } from "./_document";
 import { Index } from "./features/index/pages/Index";
 import { NotFoundPage } from "./404";
 import { ProtectedRouter } from "./lib/route/ProtectedRouter";
+import { UsersPage } from "./features/users/pages/UsersPage";
+import { UserDetailPage } from "./features/users/pages/UserDetailPage";
 import { PostsPage } from "./features/posts/pages/PostsPage";
 import { PostDetailPage } from "./features/posts/pages/PostDetailPage";
 import { CallBackPage } from "./callback";
@@ -50,27 +52,49 @@ const protectedRoute = new Route({
   component: () => <ProtectedRouter />,
 });
 
-// auth/panelルートの設定
-const authenticatedRoute = new Route({
+// auth/usersルートの設定
+const authenticatedUserRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => protectedRoute,
+  path: "users",
+});
+
+// auth/postsルートの設定
+const authenticatedPostRoute = new Route({
   // 親ルートを指定
   getParentRoute: () => protectedRoute,
   path: "posts",
 });
 
+// auth/usersルート インデックスの設定
+const usersRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => authenticatedUserRoute,
+  path: "/",
+  component: () => <UsersPage />,
+});
+
+// auth/users/$user_uuidルートの設定
+const userDetailRoute = new Route({
+  // 親ルートを指定
+  getParentRoute: () => authenticatedUserRoute,
+  path: "$user_uuid",
+  component: () => <UserDetailPage />,
+});
+
+// auth/postsルート インデックスの設定
 const postsRoute = new Route({
   // 親ルートを指定
-  getParentRoute: () => authenticatedRoute,
+  getParentRoute: () => authenticatedPostRoute,
   path: "/",
-  // 保護された外枠コンポーネントを指定
   component: () => <PostsPage />,
 });
 
-// auth/panel/$post_uuidルートの設定
+// auth/posts/$post_uuidルートの設定
 const postDetailRoute = new Route({
   // 親ルートを指定
-  getParentRoute: () => authenticatedRoute,
+  getParentRoute: () => authenticatedPostRoute,
   path: "$post_uuid",
-  // 保護された外枠コンポーネントを指定
   component: () => <PostDetailPage />,
 });
 
@@ -79,7 +103,10 @@ const router = new Router({
     indexRoute,
     notFoundRoute,
     callbackRoute,
-    protectedRoute.addChildren([authenticatedRoute.addChildren([postsRoute, postDetailRoute])]),
+    protectedRoute.addChildren([
+      authenticatedUserRoute.addChildren([usersRoute, userDetailRoute]),
+      authenticatedPostRoute.addChildren([postsRoute, postDetailRoute]),
+    ]),
   ]),
 });
 

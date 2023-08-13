@@ -1,11 +1,11 @@
 import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
 import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
-import { UserCard } from "./UserCard";
+import { UserCardForPost } from "./UserCardForPost";
 
 // 利用される投稿のフラグメントの定義
-const PostByUUIDPostFragment = graphql(`
-  fragment PostByUUIDPostFragment on Post {
+const PostDetailFragment = graphql(`
+  fragment PostDetailFragment on Post {
     post_uuid
     title
     body
@@ -13,14 +13,14 @@ const PostByUUIDPostFragment = graphql(`
     updated_at
     is_public
     user {
-      ...UserFragment
+      ...UserPopupFragment
     }
   }
 `);
 
-const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostByUUIDPostFragment> }) => {
+const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDetailFragment> }) => {
   // フラグメントから投稿の情報を取得
-  const post = useFragment(PostByUUIDPostFragment, post_frag);
+  const post = useFragment(PostDetailFragment, post_frag);
 
   return (
     <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
@@ -44,7 +44,7 @@ const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostByU
             </DropdownTrigger>
             <DropdownMenu>
               <DropdownItem>
-                <UserCard user={post.user} />
+                <UserCardForPost user={post.user} />
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
