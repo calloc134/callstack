@@ -91,6 +91,8 @@ services:
       - LOGTO_ENDPOINT=${LOGTO_ENDPOINT}
       # オーディエンスを指定
       - LOGTO_AUDIENCE=${LOGTO_AUDIENCE}
+      # logtoのwebhookシークレットを指定
+      - LOGTO_WEBHOOK_SECRET=${LOGTO_WEBHOOK_SECRET}
       # NODE_ENVをproductionに指定
       - NODE_ENV=production
     # 内部ネットワークに接続
