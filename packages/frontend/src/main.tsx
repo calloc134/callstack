@@ -6,12 +6,19 @@ import { NextUIProvider } from "@nextui-org/react";
 import { router } from "./route";
 import { AuthnProvider } from "./lib/provider/authn/AuthnProvider";
 import { UrqlProvider } from "./lib/provider/urql/UrqlProvider";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { isDev } from "./env";
 import "src/index.css";
 
 export const Main = () => {
   return (
-    // NextUI用のprovider
-    <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} />
+      {
+        // @ts-expect-error routerの型のエラーを無視
+        isDev && <TanStackRouterDevtools router={router} />
+      }
+    </>
   );
 };
 
