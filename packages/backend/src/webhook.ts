@@ -65,7 +65,7 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
         };
 
         // 適するユーザをデータベースに追加
-        prisma.user.create({
+        await prisma.user.create({
           data: {
             // 認証サービスのユーザIDを保持
             auth_sub: body.userId,
