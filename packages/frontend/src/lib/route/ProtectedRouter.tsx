@@ -7,17 +7,17 @@ import toast, { Toaster } from "react-hot-toast";
 
 export const ProtectedRouter = () => {
   // Logtoフックより認証状態とログイン関数を取得
-  const { isAuthenticated, signIn } = useAuthn();
+  const { isAuthenticated, isLoading, signIn } = useAuthn();
 
   // 認証していない場合はsignIn関数でログインリダイレクト
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isLoading) {
       toast("認証を行います...", {
         icon: "🔑",
       });
       signIn(`https://${hostname}/auth/callback`);
     }
-  }, [isAuthenticated, signIn]);
+  }, [isAuthenticated, isLoading, signIn]);
 
   // 認証されている場合は子コンポーネントを表示
   if (!isAuthenticated) {
