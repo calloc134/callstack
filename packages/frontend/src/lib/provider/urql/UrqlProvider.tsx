@@ -37,7 +37,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           );
         },
         async refreshAuth() {
-          if (!isAuthenticated || !isLoading) {
+          if (!isAuthenticated || isLoading) {
             // 未認証もしくは認証済みでもロード中の場合は何もしない
             return;
           }
