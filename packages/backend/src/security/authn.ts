@@ -34,7 +34,7 @@ const AuthnOption: Auth0PluginOptions = {
   // オプションを上書き
   // logtoのjwksUriと指定
   jwksClientOptions: {
-    jwksUri: `${logto_endpoint}/oidc/jwks}`,
+    jwksUri: `${logto_endpoint}/oidc/jwks`,
   },
   // JWTの検証オプションを上書き
   jwtVerifyOptions: {
@@ -49,4 +49,4 @@ const AuthnOption: Auth0PluginOptions = {
   onError: onError,
 };
 
-export { AuthMockOption , AuthnOption };
+export { AuthMockOption, AuthnOption };
