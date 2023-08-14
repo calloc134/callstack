@@ -4,7 +4,7 @@ import { authExchange, AuthUtilities, AuthConfig } from "@urql/exchange-auth";
 import toast, { Toaster } from "react-hot-toast";
 import { devtoolsExchange } from "@urql/devtools";
 
-import { is_dev, hostname } from "src/env";
+import { is_dev, hostname, logto_api_resource } from "src/env";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
 
 // TODO: エラーハンドリングをMapExchangeで行う
@@ -33,7 +33,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           }
 
           // トークンの取得
-          const jwt = await getAccessToken();
+          const jwt = await getAccessToken(is_dev ? "" : logto_api_resource);
           setJwt(jwt);
         },
         addAuthToOperation(operation) {
