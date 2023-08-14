@@ -20,6 +20,6 @@ const logto_api_resource = is_dev ? "" : import.meta.env.VITE_LOGTO_API_RESOURCE
 // ホスト名を取得
 // 開発環境であれば、localhostを設定
 // 本番環境であれば、環境変数から取得
-const hostname = is_dev ? "localhost:6173" : process.env.VITE_HOSTNAME || "";
+const hostname = is_dev ? "localhost:6173" : import.meta.env.VITE_HOSTNAME || "";
 
-export { is_dev , dev_jwt_token, logto_endpoint, logto_app_id, logto_api_resource, hostname };
+export { is_dev, dev_jwt_token, logto_endpoint, logto_app_id, logto_api_resource, hostname };
