@@ -19,7 +19,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     async (utils) => {
       return {
         willAuthError() {
-          return false;
+          return jwt === "";
         },
         didAuthError(error) {
           // GraphQLのエラー
