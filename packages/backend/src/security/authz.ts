@@ -6,9 +6,10 @@ import { GenericAuthPluginOptions } from "@envelop/generic-auth";
 import { GraphQLErrorWithCode } from "src/lib/error/error";
 
 const resolveUserFn: ResolveUserFn<User, GraphQLContext> = async (context) => {
-  console.log("Logto Payload", context.logto);
-
   // コンテキストからsubを取得
+  // const sub = context.logto?.sub;
+  const { prisma, currentUser, req, ...context_rest } = context;
+  console.debug("context_rest", context_rest);
   const sub = context.logto?.sub;
 
   // もしsubが存在しない場合は
