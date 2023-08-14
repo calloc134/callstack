@@ -19,9 +19,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     async (utils) => {
       return {
         willAuthError() {
-          console.log("willAuthError", jwt);
-          // jwtが空文字の場合は未認証とみなす
-          return jwt === "";
+          return false;
         },
         didAuthError(error) {
           // GraphQLのエラー
