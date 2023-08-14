@@ -10,7 +10,8 @@ import { useAuthn } from "src/lib/provider/authn/useAuthn";
 // TODO: エラーハンドリングをMapExchangeで行う
 const UrqlProvider = ({ children }: { children: ReactNode }) => {
   // urqlクライアントの設定
-  const { isAuthenticated, getAccessToken } = useAuthn();
+  const { isAuthenticated, isLoading, getAccessToken } = useAuthn();
+  // jwtの状態
   const [jwt, setJwt] = useState("");
 
   // urqlのauth Exchange用の設定
@@ -29,10 +30,6 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           // また、invalid_tokenのエラーがある場合も未認証とみなす
           // jwtが空文字でなく、authz_not_logged_inのエラーがある場合はまだjwtが反映されていないとしてスルー
 
-          console.debug(
-            "error_code_in_didAuthError",
-            error.graphQLErrors.map((e) => e.extensions?.code)
-          );
           return (
             (isAuthenticated && jwt === "" && error.graphQLErrors.some((e) => e.extensions?.code === "authz_not_logged_in")) ||
             error.graphQLErrors.some((e) => e.extensions?.code === "jwt_expired") ||
@@ -42,12 +39,10 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           );
         },
         async refreshAuth() {
-          if (!isAuthenticated) {
-            // 未認証の場合は何もしない
+          if (!isAuthenticated || isLoading) {
+            // 未認証もしくは認証済みでもロード中の場合は何もしない
             return;
           }
-
-          console.debug("logto_api_resource in refreshAuth", logto_api_resource);
 
           // トークンの取得
           const jwt = (await getAccessToken(is_dev ? "" : logto_api_resource)) || "";
@@ -63,8 +58,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           if (headers.get("Authorization")) return operation;
 
           // 認証済みかつjwtがあり、jwtが空文字でない場合はヘッダに追加
-          if (isAuthenticated && jwt && jwt !== "") {
-            console.debug("jwt in addAuthToOperation", jwt);
+          if (isAuthenticated && jwt !== "") {
             return utils.appendHeaders(operation, {
               // ヘッダの設定
               Authorization: `Bearer ${jwt}`,
