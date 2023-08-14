@@ -13,6 +13,8 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, isLoading, getAccessToken } = useAuthn();
   // jwtの状態
   const [jwt, setJwt] = useState("");
+  // フェッチしているかを判定するフラグ
+  const [isFetching, setIsFetching] = useState(false);
 
   // urqlのauth Exchange用の設定
   const authInit: (utilities: AuthUtilities) => Promise<AuthConfig> = useCallback(
@@ -37,16 +39,25 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           );
         },
         async refreshAuth() {
-          console.debug("isAuthenticated", isAuthenticated);
-          console.debug("isLoading", isLoading);
-          if (!isAuthenticated || isLoading) {
+          if (!isAuthenticated) {
             // 未認証もしくは認証済みでもロード中の場合は何もしない
             return;
           }
 
+          // もしフェッチ中であれば何もしない
+          if (isFetching) {
+            return;
+          }
+
+          // useStateをフラグとして利用
+          setIsFetching(true);
+
           // トークンの取得
           const jwt = (await getAccessToken(is_dev ? "" : logto_api_resource)) || "";
           setJwt(jwt);
+
+          // フェッチが終わったのでフラグを下ろす
+          setIsFetching(false);
         },
         addAuthToOperation(operation) {
           // fetchOptionsの適用
