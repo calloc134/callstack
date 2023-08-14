@@ -18,13 +18,22 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     async (utils) => {
       return {
         willAuthError() {
-          // 認証されていない場合は認証エラーとして処理する
-          return !isAuthenticated;
+          // jwtが空文字の場合は未認証とみなす
+          return jwt === "";
         },
         didAuthError(error) {
           // GraphQLのエラー
-          // TODO: 実際のエラーを確認してから修正
-          return error.graphQLErrors.some((e) => e.extensions?.code === "authz_not_logged_in");
+          // isAUthenticaedがtrueなのはAuthnProviderで認証済みと判定されているため
+          // jwtが空文字かつauthz_not_logged_inのエラーがある場合は未認証とみなす
+          // また、invalid_tokenのエラーがある場合も未認証とみなす
+          // jwtが空文字でなく、authz_not_logged_inのエラーがある場合はまだjwtが反映されていないとして再度認証を行う
+          return (
+            (isAuthenticated && jwt === "" && error.graphQLErrors.some((e) => e.extensions?.code === "authz_not_logged_in")) ||
+            error.graphQLErrors.some((e) => e.extensions?.code === "jwt_expired") ||
+            error.graphQLErrors.some((e) => e.extensions?.code === "jwt_invalid_signature") ||
+            error.graphQLErrors.some((e) => e.extensions?.code === "jwt_not_before") ||
+            error.graphQLErrors.some((e) => e.extensions?.code === "jwt_web_token_error")
+          );
         },
         async refreshAuth() {
           if (!isAuthenticated) {
@@ -45,8 +54,8 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           // fetchOptionsによって既にヘッダがある場合は上書きしない
           if (headers.get("Authorization")) return operation;
 
-          // 認証済みかつjwtがある場合はヘッダに追加
-          if (isAuthenticated && jwt) {
+          // 認証済みかつjwtがあり、jwtが空文字でない場合はヘッダに追加
+          if (isAuthenticated && jwt && jwt !== "") {
             return utils.appendHeaders(operation, {
               // ヘッダの設定
               Authorization: `Bearer ${jwt}`,
