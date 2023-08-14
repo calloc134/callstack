@@ -56,12 +56,23 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
         // bodyのJSONをパース
         const body = JSON.parse(rawBody) as WebHookBodyType;
 
+        // ランダムな文字列を生成する関数
+        // ランダムな数字を取得してハッシュ化
+        const generateRandomString = () => {
+          const random = Math.random().toString(36).slice(-8);
+          const hash = createHmac("sha256", random).digest("hex");
+          return hash;
+        };
+
         // 適するユーザをデータベースに追加
         prisma.user.create({
           data: {
+            // 認証サービスのユーザIDを保持
             auth_sub: body.userId,
-            handle: body.user.username || "johndoe",
-            screen_name: body.user.username || "John Doe",
+            // ユーザネームかランダムな文字列を保持
+            handle: body.user.username || generateRandomString(),
+            // スクリーンネームかランダムな文字列を保持
+            screen_name: body.user.username || generateRandomString(),
             bio: "",
           },
         });
