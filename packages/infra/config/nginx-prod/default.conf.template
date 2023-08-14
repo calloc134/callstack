@@ -88,6 +88,7 @@ server {
     location / {
         root   /usr/share/nginx/dist;
         index  index.html index.htm;
+        try_files $uri $uri/ /index.html;
     }
     error_page 404 /404.html;
         location = /40x.html {
