@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet } from "@tanstack/react-router";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
-import { logto_endpoint } from "src/env";
+import { hostname } from "src/env";
 import { Spinner } from "@nextui-org/react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -15,7 +15,7 @@ export const ProtectedRouter = () => {
       toast("認証を行います...", {
         icon: "🔑",
       });
-      signIn(`${logto_endpoint}/callback`);
+      signIn(`https://${hostname}/auth/callback`);
     }
   }, [isAuthenticated, signIn]);
 
