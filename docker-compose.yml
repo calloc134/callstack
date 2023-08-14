@@ -138,7 +138,7 @@ services:
         INFRADIR: ${INFRADIR}
     environment:
       # ホストネームを指定
-      - HOSTNAME=${HOSTNAME}=value
+      - HOSTNAME=${HOSTNAME}
     volumes:
       - type: bind
         source: /etc/letsencrypt
