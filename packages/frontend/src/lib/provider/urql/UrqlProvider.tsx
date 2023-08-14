@@ -37,6 +37,8 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           );
         },
         async refreshAuth() {
+          console.debug("isAuthenticated", isAuthenticated);
+          console.debug("isLoading", isLoading);
           if (!isAuthenticated || isLoading) {
             // 未認証もしくは認証済みでもロード中の場合は何もしない
             return;
@@ -66,7 +68,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
         },
       };
     },
-    [isAuthenticated, getAccessToken, jwt]
+    [isAuthenticated, isLoading, getAccessToken, jwt]
   );
 
   const mapInit: MapExchangeOpts = {
