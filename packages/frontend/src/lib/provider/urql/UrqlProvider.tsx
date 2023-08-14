@@ -18,6 +18,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
     async (utils) => {
       return {
         willAuthError() {
+          console.log("willAuthError", jwt);
           // jwtが空文字の場合は未認証とみなす
           return jwt === "";
         },
@@ -26,7 +27,12 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           // isAUthenticaedがtrueなのはAuthnProviderで認証済みと判定されているため
           // jwtが空文字かつauthz_not_logged_inのエラーがある場合は未認証とみなす
           // また、invalid_tokenのエラーがある場合も未認証とみなす
-          // jwtが空文字でなく、authz_not_logged_inのエラーがある場合はまだjwtが反映されていないとして再度認証を行う
+          // jwtが空文字でなく、authz_not_logged_inのエラーがある場合はまだjwtが反映されていないとしてスルー
+
+          console.debug(
+            "error_code_in_didAuthError",
+            error.graphQLErrors.map((e) => e.extensions?.code)
+          );
           return (
             (isAuthenticated && jwt === "" && error.graphQLErrors.some((e) => e.extensions?.code === "authz_not_logged_in")) ||
             error.graphQLErrors.some((e) => e.extensions?.code === "jwt_expired") ||
@@ -40,6 +46,8 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
             // 未認証の場合は何もしない
             return;
           }
+
+          console.debug("logto_api_resource in refreshAuth", logto_api_resource);
 
           // トークンの取得
           const jwt = await getAccessToken(is_dev ? "" : logto_api_resource);
@@ -56,6 +64,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
 
           // 認証済みかつjwtがあり、jwtが空文字でない場合はヘッダに追加
           if (isAuthenticated && jwt && jwt !== "") {
+            console.debug("jwt in addAuthToOperation", jwt);
             return utils.appendHeaders(operation, {
               // ヘッダの設定
               Authorization: `Bearer ${jwt}`,
