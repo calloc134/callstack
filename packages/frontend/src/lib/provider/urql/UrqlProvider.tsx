@@ -11,7 +11,7 @@ import { useAuthn } from "src/lib/provider/authn/useAuthn";
 const UrqlProvider = ({ children }: { children: ReactNode }) => {
   // urqlクライアントの設定
   const { isAuthenticated, getAccessToken } = useAuthn();
-  const [jwt, setJwt] = useState<string | undefined>();
+  const [jwt, setJwt] = useState("");
 
   // urqlのauth Exchange用の設定
   const authInit: (utilities: AuthUtilities) => Promise<AuthConfig> = useCallback(
@@ -50,7 +50,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           console.debug("logto_api_resource in refreshAuth", logto_api_resource);
 
           // トークンの取得
-          const jwt = await getAccessToken(is_dev ? "" : logto_api_resource);
+          const jwt = (await getAccessToken(is_dev ? "" : logto_api_resource)) || "";
           setJwt(jwt);
         },
         addAuthToOperation(operation) {
