@@ -148,3 +148,5 @@ services:
       - app-ins-network
     # コンテナが停止したら再起動
     restart: on-failure
+    depends_on:
+      - backend
