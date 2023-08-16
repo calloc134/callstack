@@ -10,7 +10,7 @@ import { useAuthn } from "src/lib/provider/authn/useAuthn";
 // TODO: エラーハンドリングをMapExchangeで行う
 const UrqlProvider = ({ children }: { children: ReactNode }) => {
   // urqlクライアントの設定
-  const { isAuthenticated, getAccessToken } = useAuthn();
+  const { isAuthenticated, getAccessToken, signIn } = useAuthn();
   // jwtの状態
   const [jwt, setJwt] = useState("");
   // フェッチしているかを判定するフラグ
@@ -53,7 +53,14 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           setIsFetching(true);
 
           // トークンの取得
-          const jwt = (await getAccessToken(is_dev ? "" : logto_api_resource)) || "";
+          const jwt = await getAccessToken(is_dev ? "" : logto_api_resource);
+
+          if (jwt === undefined) {
+            // トークンがundefinedの場合はサインインしなおす
+            signIn(`https://${hostname}/auth/callback`);
+            return;
+          }
+
           setJwt(jwt);
 
           // フェッチが終わったのでフラグを下ろす
