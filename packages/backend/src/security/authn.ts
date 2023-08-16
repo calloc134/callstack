@@ -1,8 +1,8 @@
 import { Auth0PluginOptions } from "@envelop/auth0";
 import { AuthMockPluginOptions } from "../lib/plugins/useAuthMock";
-import { audience, logto_endpoint } from "../env";
+import { logto_audience, logto_endpoint } from "src/env";
 import { TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
-import { GraphQLErrorWithCode } from "../error";
+import { GraphQLErrorWithCode } from "src/lib/error/error";
 
 // エラー処理を行う関数
 const onError = (error: Error) => {
@@ -17,7 +17,7 @@ const onError = (error: Error) => {
   }
 };
 
-const authMockOption: AuthMockPluginOptions = {
+const AuthMockOption: AuthMockPluginOptions = {
   // 認証されていないリクエストも許可
   preventUnauthenticatedAccess: false,
   // ペイロードを格納するフィールド名を指定
@@ -26,15 +26,15 @@ const authMockOption: AuthMockPluginOptions = {
   onError: onError,
 };
 
-const authnOption: Auth0PluginOptions = {
+const AuthnOption: Auth0PluginOptions = {
   // ドメイン部分は上書きするためダミー
   domain: "",
   // audienceは環境変数から取得
-  audience: audience,
+  audience: logto_audience,
   // オプションを上書き
   // logtoのjwksUriと指定
   jwksClientOptions: {
-    jwksUri: `${logto_endpoint}/oidc/jwks}`,
+    jwksUri: `${logto_endpoint}/oidc/jwks`,
   },
   // JWTの検証オプションを上書き
   jwtVerifyOptions: {
@@ -49,4 +49,4 @@ const authnOption: Auth0PluginOptions = {
   onError: onError,
 };
 
-export { authMockOption, authnOption };
+export { AuthMockOption, AuthnOption };

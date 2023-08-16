@@ -1,9 +1,9 @@
 import { User, Role } from "@prisma/client";
-import { GraphQLContext } from "../context";
+import { GraphQLContext } from "src/context";
 import { ResolveUserFn, ValidateUserFn } from "@envelop/generic-auth";
 import { Kind } from "graphql";
 import { GenericAuthPluginOptions } from "@envelop/generic-auth";
-import { GraphQLErrorWithCode } from "../error";
+import { GraphQLErrorWithCode } from "src/lib/error/error";
 
 const resolveUserFn: ResolveUserFn<User, GraphQLContext> = async (context) => {
   // コンテキストからsubを取得
@@ -19,7 +19,7 @@ const resolveUserFn: ResolveUserFn<User, GraphQLContext> = async (context) => {
     // 対応するユーザーを取得
     const user = await context.prisma.user.findUniqueOrThrow({
       where: {
-        sub_auth: sub,
+        auth_sub: sub,
       },
     });
 

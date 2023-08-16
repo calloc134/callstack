@@ -17,7 +17,6 @@ volumes:
   # logtoのデータベースデータを格納するボリューム
   logto-db-vol:
 
-
 services:
   # バックエンド用のデータベース
   db-app:
@@ -64,13 +63,12 @@ services:
     env_file: ${LOGTO_ENV}
     environment:
       # logtoコンテナのエンドポイントを指定
-      - ENDPOINT=${ENDPOINT}
-      - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
+      - ENDPOINT=${LOGTO_ENDPOINT}
+      - ADMIN_ENDPOINT=${LOGTO_ADMIN_ENDPOINT}
     # 内部ネットワークに接続
     networks:
       app-ins-network:
       logto-db-network:
-
 
   backend:
     container_name: backend-prod
@@ -90,11 +88,12 @@ services:
       # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
       # logtoコンテナのエンドポイントを指定
-      - ENDPOINT=${ENDPOINT}
-      - ADMIN_ENDPOINT=${ADMIN_ENDPOINT}
+      - LOGTO_ENDPOINT=${LOGTO_ENDPOINT}
       # オーディエンスを指定
-      - AUDIENCE=${AUDIENCE}
-    # NODE_ENVをproductionに指定
+      - LOGTO_AUDIENCE=${LOGTO_AUDIENCE}
+      # logtoのwebhookシークレットを指定
+      - LOGTO_WEBHOOK_SECRET=${LOGTO_WEBHOOK_SECRET}
+      # NODE_ENVをproductionに指定
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
@@ -119,25 +118,25 @@ services:
       # フロントエンドのDockerfileを指定
       dockerfile: packages/infra/Dockerfiles/Frontend-Dockerfile
       args:
+        # vite側で必要な環境変数ここから
         # フロントエンドのディレクトリを指定
         PACKAGE_PATH: ${FRONTDIR}
         # ビルド時のスキーマのパスを指定
         SCHEMA_PATH: ${SCHEMA_PATH}
         # オペレーションの環境変数を指定
-        OPERATION_PATH: ${OPERATION_PATH}
+        # OPERATION_PATH: ${OPERATION_PATH}
+        # logtoコンテナのエンドポイントを指定
+        VITE_LOGTO_ENDPOINT: ${LOGTO_ENDPOINT}
+        # logtoのアプリケーションIDを指定
+        VITE_LOGTO_APPID: ${LOGTO_APPID}
+        # logtoのアプリケーションIDを指定
+        VITE_LOGTO_API_RESOURCE: ${LOGTO_API_RESOURCE}
+        # viteとnginx両方で利用する環境変数ここから
+        # ホスト名を指定
+        VITE_HOSTNAME: ${HOSTNAME}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
-        # ホスト名を指定
-        HOSTNAME: ${HOSTNAME}
-        # 管理者のメールアドレスを指定
-        CERTBOT_EMAIL: ${CERTBOT_EMAIL}
     environment:
-      # スキーマのパスを指定
-      - SCHEMA_PATH=${SCHEMA_PATH}
-      # オペレーションの環境変数を指定
-      - OPERATION_PATH=${OPERATION_PATH}
-      # NODE_ENVをproductionに指定
-      - NODE_ENV=production
       # ホストネームを指定
       - HOSTNAME=${HOSTNAME}
     volumes:
@@ -149,3 +148,5 @@ services:
       - app-ins-network
     # コンテナが停止したら再起動
     restart: on-failure
+    depends_on:
+      - backend

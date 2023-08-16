@@ -1,81 +1,61 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
+const { nextui } = require("@nextui-org/react");
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  // ダークモードの設定
-  // ブラウザの設定に従うようにする
-  darkMode: ["media", "class"], 
-  // Tailwindを適用するファイルを指定
   content: [
-    'src/components/pages/*.{ts,tsx}',
-    'src/components/ui/*.{ts,tsx}',
-    "src/*.tsx"
-	],
+    // ...
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./src/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/features/**/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
-    },
+    extend: {},
   },
-  // プラグインの設定
-  // windy-radix-paletteは、radix-uiのパレットをtailwindcssで使用できるようにするプラグイン
-  plugins: [require("tailwindcss-animate"), require("windy-radix-palette")]
-}
+  darkMode: ["media", "class"],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            default: "#4e4e4e", // 中立的なデフォルト色
+            background: "#faf5ff", // 薄い紫で柔らかい背景
+            foreground: "#4e4e4e", // 読みやすさを保つためのフォント色
+            primary: "#df6bfd", // 主要な色で、強調したい場所に使用
+            secondary: "#f6f5fe", // 補助的な色で、主要色とのバランスを取る
+            success: "#6f42c1", // 成功を示す紫、信頼感と安心感を与える
+            warning: "#e83e8c", // 警告に使用、紫ピンクで視認性を保つ
+            danger: "#d6336c", // 危険を示す色で、緊急性を強調
+            divider: "#e0e0e0", // 区切り線に使用、目立たず機能する色
+            overlay: "#f0e5ff", // モーダルなどに使用、背景と調和する薄紫
+            focus: "#aa00ff", // フォーカス時に使用、強調したい部分に目を引く紫
+            content1: "#5e5e5e", // コンテンツ階層1
+            content2: "#6e6e6e", // コンテンツ階層2
+            content3: "#7e7e7e", // コンテンツ階層3
+            content4: "#8e8e8e", // コンテンツ階層4
+          },
+        },
+        dark: {
+          colors: {
+            default: "#f5f5f5", // 中立的なデフォルト色
+            background: "#2e2b49", // ダークテーマ背景
+            foreground: "#f4f6f8", // ダークテーマの読みやすいフォント色
+            primary: "#df6bfd", // メインの紫、深みと複雑さを示す
+            secondary: "#4d4b79", // 補助的な紫、主要色との対比を提供
+            success: "#6f42c1", // 成功を示す紫、安定感を与える
+            warning: "#e83e8c", // 警告に使用、紫ピンクで視認性を保つ
+            danger: "#d6336c", // 危険を示す色で、緊急性を強調
+            divider: "#4e4e4e", // 区切り線に使用、ダークテーマに合う色
+            overlay: "#3e3e3e", // モーダルなどに使用、背景と調和する色
+            focus: "#aa00ff", // フォーカス時に使用、強調したい部分に目を引く紫
+            content1: "#2e2e2e", // コンテンツ階層1
+            content2: "#3e3e3e", // コンテンツ階層2
+            content3: "#4e4e4e", // コンテンツ階層3
+            content4: "#5e5e5e", // コンテンツ階層4
+          },
+        },
+      },
+    }),
+  ],
+};

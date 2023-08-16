@@ -64,7 +64,7 @@ export const useAuthMock = <TOptions extends AuthMockPluginOptions>(options: TOp
   const audience = "mock";
 
   // ダミーのユーザIDを設定する
-  const userid: string[] = ["9h8g7f6d5s4", "1g2h3j4k5l6"];
+  const userid: string[] = ["1g2h3j4k5l6", "9h8g7f6d5s4"];
 
   // ダミーのJWTを返す
   const payload_list: UserPayload[] = [
@@ -86,20 +86,22 @@ export const useAuthMock = <TOptions extends AuthMockPluginOptions>(options: TOp
     },
   ];
 
+  console.log("📝 This is a sample JWT. Please use it for testing.");
+
   // サンプルのJWTを生成して表示
-  const jwt_list = payload_list.map((payload) => {
-    return sign(payload, privateKey, {
+  payload_list.map((payload) => {
+    const jwt = sign(payload, privateKey, {
       algorithm: "ES384", // 使用するアルゴリズム
       audience: audience, // オーディエンスを指定する
       issuer: issuer, // 発行者を指定する
-      expiresIn: "1h", // 有効期限を指定する,
+      expiresIn: "1h", // 有効期限を指定する
       keyid: "dummy", // キーIDを指定する
     });
-  });
 
-  console.log("📝 This is a sample JWT. Please use it for testing.");
-  jwt_list.forEach((jwt) => {
-    console.log(jwt);
+    // ここでペイロードのsubとJWTを表示する
+    console.log(`sub: ${payload.sub}, jwt: ${jwt}`);
+
+    return jwt;
   });
 
   // JWTの取得関数を設定する

@@ -7,7 +7,7 @@ WORKDIR /home
 # パッケージの存在するパス
 ARG PACKAGE_PATH=packages/backend
 ARG SCHEMA_PATH=./graphql/schemas/*.graphql
-ARG OPERATION_PATH=/home/graphql/operations/*.graphql
+# ARG OPERATION_PATH=/home/graphql/operations/*.graphql
 
 # package.jsonのみをコピーする
 COPY ${PACKAGE_PATH}/package.json ./
@@ -39,8 +39,8 @@ FROM node:latest as production-stage
 # 作業ディレクトリを指定
 WORKDIR /home
 
-# 4000ポートを開放している
-EXPOSE 4000
+# 6173ポートを開放している
+EXPOSE 6173
 
 # tiniのインストール
 RUN apt-get update && apt-get install -y tini

@@ -3,21 +3,21 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   overwrite: true,
   schema: process.env.SCHEMA_PATH,
-  documents: process.env.OPERATION_PATH,
+  documents: ["./src/features/**/components/**/*.tsx", "./src/features/**/pages/**/*.tsx"],
+  ignoreNoDocuments: true,
   generates: {
-    "src/lib/generated/dummy.ts": {
-      plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-urql",
-        // "typescript-validation-schema"
-      ],
+    "src/lib/generated/": {
+      preset: "client",
       config: {
-        withHooks: true,
         strictScalars: true,
         scalars: {
           UUID: "string",
+          DateTime: "Date",
+          PositiveInt: "number",
         },
+        enumsAsTypes: true,
+        skipTypename: true,
+        useTypeImports: true,
         // schema: "zod",
         // scalarSchemas: {
         //   UUID: "z.string().uuid()",

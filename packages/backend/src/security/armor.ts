@@ -1,11 +1,11 @@
 import { EnvelopArmor } from "@escape.tech/graphql-armor";
 
 // graphql-armorのセットアップ
-export const armor = new EnvelopArmor({
+export const Armor = new EnvelopArmor({
   // 最大深度を設定
   maxDepth: {
     enabled: true,
-    n: 6,
+    n: 15,
   },
   // 最大トークン数を設定
   maxTokens: {

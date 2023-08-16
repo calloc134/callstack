@@ -1,0 +1,14 @@
+{
+  "jsc": {
+    "baseUrl": ".",
+    "parser": {
+      "syntax": "typescript"
+    },
+    "target": "es2020"
+
+  },
+  "module": {
+    "type": "commonjs",
+    "noInterop": true
+  }
+}

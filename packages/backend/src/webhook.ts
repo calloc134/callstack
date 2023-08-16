@@ -1,5 +1,5 @@
 import { createHmac } from "crypto";
-import { webhook_secret } from "./env";
+import { logto_webhook_secret } from "./env";
 import { Plugin } from "graphql-yoga/typings/plugins/types";
 import { PrismaClient } from "@prisma/client";
 
@@ -13,7 +13,7 @@ type WebHookBodyType = {
   userId: string;
   user: {
     // id: string;
-    // username: string | null;
+    username: string | null;
     primaryEmail: string | null;
     // primaryPhone: string | null;
     // name: string | null;
@@ -47,20 +47,33 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
       const rawBody = await request.text();
 
       // ヘッダより署名を取得
-      const expectedSignature = request.headers.get("logto-signature-sha-256") || "";
+      const expected_signature = request.headers.get("logto-signature-sha-256") || "";
 
       // 署名検証
-      const isValid = verifyWebHook(webhook_secret, rawBody, expectedSignature);
+      const is_valid = verifyWebHook(logto_webhook_secret, rawBody, expected_signature);
 
-      if (isValid) {
+      if (is_valid) {
         // bodyのJSONをパース
         const body = JSON.parse(rawBody) as WebHookBodyType;
 
+        // ランダムな文字列を生成する関数
+        // ランダムな数字を取得してハッシュ化
+        const generateRandomString = () => {
+          const random = Math.random().toString(36).slice(-8);
+          const hash = createHmac("sha256", random).digest("hex");
+          return hash;
+        };
+
         // 適するユーザをデータベースに追加
-        prisma.user.create({
+        await prisma.user.create({
           data: {
-            sub_auth: body.userId,
-            email: body.user.primaryEmail || "dummy@dummy.dummy",
+            // 認証サービスのユーザIDを保持
+            auth_sub: body.userId,
+            // ユーザネームかランダムな文字列を保持
+            handle: body.user.username || generateRandomString(),
+            // スクリーンネームかランダムな文字列を保持
+            screen_name: body.user.username || generateRandomString(),
+            bio: "",
           },
         });
 
