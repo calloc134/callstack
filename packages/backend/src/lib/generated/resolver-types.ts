@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number };
   Float: { input: number; output: number };
   DateTime: { input: Date; output: Date };
+  NonEmptyString: { input: string; output: string };
   PositiveInt: { input: number; output: number };
   UUID: { input: string; output: string };
 };
@@ -32,7 +33,7 @@ export type Mutation = {
 
 export type MutationCreatePostArgs = {
   body: Scalars["String"]["input"];
-  title: Scalars["String"]["input"];
+  title: Scalars["NonEmptyString"]["input"];
 };
 
 export type MutationDeletePostArgs = {
@@ -45,8 +46,8 @@ export type MutationDeleteUserForAdminArgs = {
 
 export type MutationUpdateMyUserArgs = {
   bio?: InputMaybe<Scalars["String"]["input"]>;
-  handle?: InputMaybe<Scalars["String"]["input"]>;
-  screen_name?: InputMaybe<Scalars["String"]["input"]>;
+  handle?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
+  screen_name?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
 };
 
 export type MutationUpdatePostArgs = {
@@ -186,6 +187,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
+  NonEmptyString: ResolverTypeWrapper<Scalars["NonEmptyString"]["output"]>;
   PositiveInt: ResolverTypeWrapper<Scalars["PositiveInt"]["output"]>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
@@ -200,6 +202,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"]["output"];
   DateTime: Scalars["DateTime"]["output"];
   Mutation: {};
+  NonEmptyString: Scalars["NonEmptyString"]["output"];
   PositiveInt: Scalars["PositiveInt"]["output"];
   Post: Post;
   Query: {};
@@ -232,6 +235,10 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "body" | "post_uuid" | "title">>;
   updateUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserForAdminArgs, "user_uuid">>;
 };
+
+export interface NonEmptyStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["NonEmptyString"], any> {
+  name: "NonEmptyString";
+}
 
 export interface PositiveIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["PositiveInt"], any> {
   name: "PositiveInt";
@@ -274,6 +281,7 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 export type Resolvers<ContextType = GraphQLContext> = {
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  NonEmptyString?: GraphQLScalarType;
   PositiveInt?: GraphQLScalarType;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

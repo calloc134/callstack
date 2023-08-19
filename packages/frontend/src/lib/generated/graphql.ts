@@ -15,6 +15,7 @@ export type Scalars = {
   Int: { input: number; output: number };
   Float: { input: number; output: number };
   DateTime: { input: Date; output: Date };
+  NonEmptyString: { input: string; output: string };
   PositiveInt: { input: number; output: number };
   UUID: { input: string; output: string };
 };
@@ -31,7 +32,7 @@ export type Mutation = {
 
 export type MutationCreatePostArgs = {
   body: Scalars["String"]["input"];
-  title: Scalars["String"]["input"];
+  title: Scalars["NonEmptyString"]["input"];
 };
 
 export type MutationDeletePostArgs = {
@@ -44,8 +45,8 @@ export type MutationDeleteUserForAdminArgs = {
 
 export type MutationUpdateMyUserArgs = {
   bio?: InputMaybe<Scalars["String"]["input"]>;
-  handle?: InputMaybe<Scalars["String"]["input"]>;
-  screen_name?: InputMaybe<Scalars["String"]["input"]>;
+  handle?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
+  screen_name?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
 };
 
 export type MutationUpdatePostArgs = {

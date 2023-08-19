@@ -10,6 +10,8 @@ scalar UUID
 scalar DateTime
 # 正の整数スカラー型を利用するための定義
 scalar PositiveInt
+# 空でない文字列スカラー型を利用するための定義
+scalar NonEmptyString
 
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
@@ -42,13 +44,13 @@ type Mutation {
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
   # 自分のユーザの情報を更新するミューテーション
-  updateMyUser(handle: String, screen_name: String, bio: String): User! @auth(role: USER)
+  updateMyUser(handle: NonEmptyString, screen_name: NonEmptyString, bio: String): User! @auth(role: USER)
 
   # 自分のユーザを削除するミューテーション
   deleteMyUser: User! @auth(role: USER)
 
   # 投稿を作成するミューテーション
-  createPost(title: String!, body: String!): Post! @auth(role: USER)
+  createPost(title: NonEmptyString!, body: String!): Post! @auth(role: USER)
 
   # 投稿を更新するミューテーション
   updatePost(post_uuid: UUID!, title: String!, body: String!): Post! @auth(role: USER)

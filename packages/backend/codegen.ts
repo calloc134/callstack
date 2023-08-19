@@ -13,6 +13,7 @@ const config: CodegenConfig = {
           UUID: "string",
           DateTime: "Date",
           PositiveInt: "number",
+          NonEmptyString: "string",
         },
         enumsAsTypes: true,
         skipTypename: true,
