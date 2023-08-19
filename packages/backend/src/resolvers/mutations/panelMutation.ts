@@ -122,11 +122,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
         data: {
           title: title,
           body: body,
-          user: {
-            connect: {
-              user_uuid: currentUser_uuid,
-            },
-          },
+          userUuid: currentUser_uuid,
         },
       });
       return result;
