@@ -24,10 +24,10 @@ const UserCard = ({ user }: { user: FragmentType<typeof UserFragment> }) => {
       <CardBody>
         <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
           <div className="flex justify-between col-span-2">
-            <h1 className="text-2xl font-bold">{user_frag.screen_name}</h1>
+            <h1 className="text-2xl font-bold truncate">{user_frag.screen_name}</h1>
           </div>
           <div className="flex justify-between col-span-4 md:col-span-10">
-            <p className="text-xl">{user_frag.screen_name}</p>
+            <p className="text-xl line-clamp-3">{user_frag.screen_name}</p>
           </div>
         </div>
       </CardBody>
