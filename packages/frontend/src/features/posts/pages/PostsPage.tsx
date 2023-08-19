@@ -18,8 +18,10 @@ const PostsPage = () => {
     query: GetAllPostsQuery,
   });
 
+  // クエリの結果を取得
   const { data, fetching } = result;
 
+  // ローディング中であれば
   if (fetching)
     return (
       <div className="flex flex-col items-center justify-center">

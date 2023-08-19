@@ -1,3 +1,4 @@
+// 404ページ
 const NotFoundPage = () => (
   <>
     <div className="flex flex-col items-center justify-start h-screen">

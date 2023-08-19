@@ -13,13 +13,15 @@ const GetUsersQuery = graphql(`
 `);
 
 const UsersPage = () => {
-  // graphqlに対してクエリを実行
+  // クエリを実行してユーザーの情報を取得
   const [result] = useQuery({
     query: GetUsersQuery,
   });
 
+  // クエリの結果を取得
   const { data, fetching } = result;
 
+  // ローディング中であれば
   if (fetching)
     return (
       <div className="flex flex-col items-center justify-center">
@@ -36,7 +38,7 @@ const UsersPage = () => {
       </div>
     </div>
   );
-  // graphqlのフラグメントマスキングでやむを得ずmapのkeyでiを使っているので、少し心配
+  // graphqlのフラグメントマスキングでやむを得ずmapのkeyでインデックスを使っているので、少し心配
 };
 
 export { UsersPage };

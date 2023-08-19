@@ -25,7 +25,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
         },
         didAuthError(error) {
           // GraphQLのエラー
-          // isAUthenticaedがtrueなのはAuthnProviderで認証済みと判定されているため
+          // isAuthenticaedがtrueなのはAuthnProviderで認証済みと判定されているため
           // jwtが空文字かつauthz_not_logged_inのエラーがある場合は未認証とみなす
           // また、invalid_tokenのエラーがある場合も未認証とみなす
           // jwtが空文字でなく、authz_not_logged_inのエラーがある場合はまだjwtが反映されていないとしてスルー
@@ -67,7 +67,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
           setIsFetching(false);
         },
         addAuthToOperation(operation) {
-          // fetchOptionsの適用
+          // 処理前に渡されていた分のfetchOptionsの適用
           const fetchOptions = typeof operation.context.fetchOptions === "function" ? operation.context.fetchOptions() : operation.context.fetchOptions || {};
 
           // ヘッダのオブジェクトの作成
@@ -86,7 +86,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
         },
       };
     },
-    [isAuthenticated, isFetching, getAccessToken, jwt]
+    [isAuthenticated, isFetching, jwt]
   );
 
   const mapInit: MapExchangeOpts = {

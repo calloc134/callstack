@@ -3,6 +3,7 @@ import { Card, CardBody, CardFooter, Button } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { graphql } from "src/lib/generated/gql";
 
+// クエリするフラグメントを定義
 const PostPopupFragment = graphql(`
   fragment PostPopupFragment on Post {
     post_uuid
@@ -11,7 +12,10 @@ const PostPopupFragment = graphql(`
   }
 `);
 
+// フラグメントの定義
+// ユーザ画面でポップアップとして表示される投稿カード
 const PostCardForUser = ({ post: post_frag }: { post: FragmentType<typeof PostPopupFragment> }) => {
+  // フラグメントの型を指定して対応するデータを取得
   const post = useFragment(PostPopupFragment, post_frag);
 
   return (

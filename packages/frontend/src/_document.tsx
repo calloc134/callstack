@@ -67,8 +67,8 @@ export const Document = () => {
         </Navbar>
         <div className="flex-grow overflow-auto">
           {" "}
-          {/* ここで内側のコンポーネントを伸縮させる */}
           <Spacer y={40} />
+          {/* ここで内側のコンポーネントを表示 */}
           <Outlet />
         </div>
       </div>

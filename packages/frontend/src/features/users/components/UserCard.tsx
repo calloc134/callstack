@@ -3,6 +3,7 @@ import { Card, CardBody, CardFooter, Button } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { graphql } from "src/lib/generated/gql";
 
+// クエリするフラグメントを定義
 const UserFragment = graphql(`
   fragment UserFragment on User {
     user_uuid
@@ -15,6 +16,7 @@ const UserFragment = graphql(`
 `);
 
 const UserCard = ({ user }: { user: FragmentType<typeof UserFragment> }) => {
+  // フラグメントの型を指定して対応するデータを取得
   const user_frag = useFragment(UserFragment, user);
 
   return (

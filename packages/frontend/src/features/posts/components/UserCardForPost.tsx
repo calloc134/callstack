@@ -3,7 +3,7 @@ import { Card, CardBody, CardFooter, Button } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { graphql } from "src/lib/generated/gql";
 
-// 利用されるユーザのフラグメントの定義
+// クエリするフラグメントを定義
 const UserPopupFragment = graphql(`
   fragment UserPopupFragment on User {
     user_uuid
@@ -14,7 +14,7 @@ const UserPopupFragment = graphql(`
 `);
 
 const UserCardForPost = ({ user: user_frag }: { user: FragmentType<typeof UserPopupFragment> }) => {
-  // フラグメントから投稿の情報を取得
+  // フラグメントの型を指定して対応するデータを取得
   const user = useFragment(UserPopupFragment, user_frag);
 
   return (

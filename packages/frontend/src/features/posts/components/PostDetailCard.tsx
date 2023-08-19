@@ -3,7 +3,7 @@ import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserCardForPost } from "./UserCardForPost";
 
-// 利用される投稿のフラグメントの定義
+// クエリするフラグメントを定義
 const PostDetailFragment = graphql(`
   fragment PostDetailFragment on Post {
     post_uuid
@@ -19,7 +19,7 @@ const PostDetailFragment = graphql(`
 `);
 
 const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDetailFragment> }) => {
-  // フラグメントから投稿の情報を取得
+  // フラグメントの型を指定して対応するデータを取得
   const post = useFragment(PostDetailFragment, post_frag);
 
   return (
