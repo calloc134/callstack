@@ -17,14 +17,14 @@ import { useDisableIntrospection } from "@envelop/disable-introspection";
 // graphqlスキーマ
 import { schema } from "./schema";
 // graphql-armorのプラグイン
-import { Armor } from "./security/armor";
+import { Armor } from "./lib/security/armor";
 // 認証プラグインのオプション
-import { AuthMockOption, AuthnOption } from "./security/authn";
+import { AuthMockOption, AuthnOption } from "./lib/security/authn";
 // 認可プラグインのオプション
-import { authzOption } from "./security/authz";
+import { authzOption } from "./lib/security/authz";
 // 開発環境かどうかを判断する変数
 import { is_dev } from "./env";
-import { useWebHook } from "./webhook";
+import { useWebHook } from "./lib/webhook/webhook";
 import { useGraphQlJit } from "@envelop/graphql-jit";
 
 // graphql-armorのプラグインを取得

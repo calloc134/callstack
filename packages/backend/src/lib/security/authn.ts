@@ -1,5 +1,5 @@
 import { Auth0PluginOptions } from "@envelop/auth0";
-import { AuthMockPluginOptions } from "../lib/plugins/useAuthMock";
+import { AuthMockPluginOptions } from "../plugins/useAuthMock";
 import { logto_audience, logto_endpoint } from "src/env";
 import { TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
 import { GraphQLErrorWithCode } from "src/lib/error/error";
