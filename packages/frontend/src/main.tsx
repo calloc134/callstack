@@ -15,6 +15,7 @@ export const Main = () => {
     <>
       <RouterProvider router={router} />
       {
+        // デバッグ環境のみdevtoolsを表示
         // @ts-expect-error routerの型のエラーを無視
         is_dev && <TanStackRouterDevtools router={router} />
       }
