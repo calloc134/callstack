@@ -1,7 +1,7 @@
 import { Button, Spacer } from "@nextui-org/react";
 import { Link } from "@tanstack/react-router";
 
-export const Index = () => {
+export const RootIndexPage = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-start h-screen">
