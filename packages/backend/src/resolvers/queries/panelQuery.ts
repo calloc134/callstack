@@ -72,7 +72,7 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
 
     // もし投稿者が自分でない かつ 投稿が非公開の場合はエラーを返す
     // TODO: 投稿が非公開の処理を追加
-    if (result.userUuid !== currentUser.user_uuid) {
+    if (result.userUuid !== currentUser.user_uuid && result.is_public === false) {
       throw new GraphQLErrorWithCode("item_not_owned");
     }
 
