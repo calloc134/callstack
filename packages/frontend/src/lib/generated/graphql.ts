@@ -152,6 +152,7 @@ export type UserFragmentFragment = {
   user_uuid: string;
   handle: string;
   screen_name: string;
+  bio: string;
   posts: Array<{ " $fragmentRefs"?: { PostPopupFragmentFragment: PostPopupFragmentFragment } }>;
 } & { " $fragmentName"?: "UserFragmentFragment" };
 
@@ -303,6 +304,7 @@ export const UserFragmentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
           { kind: "Field", name: { kind: "Name", value: "handle" } },
           { kind: "Field", name: { kind: "Name", value: "screen_name" } },
+          { kind: "Field", name: { kind: "Name", value: "bio" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "posts" },
@@ -587,6 +589,7 @@ export const GetUsersQueryDocument = {
           { kind: "Field", name: { kind: "Name", value: "user_uuid" } },
           { kind: "Field", name: { kind: "Name", value: "handle" } },
           { kind: "Field", name: { kind: "Name", value: "screen_name" } },
+          { kind: "Field", name: { kind: "Name", value: "bio" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "posts" },

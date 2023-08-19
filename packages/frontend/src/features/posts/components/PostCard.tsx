@@ -29,6 +29,7 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
       </CardHeader>
       <CardBody>
         <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
+          <Card isBlurred className="min-w-full col-span-2"></Card>
           <div className="flex justify-between col-span-4 md:col-span-10">
             <p className="text-xl line-clamp-3">{post.body}</p>
           </div>

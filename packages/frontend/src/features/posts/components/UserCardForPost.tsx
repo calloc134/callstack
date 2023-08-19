@@ -20,12 +20,13 @@ const UserCardForPost = ({ user: user_frag }: { user: FragmentType<typeof UserPo
   return (
     <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
       <CardBody>
-        <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
-          <div className="flex justify-between col-span-2">
+        <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2 align-start">
+          <div className="flex flex-col justify-start col-span-2">
             <h1 className="text-2xl font-bold">{user.screen_name}</h1>
+            <p className="text-xl line-clamp-3">@{user.handle}</p>
           </div>
           <div className="flex justify-between col-span-4 md:col-span-10">
-            <p className="text-xl">{user.bio}</p>
+            <p className="text-xl truncate">{user.bio}</p>
           </div>
         </div>
       </CardBody>

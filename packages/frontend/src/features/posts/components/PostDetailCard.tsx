@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
 import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserCardForPost } from "./UserCardForPost";
@@ -24,11 +24,14 @@ const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDet
 
   return (
     <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
+      <CardHeader className="flex justify-between items-center">
+        <div className="flex justify-between col-span-2">
+          <h1 className="text-2xl font-bold truncate">{post.title}</h1>
+        </div>
+      </CardHeader>
       <CardBody>
         <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
-          <div className="flex justify-between col-span-2">
-            <h1 className="text-2xl font-bold">{post.title}</h1>
-          </div>
+          <Card isBlurred className="min-w-full col-span-2"></Card>
           <div className="flex justify-between col-span-4 md:col-span-10">
             <p className="text-xl">{post.body}</p>
           </div>
