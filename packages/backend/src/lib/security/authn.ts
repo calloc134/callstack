@@ -7,12 +7,16 @@ import { GraphQLErrorWithCode } from "src/lib/error/error";
 // エラー処理を行う関数
 const onError = (error: Error) => {
   if (error instanceof TokenExpiredError) {
+    // JWTが期限切れの場合
     throw new GraphQLErrorWithCode("jwt_expired");
   } else if (error instanceof NotBeforeError) {
+    // JWTが有効期限前の場合
     throw new GraphQLErrorWithCode("jwt_not_before");
   } else if (error instanceof JsonWebTokenError) {
+    // JWTが不正な場合
     throw new GraphQLErrorWithCode("jwt_web_token_error");
   } else {
+    // その他のエラー
     throw new GraphQLErrorWithCode("unknown_error", error.message);
   }
 };
