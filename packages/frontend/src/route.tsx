@@ -98,14 +98,31 @@ const postDetailRoute = new Route({
   component: () => <PostDetailPage />,
 });
 
+// ルータの設定
 const router = new Router({
+  // 根本ルート
   routeTree: callStackRootRoute.addChildren([
+    // /
     indexRoute,
+    // *
     notFoundRoute,
+    // /auth/callback
     callbackRoute,
+    // /auth
     protectedRoute.addChildren([
-      authenticatedUserRoute.addChildren([usersRoute, userDetailRoute]),
-      authenticatedPostRoute.addChildren([postsRoute, postDetailRoute]),
+      // /auth/users
+      authenticatedUserRoute.addChildren([
+        // /auth/users/
+        usersRoute,
+        // /auth/users/$user_uuid
+        userDetailRoute,
+      ]),
+      authenticatedPostRoute.addChildren([
+        // /auth/posts/
+        postsRoute,
+        // /auth/posts/$post_uuid
+        postDetailRoute,
+      ]),
     ]),
   ]),
 });
