@@ -33,7 +33,7 @@ const PostDetailPage = () => {
   // ローディング中であれば
   if (fetching)
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex items-center justify-center">
         <Spinner label="読み込み中..." color="warning" />
       </div>
     );
