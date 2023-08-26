@@ -41,7 +41,7 @@ module.exports = {
             default: "#54BAB9", // 中立的なデフォルト色
             background: "#2e2e2e", // より暗い背景
             foreground: "#FFFFFF", // 白い文字色
-            primary: "#54BAB9", // 主要な色で、強調したい場所に使用
+            primary: "#3c8686", // 主要な色で、強調したい場所に使用
             secondary: "#3e3e3e", // 補助的な色で、主要色とのバランスを取る（暗い色）
             success: "#28a745", // 成功を示す色
             warning: "#ffc107", // 警告に使用
