@@ -16,20 +16,20 @@ const UserFragment = graphql(`
   }
 `);
 
-const UserCard = ({ user }: { user: FragmentType<typeof UserFragment> }) => {
+const UserCard = ({ user: user_flag }: { user: FragmentType<typeof UserFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
-  const user_frag = useFragment(UserFragment, user);
+  const user = useFragment(UserFragment, user_flag);
 
   return (
     <Card isBlurred className="w-full bg-secondary" shadow="sm">
       <CardBody>
         <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
           <div className="flex flex-col justify-start col-span-4">
-            <h1 className="text-2xl font-bold truncate">{user_frag.screen_name}</h1>
-            <p className="text-xl line-clamp-3">@{user_frag.handle}</p>
+            <h1 className="text-2xl font-bold truncate">{user.screen_name}</h1>
+            <p className="text-xl line-clamp-3">@{user.handle}</p>
           </div>
           <div className="flex col-span-4 md:col-span-10">
-            <p className="text-xl line-clamp-3">{user_frag.bio}</p>
+            <p className="text-xl line-clamp-3">{user.bio}</p>
           </div>
         </div>
       </CardBody>
@@ -39,7 +39,7 @@ const UserCard = ({ user }: { user: FragmentType<typeof UserFragment> }) => {
             <Link
               to="/auth/users/$user_uuid"
               params={{
-                user_uuid: user_frag.user_uuid,
+                user_uuid: user.user_uuid,
               }}
             >
               詳細を見る
