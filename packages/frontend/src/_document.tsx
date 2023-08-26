@@ -30,9 +30,9 @@ export const Document = () => {
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""} text-foreground bg-background`}>
+    <div className={`${darkMode ? "dark" : ""} text-foreground bg-background/80 bg-gradient-to from-background`}>
       <div className="flex flex-col">
-        <Navbar className="bg-gradient-to-r from-primary bg-primary/30 backdrop-blur-sm shadow-xl rounded-b-lg">
+        <Navbar className="bg-gradient-to-r from-primary bg-primary/50 backdrop-blur-sm shadow-xl rounded-b-lg">
           <NavbarBrand>
             <Tooltip content="callstack" color="secondary">
               <Link to="/">callstack</Link>
@@ -118,7 +118,7 @@ export const Document = () => {
             </>
           </NavbarContent>
         </Navbar>
-        <div className="flex-grow overflow-auto">
+        <div>
           {" "}
           <Spacer y={40} />
           {/* ここで内側のコンポーネントを表示 */}
