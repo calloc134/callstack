@@ -86,7 +86,7 @@ export const Document = () => {
                   <DropdownMenu>
                     <DropdownItem>
                       <Tooltip content="スタイル切替" color="secondary">
-                        <Button color="secondary" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1 ">
+                        <Button color="secondary" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1">
                           <Sun size={20} />
                         </Button>
                       </Tooltip>
