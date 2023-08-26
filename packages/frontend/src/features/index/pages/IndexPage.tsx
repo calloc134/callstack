@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 export const RootIndexPage = () => {
   return (
     <>
-      <div className="flex flex-col items-center justify-start h-screen">
+      <div className="flex flex-col items-center">
         <img src="/callstack.png" alt="callstack" className="w-unit-4xl" />
         <h1 className="text-4xl font-bold">callstack</h1>
         <p className="text-xl">callstackボイラープレートのサンプルです。</p>
@@ -12,10 +12,6 @@ export const RootIndexPage = () => {
         <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
           <Link to="/auth/posts">投稿一覧の表示</Link>
         </Button>
-
-        <Spacer y={4} />
-
-        <Spacer y={4} />
       </div>
     </>
   );
