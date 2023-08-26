@@ -39,7 +39,7 @@ const UserDetailPage = () => {
     );
 
   return (
-    <div className="flex flex-col items-center justify-between h-screen">
+    <div className="flex flex-col items-center justify-between">
       <div className="flex flex-col w-8/12">{data ? <UserDetailCard user={data.getUserByUUID} /> : <div>投稿が見つかりませんでした</div>}</div>
     </div>
   );

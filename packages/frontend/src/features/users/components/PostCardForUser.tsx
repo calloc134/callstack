@@ -19,7 +19,7 @@ const PostCardForUser = ({ post: post_frag }: { post: FragmentType<typeof PostPo
   const post = useFragment(PostPopupFragment, post_frag);
 
   return (
-    <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
+    <Card isBlurred className="w-full bg-secondary backdrop-blur-sm" shadow="sm">
       <CardBody>
         <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
           <div className="flex justify-between col-span-2">
@@ -30,8 +30,8 @@ const PostCardForUser = ({ post: post_frag }: { post: FragmentType<typeof PostPo
           </div>
         </div>
       </CardBody>
-      <CardFooter className="flex flex-col justify-end items-end">
-        <div>
+      <CardFooter className="justify-end">
+        <div className="flex flex-col">
           <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
             <Link
               to="/auth/posts/$post_uuid"

@@ -30,8 +30,8 @@ const UsersPage = () => {
     );
 
   return (
-    <div className="flex flex-col items-center justify-between h-screen">
-      <div className="flex flex-col w-8/12">
+    <div className="flex flex-col items-center justify-between">
+      <div className="flex flex-col w-8/12 space-y-4">
         {data?.getAllUsers.map((user, i) => (
           <UserCard key={i} user={user} />
         ))}

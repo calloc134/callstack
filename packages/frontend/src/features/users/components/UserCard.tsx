@@ -21,20 +21,20 @@ const UserCard = ({ user }: { user: FragmentType<typeof UserFragment> }) => {
   const user_frag = useFragment(UserFragment, user);
 
   return (
-    <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
+    <Card isBlurred className="w-full bg-secondary" shadow="sm">
       <CardBody>
-        <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2 justify-center">
+        <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
           <div className="flex flex-col justify-start col-span-4">
             <h1 className="text-2xl font-bold truncate">{user_frag.screen_name}</h1>
             <p className="text-xl line-clamp-3">@{user_frag.handle}</p>
           </div>
-          <div className="flex justify-between col-span-4 md:col-span-10">
+          <div className="flex col-span-4 md:col-span-10">
             <p className="text-xl line-clamp-3">{user_frag.bio}</p>
           </div>
         </div>
       </CardBody>
-      <CardFooter className="flex flex-col justify-end items-end">
-        <div>
+      <CardFooter className="justify-end">
+        <div className="flex flex-col">
           <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
             <Link
               to="/auth/users/$user_uuid"
