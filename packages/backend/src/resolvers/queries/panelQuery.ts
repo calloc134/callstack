@@ -50,6 +50,25 @@ const PanelQueryResolver: QueryResolvers<GraphQLContext> = {
     return await safe(prisma, { limit, offset });
   },
 
+  // getMyUserクエリのリゾルバー
+  // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  getMyUser: async (_parent, _args, context) => {
+    const safe = withErrorHandling(async (currentUser_uuid: string, prisma: PrismaClient) => {
+      // 現在ログインしているユーザーのデータを取得
+      const result = await prisma.user.findUniqueOrThrow({
+        where: {
+          user_uuid: currentUser_uuid,
+        },
+      });
+      return result;
+    });
+
+    // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
+    const { prisma, currentUser } = context;
+
+    return await safe(currentUser.user_uuid, prisma);
+  },
+
   // getPostByUUIDクエリのリゾルバー
   // @ts-expect-error userフィールドが存在しないためエラーが出るが、実際には存在するので無視
   getPostByUUID: async (_parent, args, context) => {

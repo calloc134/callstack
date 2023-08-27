@@ -76,6 +76,7 @@ export type Post = {
 export type Query = {
   getAllPosts: Array<Post>;
   getAllUsers: Array<User>;
+  getMyUser: User;
   getPostByUUID: Post;
   getUserByUUID: User;
 };
@@ -258,6 +259,7 @@ export type PostResolvers<ContextType = GraphQLContext, ParentType extends Resol
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
   getAllPosts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType, RequireFields<QueryGetAllPostsArgs, "limit" | "offset">>;
   getAllUsers?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType, RequireFields<QueryGetAllUsersArgs, "limit" | "offset">>;
+  getMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   getPostByUUID?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<QueryGetPostByUuidArgs, "uuid">>;
   getUserByUUID?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryGetUserByUuidArgs, "uuid">>;
 };
