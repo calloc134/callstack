@@ -15,9 +15,11 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  BodyString: { input: string; output: string };
   DateTime: { input: Date; output: Date };
   NonEmptyString: { input: string; output: string };
   PositiveInt: { input: number; output: number };
+  TitleString: { input: string; output: string };
   UUID: { input: string; output: string };
 };
 
@@ -180,6 +182,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  BodyString: ResolverTypeWrapper<Scalars["BodyString"]["output"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -189,12 +192,14 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Role: Role;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
+  TitleString: ResolverTypeWrapper<Scalars["TitleString"]["output"]>;
   UUID: ResolverTypeWrapper<Scalars["UUID"]["output"]>;
   User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  BodyString: Scalars["BodyString"]["output"];
   Boolean: Scalars["Boolean"]["output"];
   DateTime: Scalars["DateTime"]["output"];
   Mutation: {};
@@ -203,6 +208,7 @@ export type ResolversParentTypes = {
   Post: Post;
   Query: {};
   String: Scalars["String"]["output"];
+  TitleString: Scalars["TitleString"]["output"];
   UUID: Scalars["UUID"]["output"];
   User: User;
 };
@@ -217,6 +223,10 @@ export type AuthDirectiveResolver<Result, Parent, ContextType = GraphQLContext, 
   ContextType,
   Args
 >;
+
+export interface BodyStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["BodyString"], any> {
+  name: "BodyString";
+}
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
   name: "DateTime";
@@ -259,6 +269,10 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   getUserByUUID?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryGetUserByUuidArgs, "uuid">>;
 };
 
+export interface TitleStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["TitleString"], any> {
+  name: "TitleString";
+}
+
 export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["UUID"], any> {
   name: "UUID";
 }
@@ -276,12 +290,14 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {
+  BodyString?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   NonEmptyString?: GraphQLScalarType;
   PositiveInt?: GraphQLScalarType;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  TitleString?: GraphQLScalarType;
   UUID?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
 };

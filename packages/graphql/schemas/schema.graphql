@@ -12,6 +12,10 @@ scalar DateTime
 scalar PositiveInt
 # 空でない文字列スカラー型を利用するための定義
 scalar NonEmptyString
+# タイトル用の文字列スカラー型を利用するための定義
+scalar TitleString
+# 本文用の文字列スカラー型を利用するための定義
+scalar BodyString
 
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
@@ -26,11 +30,16 @@ schema {
 type Query {
   # ユーザ一覧を取得するクエリ
   getAllUsers(offset: PositiveInt = 0, limit: PositiveInt = 10): [User!]! @auth(role: USER)
+
   # ユーザを取得するクエリ
   getUserByUUID(uuid: UUID!): User! @auth(role: USER)
 
+  # 自分のユーザを取得するクエリ
+  getMyUser: User! @auth(role: USER)
+
   # 投稿一覧を取得するクエリ
   getAllPosts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]! @auth(role: USER)
+
   # 投稿を取得するクエリ
   getPostByUUID(uuid: UUID!): Post! @auth(role: USER)
 }
@@ -50,10 +59,10 @@ type Mutation {
   deleteMyUser: User! @auth(role: USER)
 
   # 投稿を作成するミューテーション
-  createPost(title: NonEmptyString!, body: String!): Post! @auth(role: USER)
+  createPost: Post! @auth(role: USER)
 
   # 投稿を更新するミューテーション
-  updatePost(post_uuid: UUID!, title: String!, body: String!): Post! @auth(role: USER)
+  updatePost(post_uuid: UUID!, title: TitleString, body: BodyString): Post! @auth(role: USER)
 
   # 投稿を削除するミューテーション
   deletePost(post_uuid: UUID!): Post! @auth(role: USER)

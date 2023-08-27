@@ -14,6 +14,8 @@ const config: CodegenConfig = {
           DateTime: "Date",
           PositiveInt: "number",
           NonEmptyString: "string",
+          TitleString: "string",
+          BodyString: "string",
         },
         enumsAsTypes: true,
         skipTypename: true,
