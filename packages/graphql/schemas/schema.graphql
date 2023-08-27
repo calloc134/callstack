@@ -51,6 +51,19 @@ type Query {
   getPostByUUID(uuid: UUID!): Post! @auth(role: USER)
 }
 
+# ユーザをアップデートする際の入力型の定義
+input UpdateUserInput {
+  handle: HandleString
+  screen_name: ScreenNameString
+  bio: BioString
+}
+
+# 投稿をアップデートする際の入力型の定義
+input UpdatePostInput {
+  title: TitleString
+  body: BodyString
+}
+
 # ミューテーションのスキーマ定義
 type Mutation {
   # ユーザを更新するミューテーション 管理者用
@@ -60,7 +73,7 @@ type Mutation {
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
   # 自分のユーザの情報を更新するミューテーション
-  updateMyUser(handle: HandleString, screen_name: ScreenNameString, bio: BioString): User! @auth(role: USER)
+  updateMyUser(input: UpdateUserInput!): User! @auth(role: USER)
 
   # 自分のユーザを削除するミューテーション
   deleteMyUser: User! @auth(role: USER)
@@ -69,7 +82,7 @@ type Mutation {
   createPost: Post! @auth(role: USER)
 
   # 投稿を更新するミューテーション
-  updatePost(post_uuid: UUID!, title: TitleString, body: BodyString): Post! @auth(role: USER)
+  updatePost(post_uuid: UUID!, input: UpdatePostInput!): Post! @auth(role: USER)
 
   # 投稿を削除するミューテーション
   deletePost(post_uuid: UUID!): Post! @auth(role: USER)

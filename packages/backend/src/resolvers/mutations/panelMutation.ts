@@ -82,7 +82,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     );
 
     // 引数からミューテーションの引数を取得
-    const { bio: maybeBio, handle: maybeHandle, screen_name: maybeScreenName } = args;
+    const { bio: maybeBio, handle: maybeHandle, screen_name: maybeScreenName } = args.input;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
     const { prisma, currentUser } = context;
@@ -161,7 +161,10 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     );
 
     // 引数からユーザーのUUIDとミューテーションの引数を取得
-    const { post_uuid, title: maybeTitle, body: maybeBody } = args;
+    const {
+      post_uuid,
+      input: { title: maybeTitle, body: maybeBody },
+    } = args;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
     const { prisma, currentUser } = context;

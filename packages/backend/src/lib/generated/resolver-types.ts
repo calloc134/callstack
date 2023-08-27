@@ -45,15 +45,12 @@ export type MutationDeleteUserForAdminArgs = {
 };
 
 export type MutationUpdateMyUserArgs = {
-  bio?: InputMaybe<Scalars["BioString"]["input"]>;
-  handle?: InputMaybe<Scalars["HandleString"]["input"]>;
-  screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
+  input: UpdateUserInput;
 };
 
 export type MutationUpdatePostArgs = {
-  body?: InputMaybe<Scalars["BodyString"]["input"]>;
+  input: UpdatePostInput;
   post_uuid: Scalars["UUID"]["input"];
-  title?: InputMaybe<Scalars["TitleString"]["input"]>;
 };
 
 export type MutationUpdateUserForAdminArgs = {
@@ -100,6 +97,17 @@ export type QueryGetUserByUuidArgs = {
 };
 
 export type Role = "ADMIN" | "USER";
+
+export type UpdatePostInput = {
+  body?: InputMaybe<Scalars["BodyString"]["input"]>;
+  title?: InputMaybe<Scalars["TitleString"]["input"]>;
+};
+
+export type UpdateUserInput = {
+  bio?: InputMaybe<Scalars["BioString"]["input"]>;
+  handle?: InputMaybe<Scalars["HandleString"]["input"]>;
+  screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
+};
 
 export type User = {
   bio: Scalars["String"]["output"];
@@ -200,6 +208,8 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   TitleString: ResolverTypeWrapper<Scalars["TitleString"]["output"]>;
   UUID: ResolverTypeWrapper<Scalars["UUID"]["output"]>;
+  UpdatePostInput: UpdatePostInput;
+  UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -219,6 +229,8 @@ export type ResolversParentTypes = {
   String: Scalars["String"]["output"];
   TitleString: Scalars["TitleString"]["output"];
   UUID: Scalars["UUID"]["output"];
+  UpdatePostInput: UpdatePostInput;
+  UpdateUserInput: UpdateUserInput;
   User: User;
 };
 
@@ -254,8 +266,8 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   deleteMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   deletePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationDeletePostArgs, "post_uuid">>;
   deleteUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserForAdminArgs, "user_uuid">>;
-  updateMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, Partial<MutationUpdateMyUserArgs>>;
-  updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "post_uuid">>;
+  updateMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateMyUserArgs, "input">>;
+  updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "input" | "post_uuid">>;
   updateUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserForAdminArgs, "user_uuid">>;
 };
 
