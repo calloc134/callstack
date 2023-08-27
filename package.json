@@ -32,6 +32,7 @@
     "turbo": "^1.10.12"
   },
   "devDependencies": {
+    "graphql-config": "^5.0.2",
     "husky": "^8.0.0"
   }
 }
