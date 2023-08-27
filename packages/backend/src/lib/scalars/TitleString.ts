@@ -35,7 +35,7 @@ export const GraphQLTitleString = /*#__PURE__*/ new GraphQLScalarType({
   extensions: {
     codegenScalarType: "string",
     jsonSchema: {
-      title: "NonEmptyString",
+      title: "TitleString",
       type: "string",
       minLength: 1,
     },

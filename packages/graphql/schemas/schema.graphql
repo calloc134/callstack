@@ -12,6 +12,13 @@ scalar DateTime
 scalar PositiveInt
 # 空でない文字列スカラー型を利用するための定義
 scalar NonEmptyString
+
+# ユーザのハンドル用の文字列スカラー型を利用するための定義
+scalar HandleString
+# ユーザのスクリーンネーム用の文字列スカラー型を利用するための定義
+scalar ScreenNameString
+# ユーザの自己紹介用の文字列スカラー型を利用するための定義
+scalar BioString
 # タイトル用の文字列スカラー型を利用するための定義
 scalar TitleString
 # 本文用の文字列スカラー型を利用するための定義
@@ -47,13 +54,13 @@ type Query {
 # ミューテーションのスキーマ定義
 type Mutation {
   # ユーザを更新するミューテーション 管理者用
-  updateUserForAdmin(user_uuid: UUID!, handle: String, screen_name: String, bio: String): User! @auth(role: ADMIN)
+  updateUserForAdmin(user_uuid: UUID!, handle: HandleString, screen_name: ScreenNameString, bio: BioString): User! @auth(role: ADMIN)
 
   # ユーザを削除するミューテーション 管理者用
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
   # 自分のユーザの情報を更新するミューテーション
-  updateMyUser(handle: NonEmptyString, screen_name: NonEmptyString, bio: String): User! @auth(role: USER)
+  updateMyUser(handle: HandleString, screen_name: ScreenNameString, bio: BioString): User! @auth(role: USER)
 
   # 自分のユーザを削除するミューテーション
   deleteMyUser: User! @auth(role: USER)

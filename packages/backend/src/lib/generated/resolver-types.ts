@@ -15,10 +15,13 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  BioString: { input: string; output: string };
   BodyString: { input: string; output: string };
   DateTime: { input: Date; output: Date };
+  HandleString: { input: string; output: string };
   NonEmptyString: { input: string; output: string };
   PositiveInt: { input: number; output: number };
+  ScreenNameString: { input: string; output: string };
   TitleString: { input: string; output: string };
   UUID: { input: string; output: string };
 };
@@ -48,14 +51,14 @@ export type MutationUpdateMyUserArgs = {
 };
 
 export type MutationUpdatePostArgs = {
-  body: Scalars["String"]["input"];
+  body?: InputMaybe<Scalars["BodyString"]["input"]>;
   post_uuid: Scalars["UUID"]["input"];
-  title: Scalars["String"]["input"];
+  title?: InputMaybe<Scalars["TitleString"]["input"]>;
 };
 
 export type MutationUpdateUserForAdminArgs = {
   bio?: InputMaybe<Scalars["String"]["input"]>;
-  handle?: InputMaybe<Scalars["String"]["input"]>;
+  handle?: InputMaybe<Scalars["HandleString"]["input"]>;
   screen_name?: InputMaybe<Scalars["String"]["input"]>;
   user_uuid: Scalars["UUID"]["input"];
 };
@@ -182,15 +185,18 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  BioString: ResolverTypeWrapper<Scalars["BioString"]["output"]>;
   BodyString: ResolverTypeWrapper<Scalars["BodyString"]["output"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
+  HandleString: ResolverTypeWrapper<Scalars["HandleString"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
   NonEmptyString: ResolverTypeWrapper<Scalars["NonEmptyString"]["output"]>;
   PositiveInt: ResolverTypeWrapper<Scalars["PositiveInt"]["output"]>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   Role: Role;
+  ScreenNameString: ResolverTypeWrapper<Scalars["ScreenNameString"]["output"]>;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   TitleString: ResolverTypeWrapper<Scalars["TitleString"]["output"]>;
   UUID: ResolverTypeWrapper<Scalars["UUID"]["output"]>;
@@ -199,14 +205,17 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  BioString: Scalars["BioString"]["output"];
   BodyString: Scalars["BodyString"]["output"];
   Boolean: Scalars["Boolean"]["output"];
   DateTime: Scalars["DateTime"]["output"];
+  HandleString: Scalars["HandleString"]["output"];
   Mutation: {};
   NonEmptyString: Scalars["NonEmptyString"]["output"];
   PositiveInt: Scalars["PositiveInt"]["output"];
   Post: Post;
   Query: {};
+  ScreenNameString: Scalars["ScreenNameString"]["output"];
   String: Scalars["String"]["output"];
   TitleString: Scalars["TitleString"]["output"];
   UUID: Scalars["UUID"]["output"];
@@ -224,6 +233,10 @@ export type AuthDirectiveResolver<Result, Parent, ContextType = GraphQLContext, 
   Args
 >;
 
+export interface BioStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["BioString"], any> {
+  name: "BioString";
+}
+
 export interface BodyStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["BodyString"], any> {
   name: "BodyString";
 }
@@ -232,13 +245,17 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: "DateTime";
 }
 
+export interface HandleStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["HandleString"], any> {
+  name: "HandleString";
+}
+
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
   createPost?: Resolver<ResolversTypes["Post"], ParentType, ContextType>;
   deleteMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   deletePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationDeletePostArgs, "post_uuid">>;
   deleteUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserForAdminArgs, "user_uuid">>;
   updateMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType, Partial<MutationUpdateMyUserArgs>>;
-  updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "body" | "post_uuid" | "title">>;
+  updatePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, "post_uuid">>;
   updateUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationUpdateUserForAdminArgs, "user_uuid">>;
 };
 
@@ -269,6 +286,10 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   getUserByUUID?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<QueryGetUserByUuidArgs, "uuid">>;
 };
 
+export interface ScreenNameStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["ScreenNameString"], any> {
+  name: "ScreenNameString";
+}
+
 export interface TitleStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["TitleString"], any> {
   name: "TitleString";
 }
@@ -290,13 +311,16 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {
+  BioString?: GraphQLScalarType;
   BodyString?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
+  HandleString?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   NonEmptyString?: GraphQLScalarType;
   PositiveInt?: GraphQLScalarType;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ScreenNameString?: GraphQLScalarType;
   TitleString?: GraphQLScalarType;
   UUID?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;

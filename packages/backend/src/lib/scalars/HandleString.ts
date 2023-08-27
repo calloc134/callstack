@@ -6,17 +6,22 @@ const validate = (value: any, ast?: ASTNode) => {
     throw createGraphQLError(`Value is not a string: ${value}`, ast ? { nodes: ast } : undefined);
   }
 
-  if (value.length > 1000) {
-    throw createGraphQLError(`Value cannot be longer than 1000 characters: ${value}`, ast ? { nodes: ast } : undefined);
+  if (!value.trim().length) {
+    throw createGraphQLError(`Value cannot be an empty string: ${value}`, ast ? { nodes: ast } : undefined);
+  }
+
+  // ASCIIで表現可能な小文字、数字、簡単な記号のみを許容
+  if (!/^[a-z0-9_]+$/.test(value)) {
+    throw createGraphQLError(`Value must consist only of lowercase ASCII letters, numbers, or underscores: ${value}`, ast ? { nodes: ast } : undefined);
   }
 
   return value;
 };
 
-export const GraphQLBodyString = /*#__PURE__*/ new GraphQLScalarType({
-  name: "BodyString",
+export const GraphQLHandleString = /*#__PURE__*/ new GraphQLScalarType({
+  name: "HandleString",
 
-  description: "A string that is used for the body of a post",
+  description: "A string that is used for the handle of a user",
 
   serialize: validate,
 
@@ -31,9 +36,10 @@ export const GraphQLBodyString = /*#__PURE__*/ new GraphQLScalarType({
   extensions: {
     codegenScalarType: "string",
     jsonSchema: {
-      title: "BodyString",
+      title: "HandleString",
       type: "string",
       minLength: 1,
+      pattern: "^[a-z0-9_]+$", // JSON Schemaでの正規表現パターン
     },
   },
 });
