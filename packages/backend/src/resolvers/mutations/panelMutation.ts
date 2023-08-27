@@ -115,25 +115,23 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
 
   // createPostフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
-  createPost: async (_parent, args, context) => {
-    const safe = withErrorHandling(async (currentUser_uuid: string, prisma: PrismaClient, { title, body }: { title: string; body: string }) => {
+  createPost: async (_parent, _, context) => {
+    const safe = withErrorHandling(async (currentUser_uuid: string, prisma: PrismaClient) => {
       // UUIDからユーザーを取得
       const result = await prisma.post.create({
         data: {
-          title: title,
-          body: body,
+          title: "下書き",
+          body: "",
           userUuid: currentUser_uuid,
         },
       });
       return result;
     });
 
-    // 引数からミューテーションの引数を取得
-    const { title, body } = args;
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
     const { prisma, currentUser } = context;
 
-    return await safe(currentUser.user_uuid, prisma, { title, body });
+    return await safe(currentUser.user_uuid, prisma);
   },
 
   // updatePostフィールドのリゾルバー

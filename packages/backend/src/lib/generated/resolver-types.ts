@@ -31,11 +31,6 @@ export type Mutation = {
   updateUserForAdmin: User;
 };
 
-export type MutationCreatePostArgs = {
-  body: Scalars["String"]["input"];
-  title: Scalars["NonEmptyString"]["input"];
-};
-
 export type MutationDeletePostArgs = {
   post_uuid: Scalars["UUID"]["input"];
 };
@@ -228,7 +223,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
-  createPost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationCreatePostArgs, "body" | "title">>;
+  createPost?: Resolver<ResolversTypes["Post"], ParentType, ContextType>;
   deleteMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   deletePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationDeletePostArgs, "post_uuid">>;
   deleteUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserForAdminArgs, "user_uuid">>;
