@@ -20,7 +20,7 @@ export type Scalars = {
   DateTime: { input: Date; output: Date };
   HandleString: { input: string; output: string };
   NonEmptyString: { input: string; output: string };
-  PositiveInt: { input: number; output: number };
+  NonNegativeInt: { input: number; output: number };
   ScreenNameString: { input: string; output: string };
   TitleString: { input: string; output: string };
   UUID: { input: string; output: string };
@@ -45,9 +45,9 @@ export type MutationDeleteUserForAdminArgs = {
 };
 
 export type MutationUpdateMyUserArgs = {
-  bio?: InputMaybe<Scalars["String"]["input"]>;
-  handle?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
-  screen_name?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
+  bio?: InputMaybe<Scalars["BioString"]["input"]>;
+  handle?: InputMaybe<Scalars["HandleString"]["input"]>;
+  screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
 };
 
 export type MutationUpdatePostArgs = {
@@ -57,9 +57,9 @@ export type MutationUpdatePostArgs = {
 };
 
 export type MutationUpdateUserForAdminArgs = {
-  bio?: InputMaybe<Scalars["String"]["input"]>;
+  bio?: InputMaybe<Scalars["BioString"]["input"]>;
   handle?: InputMaybe<Scalars["HandleString"]["input"]>;
-  screen_name?: InputMaybe<Scalars["String"]["input"]>;
+  screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
   user_uuid: Scalars["UUID"]["input"];
 };
 
@@ -82,13 +82,13 @@ export type Query = {
 };
 
 export type QueryGetAllPostsArgs = {
-  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
-  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  limit?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
+  offset?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
 };
 
 export type QueryGetAllUsersArgs = {
-  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
-  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  limit?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
+  offset?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
 };
 
 export type QueryGetPostByUuidArgs = {
@@ -113,8 +113,8 @@ export type User = {
 };
 
 export type UserPostsArgs = {
-  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
-  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  limit?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
+  offset?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -192,7 +192,7 @@ export type ResolversTypes = {
   HandleString: ResolverTypeWrapper<Scalars["HandleString"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
   NonEmptyString: ResolverTypeWrapper<Scalars["NonEmptyString"]["output"]>;
-  PositiveInt: ResolverTypeWrapper<Scalars["PositiveInt"]["output"]>;
+  NonNegativeInt: ResolverTypeWrapper<Scalars["NonNegativeInt"]["output"]>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   Role: Role;
@@ -212,7 +212,7 @@ export type ResolversParentTypes = {
   HandleString: Scalars["HandleString"]["output"];
   Mutation: {};
   NonEmptyString: Scalars["NonEmptyString"]["output"];
-  PositiveInt: Scalars["PositiveInt"]["output"];
+  NonNegativeInt: Scalars["NonNegativeInt"]["output"];
   Post: Post;
   Query: {};
   ScreenNameString: Scalars["ScreenNameString"]["output"];
@@ -263,8 +263,8 @@ export interface NonEmptyStringScalarConfig extends GraphQLScalarTypeConfig<Reso
   name: "NonEmptyString";
 }
 
-export interface PositiveIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["PositiveInt"], any> {
-  name: "PositiveInt";
+export interface NonNegativeIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["NonNegativeInt"], any> {
+  name: "NonNegativeInt";
 }
 
 export type PostResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Post"] = ResolversParentTypes["Post"]> = {
@@ -317,7 +317,7 @@ export type Resolvers<ContextType = GraphQLContext> = {
   HandleString?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   NonEmptyString?: GraphQLScalarType;
-  PositiveInt?: GraphQLScalarType;
+  NonNegativeInt?: GraphQLScalarType;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ScreenNameString?: GraphQLScalarType;

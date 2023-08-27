@@ -12,7 +12,7 @@ const config: CodegenConfig = {
         scalars: {
           UUID: "string",
           DateTime: "Date",
-          PositiveInt: "number",
+          NonNegativeInt: "number",
           NonEmptyString: "string",
           HandleString: "string",
           ScreenNameString: "string",

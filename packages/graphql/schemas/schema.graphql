@@ -8,8 +8,8 @@ enum Role {
 scalar UUID
 # DateTimeスカラー型を利用するための定義
 scalar DateTime
-# 正の整数スカラー型を利用するための定義
-scalar PositiveInt
+# 負でないスカラー型を利用するための定義
+scalar NonNegativeInt
 # 空でない文字列スカラー型を利用するための定義
 scalar NonEmptyString
 
@@ -36,7 +36,7 @@ schema {
 # クエリのスキーマ定義
 type Query {
   # ユーザ一覧を取得するクエリ
-  getAllUsers(offset: PositiveInt = 0, limit: PositiveInt = 10): [User!]! @auth(role: USER)
+  getAllUsers(offset: NonNegativeInt = 0, limit: NonNegativeInt = 10): [User!]! @auth(role: USER)
 
   # ユーザを取得するクエリ
   getUserByUUID(uuid: UUID!): User! @auth(role: USER)
@@ -45,7 +45,7 @@ type Query {
   getMyUser: User! @auth(role: USER)
 
   # 投稿一覧を取得するクエリ
-  getAllPosts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]! @auth(role: USER)
+  getAllPosts(offset: NonNegativeInt = 0, limit: NonNegativeInt = 10): [Post!]! @auth(role: USER)
 
   # 投稿を取得するクエリ
   getPostByUUID(uuid: UUID!): Post! @auth(role: USER)
@@ -85,7 +85,7 @@ type User {
   created_at: DateTime!
   updated_at: DateTime!
   role: Role!
-  posts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]!
+  posts(offset: NonNegativeInt = 0, limit: NonNegativeInt = 10): [Post!]!
 }
 
 # 投稿型の定義
