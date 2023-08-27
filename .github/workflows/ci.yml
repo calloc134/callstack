@@ -1,10 +1,15 @@
 name: CI
 
 on:
+  # masterブランチへのpushに対応する
   push:
-    branches: ["main"]
+    branches: ["master"]
+  # プルリクエストでのCIに対応する
   pull_request:
     types: [opened, synchronize]
+
+  # 手動での実行に対応する
+  workflow_dispatch:
 
 
 jobs:
