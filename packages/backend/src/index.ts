@@ -5,6 +5,8 @@ import { createYoga } from "graphql-yoga";
 
 // Prismaのクライアント
 import { PrismaClient } from "@prisma/client";
+// minioのクライアント
+import { Client } from "minio";
 // 開発環境でのJWT検証のモックプラグイン
 import { useAuthMock } from "./lib/plugins/useAuthMock";
 // 本番環境でJWTの検証等を行うプラグイン
@@ -23,7 +25,7 @@ import { AuthMockOption, AuthnOption } from "./lib/security/authn";
 // 認可プラグインのオプション
 import { authzOption } from "./lib/security/authz";
 // 開発環境かどうかを判断する変数
-import { is_dev } from "./env";
+import { is_dev, minio_endpoint, minio_root_password, minio_root_user } from "./env";
 import { useWebHook } from "./lib/webhook/webhook";
 import { useGraphQlJit } from "@envelop/graphql-jit";
 
@@ -32,6 +34,15 @@ const enhancements = Armor.protect();
 
 // Prismaクライアントを作成
 const prisma = new PrismaClient();
+
+// minioクライアントを作成
+const minio = new Client({
+  endPoint: minio_endpoint,
+  port: 9000,
+  useSSL: false,
+  accessKey: minio_root_user,
+  secretKey: minio_root_password,
+});
 
 // graphql-yogaのcreateYoga関数を利用してyogaサーバーを作成
 const yoga = createYoga({
@@ -42,6 +53,7 @@ const yoga = createYoga({
   // 利用するコンテキストを設定
   context: {
     prisma,
+    minio,
   },
   // 開発環境の場合はplaygroundを有効化
   graphiql: is_dev,
