@@ -11,31 +11,22 @@ import { minio_bucket } from "src/env";
 // prismaのupdateは、undefinedな値を渡すと、そのフィールドを更新しないことに留意する
 const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // createPresignedURLForUploadImageフィールドのリゾルバー
-  createPresignedURLForUploadImage: async (_parent, args, context) => {
-    const safe = withErrorHandling(async (minio: Client, filename: string) => {
+  createPresignedURLForUploadImage: async (_parent, _args, context) => {
+    const safe = withErrorHandling(async (minio: Client) => {
       // uuidを生成
       const uuid = uuidv4();
 
-      // ファイル名の拡張子を取得
-      const ext = filename.split(".").pop();
-
-      // ファイル名を生成
-      const filename_with_ext = `${uuid}.${ext}`;
-
       // プリサインドURLを作成
-      const result = await minio.presignedPutObject(minio_bucket, filename_with_ext, 60 * 60 * 24);
+      const result = await minio.presignedPutObject(minio_bucket, uuid, 60 * 60 * 24);
 
       // プリサインドURLを返す
       return result;
     });
 
-    // 引数からファイル名を取得
-    const { filename } = args;
-
     // コンテキストからminioクライアントを取得
     const { minio } = context;
 
-    return await safe(minio, filename);
+    return await safe(minio);
   },
 
   // updateUserForAdminフィールドのリゾルバー

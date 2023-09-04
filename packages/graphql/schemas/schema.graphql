@@ -73,7 +73,7 @@ type Mutation {
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
   # 画像をアップロードするためのプリサインドURLを作成するミューテーション
-  createPresignedURLForUploadImage: String! @auth(role: USER)
+  createPresignedURLForUploadImage: NonEmptyString! @auth(role: USER)
 
   # 自分のユーザの情報を更新するミューテーション
   updateMyUser(input: UpdateUserInput!): User! @auth(role: USER)

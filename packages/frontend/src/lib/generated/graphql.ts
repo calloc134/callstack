@@ -27,6 +27,7 @@ export type Scalars = {
 
 export type Mutation = {
   createPost: Post;
+  createPresignedURLForUploadImage: Scalars["String"]["output"];
   deleteMyUser: User;
   deletePost: Post;
   deleteUserForAdmin: User;
