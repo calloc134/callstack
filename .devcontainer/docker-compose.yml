@@ -2,7 +2,7 @@ version: "3.8"
 
 # ネットワークを作成
 networks:
-  app-db-network:
+  app-network:
 
 services:
   app:
@@ -41,13 +41,10 @@ services:
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     networks:
-      - app-db-network
+      - app-network
     # depends_on:
     #   db:
     #     condition: service_healthy
-
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   db:
     image: postgres:latest
@@ -59,18 +56,25 @@ services:
     # ポスグレの環境変数を読み込む
     env_file: ${POSTGRES_ENV}
     networks:
-      - app-db-network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
-    #   interval: 30s
-    #   timeout: 30s
-    #   retries: 5
+      - app-network
 
-    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+  minio:
+    build:
+      context: .
+      dockerfile: Dockerfile.minio
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: minio-data
+        target: /data
+    # minioの環境変数を読み込む
+    env_file: ${MINIO_ENV}
+    networks:
+      - app-network
 
 volumes:
   postgres-data:
+  minio-data:
   root-data:
   frontend-data:
   backend-data:

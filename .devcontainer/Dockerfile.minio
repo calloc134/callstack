@@ -1,0 +1,6 @@
+FROM quay.io/minio/minio:latest
+
+RUN mkdir -p /data/development
+COPY ./policy.json /data/development/policy.json
+
+ENTRYPOINT ["minio", "server", "/data", "--console-address", ":9001"]

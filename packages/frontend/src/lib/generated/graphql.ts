@@ -14,9 +14,14 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  BioString: { input: string; output: string };
+  BodyString: { input: string; output: string };
   DateTime: { input: Date; output: Date };
+  HandleString: { input: string; output: string };
   NonEmptyString: { input: string; output: string };
-  PositiveInt: { input: number; output: number };
+  NonNegativeInt: { input: number; output: number };
+  ScreenNameString: { input: string; output: string };
+  TitleString: { input: string; output: string };
   UUID: { input: string; output: string };
 };
 
@@ -30,11 +35,6 @@ export type Mutation = {
   updateUserForAdmin: User;
 };
 
-export type MutationCreatePostArgs = {
-  body: Scalars["String"]["input"];
-  title: Scalars["NonEmptyString"]["input"];
-};
-
 export type MutationDeletePostArgs = {
   post_uuid: Scalars["UUID"]["input"];
 };
@@ -44,21 +44,18 @@ export type MutationDeleteUserForAdminArgs = {
 };
 
 export type MutationUpdateMyUserArgs = {
-  bio?: InputMaybe<Scalars["String"]["input"]>;
-  handle?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
-  screen_name?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
+  input: UpdateUserInput;
 };
 
 export type MutationUpdatePostArgs = {
-  body: Scalars["String"]["input"];
+  input: UpdatePostInput;
   post_uuid: Scalars["UUID"]["input"];
-  title: Scalars["String"]["input"];
 };
 
 export type MutationUpdateUserForAdminArgs = {
-  bio?: InputMaybe<Scalars["String"]["input"]>;
-  handle?: InputMaybe<Scalars["String"]["input"]>;
-  screen_name?: InputMaybe<Scalars["String"]["input"]>;
+  bio?: InputMaybe<Scalars["BioString"]["input"]>;
+  handle?: InputMaybe<Scalars["HandleString"]["input"]>;
+  screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
   user_uuid: Scalars["UUID"]["input"];
 };
 
@@ -75,18 +72,19 @@ export type Post = {
 export type Query = {
   getAllPosts: Array<Post>;
   getAllUsers: Array<User>;
+  getMyUser: User;
   getPostByUUID: Post;
   getUserByUUID: User;
 };
 
 export type QueryGetAllPostsArgs = {
-  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
-  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  limit?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
+  offset?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
 };
 
 export type QueryGetAllUsersArgs = {
-  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
-  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  limit?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
+  offset?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
 };
 
 export type QueryGetPostByUuidArgs = {
@@ -98,6 +96,17 @@ export type QueryGetUserByUuidArgs = {
 };
 
 export type Role = "ADMIN" | "USER";
+
+export type UpdatePostInput = {
+  body?: InputMaybe<Scalars["BodyString"]["input"]>;
+  title?: InputMaybe<Scalars["TitleString"]["input"]>;
+};
+
+export type UpdateUserInput = {
+  bio?: InputMaybe<Scalars["BioString"]["input"]>;
+  handle?: InputMaybe<Scalars["HandleString"]["input"]>;
+  screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
+};
 
 export type User = {
   bio: Scalars["String"]["output"];
@@ -111,8 +120,8 @@ export type User = {
 };
 
 export type UserPostsArgs = {
-  limit?: InputMaybe<Scalars["PositiveInt"]["input"]>;
-  offset?: InputMaybe<Scalars["PositiveInt"]["input"]>;
+  limit?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
+  offset?: InputMaybe<Scalars["NonNegativeInt"]["input"]>;
 };
 
 export type PostFragmentFragment = {
