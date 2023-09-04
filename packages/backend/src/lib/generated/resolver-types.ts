@@ -28,12 +28,17 @@ export type Scalars = {
 
 export type Mutation = {
   createPost: Post;
+  createPresignedURLForUploadImage: Scalars["NonEmptyString"]["output"];
   deleteMyUser: User;
   deletePost: Post;
   deleteUserForAdmin: User;
   updateMyUser: User;
   updatePost: Post;
   updateUserForAdmin: User;
+};
+
+export type MutationCreatePresignedUrlForUploadImageArgs = {
+  filename: Scalars["NonEmptyString"]["input"];
 };
 
 export type MutationDeletePostArgs = {
@@ -263,6 +268,12 @@ export interface HandleStringScalarConfig extends GraphQLScalarTypeConfig<Resolv
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
   createPost?: Resolver<ResolversTypes["Post"], ParentType, ContextType>;
+  createPresignedURLForUploadImage?: Resolver<
+    ResolversTypes["NonEmptyString"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreatePresignedUrlForUploadImageArgs, "filename">
+  >;
   deleteMyUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   deletePost?: Resolver<ResolversTypes["Post"], ParentType, ContextType, RequireFields<MutationDeletePostArgs, "post_uuid">>;
   deleteUserForAdmin?: Resolver<ResolversTypes["User"], ParentType, ContextType, RequireFields<MutationDeleteUserForAdminArgs, "user_uuid">>;
