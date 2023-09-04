@@ -8,8 +8,21 @@ enum Role {
 scalar UUID
 # DateTimeスカラー型を利用するための定義
 scalar DateTime
-# 正の整数スカラー型を利用するための定義
-scalar PositiveInt
+# 負でないスカラー型を利用するための定義
+scalar NonNegativeInt
+# 空でない文字列スカラー型を利用するための定義
+scalar NonEmptyString
+
+# ユーザのハンドル用の文字列スカラー型を利用するための定義
+scalar HandleString
+# ユーザのスクリーンネーム用の文字列スカラー型を利用するための定義
+scalar ScreenNameString
+# ユーザの自己紹介用の文字列スカラー型を利用するための定義
+scalar BioString
+# タイトル用の文字列スカラー型を利用するための定義
+scalar TitleString
+# 本文用の文字列スカラー型を利用するための定義
+scalar BodyString
 
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
@@ -23,35 +36,53 @@ schema {
 # クエリのスキーマ定義
 type Query {
   # ユーザ一覧を取得するクエリ
-  getAllUsers(offset: PositiveInt = 0, limit: PositiveInt = 10): [User!]! @auth(role: USER)
+  getAllUsers(offset: NonNegativeInt = 0, limit: NonNegativeInt = 10): [User!]! @auth(role: USER)
+
   # ユーザを取得するクエリ
   getUserByUUID(uuid: UUID!): User! @auth(role: USER)
 
+  # 自分のユーザを取得するクエリ
+  getMyUser: User! @auth(role: USER)
+
   # 投稿一覧を取得するクエリ
-  getAllPosts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]! @auth(role: USER)
+  getAllPosts(offset: NonNegativeInt = 0, limit: NonNegativeInt = 10): [Post!]! @auth(role: USER)
+
   # 投稿を取得するクエリ
   getPostByUUID(uuid: UUID!): Post! @auth(role: USER)
+}
+
+# ユーザをアップデートする際の入力型の定義
+input UpdateUserInput {
+  handle: HandleString
+  screen_name: ScreenNameString
+  bio: BioString
+}
+
+# 投稿をアップデートする際の入力型の定義
+input UpdatePostInput {
+  title: TitleString
+  body: BodyString
 }
 
 # ミューテーションのスキーマ定義
 type Mutation {
   # ユーザを更新するミューテーション 管理者用
-  updateUserForAdmin(user_uuid: UUID!, handle: String, screen_name: String, bio: String): User! @auth(role: ADMIN)
+  updateUserForAdmin(user_uuid: UUID!, handle: HandleString, screen_name: ScreenNameString, bio: BioString): User! @auth(role: ADMIN)
 
   # ユーザを削除するミューテーション 管理者用
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
   # 自分のユーザの情報を更新するミューテーション
-  updateMyUser(handle: String, screen_name: String, bio: String): User! @auth(role: USER)
+  updateMyUser(input: UpdateUserInput!): User! @auth(role: USER)
 
   # 自分のユーザを削除するミューテーション
   deleteMyUser: User! @auth(role: USER)
 
   # 投稿を作成するミューテーション
-  createPost(title: String!, body: String!): Post! @auth(role: USER)
+  createPost: Post! @auth(role: USER)
 
   # 投稿を更新するミューテーション
-  updatePost(post_uuid: UUID!, title: String!, body: String!): Post! @auth(role: USER)
+  updatePost(post_uuid: UUID!, input: UpdatePostInput!): Post! @auth(role: USER)
 
   # 投稿を削除するミューテーション
   deletePost(post_uuid: UUID!): Post! @auth(role: USER)
@@ -67,7 +98,7 @@ type User {
   created_at: DateTime!
   updated_at: DateTime!
   role: Role!
-  posts(offset: PositiveInt = 0, limit: PositiveInt = 10): [Post!]!
+  posts(offset: NonNegativeInt = 0, limit: NonNegativeInt = 10): [Post!]!
 }
 
 # 投稿型の定義

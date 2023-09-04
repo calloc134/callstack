@@ -17,7 +17,7 @@ export const ProtectedRouter = () => {
       });
       signIn(`https://${hostname}/auth/callback`);
     }
-  }, [isAuthenticated, isLoading, signIn]);
+  }, [isAuthenticated, isLoading]);
 
   // 認証されている場合は子コンポーネントを表示
   if (!isAuthenticated) {

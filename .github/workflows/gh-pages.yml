@@ -2,13 +2,14 @@
 name: Deploy Docusaurus with GitHub Pages dependencies preinstalled
 
 on:
-  # Runs on pushes targeting the default branch
+  # masterブランチへのpushに対応する
   push:
     branches: ["master"]
+  # プルリクエストでのCIに対応する
   pull_request:
     types: [opened, synchronize]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # 手動での実行に対応する
   workflow_dispatch:
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
@@ -57,6 +58,9 @@ jobs:
 
   # Deployment job
   deploy:
+    # masterブランチのときのみ実行する
+    if : github.ref == 'refs/heads/master'
+    # 必要な権限を付与する
     permissions:
       pages: write # to deploy to Pages
       id-token: write

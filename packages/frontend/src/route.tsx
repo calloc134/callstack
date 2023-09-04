@@ -1,6 +1,6 @@
 import { RootRoute, Route, Router } from "@tanstack/react-router";
 import { Document } from "./_document";
-import { Index } from "./features/index/pages/Index";
+import { RootIndexPage } from "./features/index/pages/IndexPage";
 import { NotFoundPage } from "./404";
 import { ProtectedRouter } from "./lib/route/ProtectedRouter";
 import { UsersPage } from "./features/users/pages/UsersPage";
@@ -21,7 +21,7 @@ const indexRoute = new Route({
   getParentRoute: () => callStackRootRoute,
   path: "/",
   // ここに内側のコンポーネントを指定
-  component: () => <Index />,
+  component: () => <RootIndexPage />,
 });
 
 // 404ルートの設定
@@ -98,14 +98,31 @@ const postDetailRoute = new Route({
   component: () => <PostDetailPage />,
 });
 
+// ルータの設定
 const router = new Router({
+  // 根本ルート
   routeTree: callStackRootRoute.addChildren([
+    // /
     indexRoute,
+    // *
     notFoundRoute,
+    // /auth/callback
     callbackRoute,
+    // /auth
     protectedRoute.addChildren([
-      authenticatedUserRoute.addChildren([usersRoute, userDetailRoute]),
-      authenticatedPostRoute.addChildren([postsRoute, postDetailRoute]),
+      // /auth/users
+      authenticatedUserRoute.addChildren([
+        // /auth/users/
+        usersRoute,
+        // /auth/users/$user_uuid
+        userDetailRoute,
+      ]),
+      authenticatedPostRoute.addChildren([
+        // /auth/posts/
+        postsRoute,
+        // /auth/posts/$post_uuid
+        postDetailRoute,
+      ]),
     ]),
   ]),
 });

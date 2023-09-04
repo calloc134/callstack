@@ -4,7 +4,7 @@ import { PostDetailCard } from "../components/PostDetailCard";
 import { Spinner } from "@nextui-org/react";
 import { useParams } from "@tanstack/react-router";
 
-// 利用されるクエリの定義
+// クエリするフラグメントを定義
 const GetPostDetailQuery = graphql(`
   query GetPostDetailQuery($uuid: UUID!) {
     getPostByUUID(uuid: $uuid) {
@@ -14,12 +14,12 @@ const GetPostDetailQuery = graphql(`
 `);
 
 const PostDetailPage = () => {
-  // パスパラメータの内容を取得
+  // URLパラメータより投稿のUUIDを取得
   const post_uuid = useParams({
     from: "/auth/posts/$post_uuid",
   })?.post_uuid;
 
-  // graphqlに対してクエリを実行
+  // クエリを行って投稿の情報を取得
   const [result] = useQuery({
     query: GetPostDetailQuery,
     variables: {
@@ -27,11 +27,13 @@ const PostDetailPage = () => {
     },
   });
 
+  // クエリの結果を取得
   const { data, fetching } = result;
 
+  // ローディング中であれば
   if (fetching)
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex items-center justify-center">
         <Spinner label="読み込み中..." color="warning" />
       </div>
     );

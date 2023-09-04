@@ -1,9 +1,9 @@
-import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/react";
 import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserCardForPost } from "./UserCardForPost";
 
-// 利用される投稿のフラグメントの定義
+// クエリするフラグメントを定義
 const PostDetailFragment = graphql(`
   fragment PostDetailFragment on Post {
     post_uuid
@@ -19,23 +19,26 @@ const PostDetailFragment = graphql(`
 `);
 
 const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDetailFragment> }) => {
-  // フラグメントから投稿の情報を取得
+  // フラグメントの型を指定して対応するデータを取得
   const post = useFragment(PostDetailFragment, post_frag);
 
   return (
-    <Card isBlurred className="min-w-full m-2 bg-secondary backdrop-blur-sm" shadow="sm">
+    <Card isBlurred className="w-full m-2 bg-secondary" shadow="sm">
+      <CardHeader>
+        <div className="flex">
+          <h1 className="text-2xl font-bold truncate">{post.title}</h1>
+        </div>
+      </CardHeader>
       <CardBody>
         <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
-          <div className="flex justify-between col-span-2">
-            <h1 className="text-2xl font-bold">{post.title}</h1>
-          </div>
+          <Card isBlurred className="w-full col-span-2"></Card>
           <div className="flex justify-between col-span-4 md:col-span-10">
             <p className="text-xl">{post.body}</p>
           </div>
         </div>
       </CardBody>
-      <CardFooter className="flex flex-col justify-end items-end">
-        <div>
+      <CardFooter className="justify-end">
+        <div className="flex flex-row">
           <Dropdown>
             <DropdownTrigger>
               <Button color="secondary" variant="shadow" className="rounded-full hover:-translate-y-1">
