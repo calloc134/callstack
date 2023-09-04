@@ -7,7 +7,7 @@ const schema_path = process.env.SCHEMA_PATH || "../graphql/schemas/*.graphql";
 
 // 開発環境であれば、空文字を設定
 // 本番環境であれば、minioエンドポイントのURLを設定
-const minio_endpoint = is_dev ? "" : process.env.MINIO_ENDPOINT || "";
+const minio_endpoint = is_dev ? "minio" : process.env.MINIO_ENDPOINT || "";
 
 const minio_root_user = process.env.MINIO_ROOT_USER || "";
 const minio_root_password = process.env.MINIO_ROOT_PASSWORD || "";
