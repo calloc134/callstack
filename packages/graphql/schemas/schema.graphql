@@ -56,6 +56,7 @@ input UpdateUserInput {
   handle: HandleString
   screen_name: ScreenNameString
   bio: BioString
+  image_url: NonEmptyString
 }
 
 # 投稿をアップデートする際の入力型の定義

@@ -107,6 +107,7 @@ export type UpdatePostInput = {
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars["BioString"]["input"]>;
   handle?: InputMaybe<Scalars["HandleString"]["input"]>;
+  image_url?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
   screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
 };
 
