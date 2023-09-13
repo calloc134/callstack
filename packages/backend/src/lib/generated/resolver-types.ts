@@ -114,6 +114,7 @@ export type User = {
   bio: Scalars["String"]["output"];
   created_at: Scalars["DateTime"]["output"];
   handle: Scalars["String"]["output"];
+  image_url: Scalars["String"]["output"];
   posts: Array<Post>;
   role: Role;
   screen_name: Scalars["String"]["output"];
@@ -316,6 +317,7 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
   bio?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   handle?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  image_url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes["Post"]>, ParentType, ContextType, RequireFields<UserPostsArgs, "limit" | "offset">>;
   role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>;
   screen_name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
