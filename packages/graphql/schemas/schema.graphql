@@ -98,6 +98,7 @@ type User {
   handle: String!
   screen_name: String!
   bio: String!
+  image_url: String!
   created_at: DateTime!
   updated_at: DateTime!
   role: Role!

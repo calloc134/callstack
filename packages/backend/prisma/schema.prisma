@@ -26,6 +26,7 @@ model User {
   handle      String
   screen_name String
   bio         String
+  image_url   String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   role        Role     @default(USER)
