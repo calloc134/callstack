@@ -27,7 +27,7 @@ export type Scalars = {
 
 export type Mutation = {
   createPost: Post;
-  createPresignedURLForUploadImage: Scalars["String"]["output"];
+  createPresignedURLForUploadImage: Scalars["NonEmptyString"]["output"];
   deleteMyUser: User;
   deletePost: Post;
   deleteUserForAdmin: User;
@@ -106,6 +106,7 @@ export type UpdatePostInput = {
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars["BioString"]["input"]>;
   handle?: InputMaybe<Scalars["HandleString"]["input"]>;
+  image_url?: InputMaybe<Scalars["NonEmptyString"]["input"]>;
   screen_name?: InputMaybe<Scalars["ScreenNameString"]["input"]>;
 };
 
@@ -113,6 +114,7 @@ export type User = {
   bio: Scalars["String"]["output"];
   created_at: Scalars["DateTime"]["output"];
   handle: Scalars["String"]["output"];
+  image_url: Scalars["String"]["output"];
   posts: Array<Post>;
   role: Role;
   screen_name: Scalars["String"]["output"];
@@ -177,11 +179,11 @@ export type UserDetailFragmentFragment = {
   posts: Array<{ " $fragmentRefs"?: { PostPopupFragmentFragment: PostPopupFragmentFragment } }>;
 } & { " $fragmentName"?: "UserDetailFragmentFragment" };
 
-export type UserDetailFragmentQueryVariables = Exact<{
+export type UserDetailQueryQueryVariables = Exact<{
   uuid: Scalars["UUID"]["input"];
 }>;
 
-export type UserDetailFragmentQuery = { getUserByUUID: { " $fragmentRefs"?: { UserDetailFragmentFragment: UserDetailFragmentFragment } } };
+export type UserDetailQueryQuery = { getUserByUUID: { " $fragmentRefs"?: { UserDetailFragmentFragment: UserDetailFragmentFragment } } };
 
 export type GetUsersQueryQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -494,13 +496,13 @@ export const GetAllPostsQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<GetAllPostsQueryQuery, GetAllPostsQueryQueryVariables>;
-export const UserDetailFragmentDocument = {
+export const UserDetailQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "UserDetailFragment" },
+      name: { kind: "Name", value: "UserDetailQuery" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -556,7 +558,7 @@ export const UserDetailFragmentDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<UserDetailFragmentQuery, UserDetailFragmentQueryVariables>;
+} as unknown as DocumentNode<UserDetailQueryQuery, UserDetailQueryQueryVariables>;
 export const GetUsersQueryDocument = {
   kind: "Document",
   definitions: [

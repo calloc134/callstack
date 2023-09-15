@@ -25,7 +25,7 @@ const documents = {
     types.UserFragmentFragmentDoc,
   "\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n":
     types.UserDetailFragmentFragmentDoc,
-  "\n  query UserDetailFragment($uuid: UUID!) {\n    getUserByUUID(uuid: $uuid) {\n      ...UserDetailFragment\n    }\n  }\n": types.UserDetailFragmentDocument,
+  "\n  query UserDetailQuery($uuid: UUID!) {\n    getUserByUUID(uuid: $uuid) {\n      ...UserDetailFragment\n    }\n  }\n": types.UserDetailQueryDocument,
   "\n  query GetUsersQuery {\n    getAllUsers(limit: 10) {\n      ...UserFragment\n    }\n  }\n": types.GetUsersQueryDocument,
 };
 
@@ -95,8 +95,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query UserDetailFragment($uuid: UUID!) {\n    getUserByUUID(uuid: $uuid) {\n      ...UserDetailFragment\n    }\n  }\n"
-): (typeof documents)["\n  query UserDetailFragment($uuid: UUID!) {\n    getUserByUUID(uuid: $uuid) {\n      ...UserDetailFragment\n    }\n  }\n"];
+  source: "\n  query UserDetailQuery($uuid: UUID!) {\n    getUserByUUID(uuid: $uuid) {\n      ...UserDetailFragment\n    }\n  }\n"
+): (typeof documents)["\n  query UserDetailQuery($uuid: UUID!) {\n    getUserByUUID(uuid: $uuid) {\n      ...UserDetailFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

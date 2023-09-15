@@ -4,9 +4,9 @@ import { Spinner } from "@nextui-org/react";
 import { graphql } from "src/lib/generated/gql";
 import { UserDetailCard } from "../components/UserDetailCard";
 
-// クエリするフラグメントを定義
-const UserDetailFragment = graphql(`
-  query UserDetailFragment($uuid: UUID!) {
+// 利用されるクエリの定義
+const UserDetailQuery = graphql(`
+  query UserDetailQuery($uuid: UUID!) {
     getUserByUUID(uuid: $uuid) {
       ...UserDetailFragment
     }
@@ -21,7 +21,7 @@ const UserDetailPage = () => {
 
   // クエリを行ってユーザーの情報を取得
   const [result] = useQuery({
-    query: UserDetailFragment,
+    query: UserDetailQuery,
     variables: {
       uuid: user_uuid,
     },
