@@ -46,7 +46,7 @@ module.exports = {
             background: "#000511", // より暗い背景
             foreground: "#FFFFFF", // 白い文字色
             primary: "#0e3765", // 主要な色で、強調したい場所に使用
-            secondary: "#33465c", // 補助的な色で、主要色とのバランスを取る（暗い色）
+            secondary: "#323753", // 補助的な色で、主要色とのバランスを取る（暗い色）
             success: "#28a745", // 成功を示す色
             warning: "#ffc107", // 警告に使用
             danger: "#dc3545", // 危険を示す色で、緊急性を強調
