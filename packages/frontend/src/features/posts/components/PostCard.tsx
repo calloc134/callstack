@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu, CardHeader, Image } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserCardForPost } from "./UserCardForPost";
 import { graphql } from "src/lib/generated/gql";
@@ -21,47 +21,50 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
   const post = useFragment(PostFragment, post_frag);
 
   return (
-    <Card isBlurred className="w-full m-2 bg-secondary" shadow="sm">
-      <CardHeader>
-        <div className="flex">
-          <h1 className="text-2xl font-bold truncate">{post.title}</h1>
-        </div>
-      </CardHeader>
-      <CardBody>
-        <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
-          <Card isBlurred className="h-full col-span-2"></Card>
-          <div className="flex col-span-4 md:col-span-10">
-            <p className="text-xl line-clamp-3">{post.body}</p>
+    <div className="flex flex-row gap-2">
+      <Image src="https://picsum.photos/200/300" className=" h-full shadow-sm" />
+
+      <Card isBlurred className="w-full m-2 bg-secondary" shadow="sm">
+        <CardHeader>
+          <div className="flex">
+            <h1 className="text-2xl font-bold truncate">{post.title}</h1>
           </div>
-        </div>
-      </CardBody>
-      <CardFooter className="justify-end">
-        <div className="flex flex-row">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button color="secondary" variant="shadow" className="rounded-full hover:-translate-y-1">
-                ユーザのプロフィール
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem>
-                <UserCardForPost user={post.user} />
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-          <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-            <Link
-              to="/auth/posts/$post_uuid"
-              params={{
-                post_uuid: post.post_uuid,
-              }}
-            >
-              詳細を見る
-            </Link>
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
+        </CardHeader>
+        <CardBody>
+          <div className="grid grid-flow-col">
+            <div className="flex">
+              <p className="text-xl line-clamp-3">{post.body}</p>
+            </div>
+          </div>
+        </CardBody>
+        <CardFooter className="justify-end">
+          <div className="flex flex-row">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button color="secondary" variant="shadow" className="rounded-full hover:-translate-y-1">
+                  ユーザのプロフィール
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem>
+                  <UserCardForPost user={post.user} />
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
+              <Link
+                to="/auth/posts/$post_uuid"
+                params={{
+                  post_uuid: post.post_uuid,
+                }}
+              >
+                詳細を見る
+              </Link>
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
