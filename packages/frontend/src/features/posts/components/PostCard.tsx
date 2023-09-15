@@ -34,7 +34,7 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
           </div>
         </CardHeader>
         <CardBody>
-          <div className="flex justify-between bg-background rounded-md">
+          <div className="flex justify-between bg-background rounded-lg divide-x-2">
             <div className="flex m-2">
               <p className="text-xl line-clamp-3">{post.body}</p>
             </div>
