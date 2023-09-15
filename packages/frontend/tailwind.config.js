@@ -34,7 +34,7 @@ module.exports = {
             divider: "#e0e0e0", // 区切り線に使用、目立たず機能する色
             overlay: "#FBF8F1", // モーダルなどに使用、背景と調和する色
             focus: "#54BAB9", // フォーカス時に使用、強調したい部分に目を引く色
-            content1: "#FBF8F1", // コンテンツ階層1
+            content1: "#f5f8fb", // コンテンツ階層1
             content2: "#F7ECDE", // コンテンツ階層2
             content3: "#F7ECDE", // コンテンツ階層3
             content4: "#F7ECDE", // コンテンツ階層4
