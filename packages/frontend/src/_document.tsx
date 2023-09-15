@@ -30,9 +30,9 @@ export const Document = () => {
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""} text-foreground bg-background/80 bg-gradient-to from-background w-screen h-screen`}>
+    <div className={`${darkMode ? "dark" : ""} text-foreground bg-background bg-gradient-to-r from-slate-300 to-50% w-screen h-screen`}>
       <div className="flex flex-col">
-        <Navbar className="bg-gradient-to-r from-primary bg-primary/50 backdrop-blur-sm shadow-xl rounded-b-lg">
+        <Navbar className="bg-gradient-to-r from-red-600/20 via-blue-300 bg-purple-500/80 backdrop-blur-sm shadow-md rounded-b-sm">
           <NavbarBrand>
             <Tooltip content="callstack" color="secondary">
               <Link to="/">callstack</Link>

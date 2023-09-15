@@ -179,6 +179,10 @@ export type UserDetailFragmentFragment = {
   posts: Array<{ " $fragmentRefs"?: { PostPopupFragmentFragment: PostPopupFragmentFragment } }>;
 } & { " $fragmentName"?: "UserDetailFragmentFragment" };
 
+export type GetMeQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMeQueryQuery = { getMyUser: { user_uuid: string } };
+
 export type UserDetailQueryQueryVariables = Exact<{
   uuid: Scalars["UUID"]["input"];
 }>;
@@ -496,6 +500,26 @@ export const GetAllPostsQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<GetAllPostsQueryQuery, GetAllPostsQueryQueryVariables>;
+export const GetMeQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetMeQuery" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getMyUser" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "user_uuid" } }] },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetMeQueryQuery, GetMeQueryQueryVariables>;
 export const UserDetailQueryDocument = {
   kind: "Document",
   definitions: [

@@ -18,7 +18,7 @@ const UserDetailFragment = graphql(`
   }
 `);
 
-const UserDetailCard = ({ user: user_frag }: { user: FragmentType<typeof UserDetailFragment> }) => {
+const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; user_frag: FragmentType<typeof UserDetailFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
   const user = useFragment(UserDetailFragment, user_frag);
 
