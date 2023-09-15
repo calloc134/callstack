@@ -1,11 +1,11 @@
-import { Button, Spacer } from "@nextui-org/react";
+import { Button, Image, Spacer } from "@nextui-org/react";
 import { Link } from "@tanstack/react-router";
 
 export const RootIndexPage = () => {
   return (
     <>
       <div className="flex flex-col items-center">
-        <img src="/callstack.png" alt="callstack" className="w-unit-4xl" />
+        <Image src="/callstack.png" className="w-unit-4xl" />
         <h1 className="text-4xl font-bold">callstack</h1>
         <p className="text-xl">callstackボイラープレートのサンプルです。</p>
         <Spacer y={4} />
