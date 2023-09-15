@@ -51,7 +51,7 @@ export const Document = () => {
               {/* 十分に画面サイズが大きい場合 */}
               <NavbarItem className="hidden sm:flex gap-4">
                 <Tooltip content="スタイル切替" color="secondary">
-                  <Button isIconOnly variant="light" onClick={toggleDarkMode} className="hover:bg-secondary">
+                  <Button isIconOnly radius="full" variant="light" onClick={toggleDarkMode} className="hover:bg-secondary">
                     <Sun size={20} />
                   </Button>
                 </Tooltip>
@@ -79,14 +79,14 @@ export const Document = () => {
               <NavbarItem className="flex sm:hidden gap-4">
                 <Dropdown>
                   <DropdownTrigger>
-                    <Button color="secondary" variant="light" className="hover:-translate-y-1">
+                    <Button isIconOnly color="secondary" radius="full" variant="light" className="hover:scale-110">
                       <Menu2 size={20} />
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu>
                     <DropdownItem>
                       <Tooltip content="スタイル切替" color="secondary">
-                        <Button isIconOnly color="secondary" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1">
+                        <Button isIconOnly color="secondary" radius="full" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1">
                           <Sun size={20} />
                         </Button>
                       </Tooltip>
