@@ -11,7 +11,11 @@ module.exports = {
     "./src/features/**/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter", "Noto Sans JP"],
+      },
+    },
   },
   darkMode: ["media", "class"],
   plugins: [
