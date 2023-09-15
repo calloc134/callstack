@@ -120,7 +120,7 @@ export const Document = () => {
         </Navbar>
         <div>
           {" "}
-          <Spacer y={40} />
+          <Spacer y={10} />
           {/* ここで内側のコンポーネントを表示 */}
           <Outlet />
         </div>
