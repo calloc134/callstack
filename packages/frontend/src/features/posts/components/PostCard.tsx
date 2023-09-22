@@ -24,7 +24,7 @@ const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment>
   return (
     <div className="grid grid-cols-3 flex-row  gap-2 h-unit-72">
       <Card isBlurred className="col-span-1 h-full shadow-sm" shadow="sm">
-        <Image src="https://picsum.photos/400" isZoomed className="h-full overflow-hidden" />
+        <Image src="https://picsum.photos/400" width={400} height={400} isZoomed className="h-full overflow-hidden" />
       </Card>
 
       <Card isBlurred className="col-span-2 w-full bg-secondary" shadow="sm">

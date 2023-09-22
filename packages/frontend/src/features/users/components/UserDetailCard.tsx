@@ -25,8 +25,8 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-row justify-between gap-2">
-        <Image src="https://picsum.photos/200" radius="full" className="shadow-md hover:scale-105" />
-        <Image src="https://picsum.photos/800/200" radius="sm" className="shadow-md " />
+        <Image src="https://picsum.photos/200" radius="full" width={200} className="shadow-md hover:scale-105" />
+        <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
       </div>
       <Spacer y={6} />
       <Card isBlurred className="w-full bg-secondary" shadow="sm">

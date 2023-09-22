@@ -24,7 +24,7 @@ const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDet
 
   return (
     <div className="flex flex-col">
-      <Image src="https://picsum.photos/200/300" className="w-full shadow-sm " />
+      <Image src="https://picsum.photos/200/300" width={300} height={200} className="w-full shadow-sm " />
       <Card isBlurred className="w-full m-2 bg-secondary" shadow="sm">
         <CardHeader>
           <div className="flex">
