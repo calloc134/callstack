@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Card, CardBody, CardFooter, Button, Image, Spacer } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { graphql } from "src/lib/generated/gql";
-import { Space } from "tabler-icons-react";
 
 // クエリするフラグメントを定義
 const UserFragment = graphql(`
@@ -11,9 +10,6 @@ const UserFragment = graphql(`
     handle
     screen_name
     bio
-    posts {
-      ...PostPopupFragment
-    }
   }
 `);
 
