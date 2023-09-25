@@ -11,7 +11,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "codegen": "graphql-codegen --config codegen.ts",
     "prigen": "prisma generate",
-    "primig": "prisma migrate deploy"
+    "primig": "prisma migrate deploy",
+    "priseed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
