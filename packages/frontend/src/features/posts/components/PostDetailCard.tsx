@@ -1,7 +1,8 @@
-import { Card, CardBody, CardFooter, CardHeader, Button, Dropdown, DropdownItem, DropdownTrigger, DropdownMenu, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Button, Image, Spacer } from "@nextui-org/react";
+import { DotsVertical, Heart, MessageChatbot } from "tabler-icons-react";
 import { graphql } from "src/lib/generated/gql";
 import { FragmentType, useFragment } from "src/lib/generated";
-import { UserCardForPost } from "./UserCardForPost";
+import { UserCard } from "src/features/users/components/UserCard";
 
 // クエリするフラグメントを定義
 const PostDetailFragment = graphql(`
@@ -13,7 +14,7 @@ const PostDetailFragment = graphql(`
     updated_at
     is_public
     user {
-      ...UserPopupFragment
+      ...UserFragment
     }
   }
 `);
@@ -23,39 +24,42 @@ const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDet
   const post = useFragment(PostDetailFragment, post_frag);
 
   return (
-    <div className="flex flex-col">
-      <Image src="https://picsum.photos/200/300" className="w-full shadow-sm " />
-      <Card isBlurred className="w-full m-2 bg-secondary" shadow="sm">
-        <CardHeader>
-          <div className="flex">
-            <h1 className="text-2xl font-bold truncate">{post.title}</h1>
-          </div>
-        </CardHeader>
-        <CardBody>
-          <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
-            <Card isBlurred className="w-full col-span-2"></Card>
-            <div className="flex justify-between col-span-4 md:col-span-10">
-              <p className="text-xl">{post.body}</p>
+    <div className="flex flex-col gap-2">
+      <Image src="https://picsum.photos/1500/200" width={1500} height={200} className="w-full shadow-sm" />
+      <div className="grid grid-cols-6 flex-row gap-2">
+        <Card isBlurred className="w-full bg-secondary col-span-5" shadow="sm">
+          <CardHeader>
+            <div className="flex">
+              <h1 className="text-2xl font-bold truncate">{post.title}</h1>
             </div>
-          </div>
-        </CardBody>
-        <CardFooter className="justify-end">
-          <div className="flex flex-row">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button color="secondary" variant="shadow" className="rounded-full hover:-translate-y-1">
-                  ユーザのプロフィール
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>
-                  <UserCardForPost user={post.user} />
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        </CardFooter>
-      </Card>
+          </CardHeader>
+          <CardBody>
+            <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
+              <div className="flex justify-between col-span-4 md:col-span-10">
+                <p className="text-xl">{post.body}</p>
+              </div>
+            </div>
+          </CardBody>
+          <CardFooter className="justify-end"></CardFooter>
+        </Card>
+        <Card isBlurred className="col-span-1 h-full" shadow="md">
+          <CardBody className="flex flex-col justify-center">
+            <Button radius="full" className="flex flex-row gap-2">
+              <Heart size={24} strokeWidth={1.5} />
+              <p>10</p>
+            </Button>
+            <Button radius="full" className="flex flex-row gap-2">
+              <MessageChatbot size={24} strokeWidth={1.5} />
+              <p>10</p>
+            </Button>
+            <Button variant="light" radius="full">
+              <DotsVertical size={24} strokeWidth={1.5} />
+            </Button>
+          </CardBody>
+        </Card>
+      </div>
+      <Spacer y={8} />
+      <UserCard user={post.user} />
     </div>
   );
 };
