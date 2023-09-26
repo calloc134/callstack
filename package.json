@@ -8,6 +8,7 @@
     "lint": "turbo lint",
     "prigen": "turbo prigen",
     "primig": "turbo primig",
+    "priseed": "turbo priseed",
     "prepare": "husky install && turbo prigen && turbo codegen"
   },
   "keywords": [],
