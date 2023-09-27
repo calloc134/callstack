@@ -71,7 +71,9 @@ services:
     env_file: ${MINIO_ENV}
     networks:
       - app-network
-
+    ports:
+      - 9000:9000
+      - 9001:9001
 volumes:
   postgres-data:
   minio-data:
