@@ -22,7 +22,7 @@
   // "features": {},
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // This can be used to network with other containers or with the host.
-  "forwardPorts": [6173, 5173],
+  "forwardPorts": [6173, 5173, "minio:9001"],
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "pnpm install && pnpm primig && pnpm priseed",
   // Configure tool-specific properties.
