@@ -1,6 +1,7 @@
 import { graphql } from "src/lib/generated/gql";
-import { Card, CardBody, CardFooter, Image, Spacer } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Spacer, Button } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
+import { Link } from "@tanstack/react-router";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -43,16 +44,18 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
         </CardBody>
         <CardFooter className="justify-end">
           <div className="flex flex-row">
-            {/* <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-              <Link
-                to="/auth/users/$user_uuid"
-                params={{
-                  user_uuid: user.user_uuid,
-                }}
-              >
-                詳細を見る
-              </Link>
-            </Button> */}
+            {my_user_uuid === user.user_uuid && (
+              <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
+                <Link
+                  to="/auth/users/$user_uuid"
+                  params={{
+                    user_uuid: user.user_uuid,
+                  }}
+                >
+                  プロフィールの編集
+                </Link>
+              </Button>
+            )}
           </div>
         </CardFooter>
       </Card>

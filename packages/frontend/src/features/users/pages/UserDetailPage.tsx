@@ -31,7 +31,7 @@ const UserDetailPage = () => {
   // 自身のユーザの情報を取得
   const [myUserResult] = useQuery({
     query: GetMeQuery,
-    requestPolicy: "cache-only",
+    requestPolicy: "cache-first",
   });
 
   // クエリを行ってユーザーの情報を取得
