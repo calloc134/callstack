@@ -52,7 +52,8 @@
         "markdown.showPreview",
         "eamodio.gitlens",
         "GitHub.vscode-pull-request-github",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "capaj.graphql-codegen-vscode"
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
