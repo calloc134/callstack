@@ -1,5 +1,6 @@
 import { graphql } from "src/lib/generated/gql";
-import { Card, CardBody, CardFooter, Image, Spacer, Button } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Spacer, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import { useMutation } from "urql";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { Link } from "@tanstack/react-router";
 
@@ -19,9 +20,24 @@ const UserDetailFragment = graphql(`
   }
 `);
 
+// 自分のプロフィールを更新するためのミューテーションを定義
+const UpdateMyProfileMutation = graphql(`
+  mutation UpdateMyProfileMutation($input: UpdateUserInput!) {
+    updateMyUser(input: $input) {
+      ...UserDetailFragment
+    }
+  }
+`);
+
 const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; user_frag: FragmentType<typeof UserDetailFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
   const user = useFragment(UserDetailFragment, user_frag);
+
+  // プロフィール更新用ミューテーションのフックを実行
+  const [result, executeMutation] = useMutation(UpdateMyProfileMutation);
+
+  // モーダル用のフックを実行
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <div className="flex flex-col justify-between">
@@ -45,16 +61,22 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
         <CardFooter className="justify-end">
           <div className="flex flex-row">
             {my_user_uuid === user.user_uuid && (
-              <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-                <Link
-                  to="/auth/users/$user_uuid"
-                  params={{
-                    user_uuid: user.user_uuid,
-                  }}
-                >
-                  プロフィールの編集
-                </Link>
-              </Button>
+              <>
+                <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1" onPress={onOpen}>
+                  プロフィールを編集
+                </Button>
+                <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                  <ModalContent>
+                    <ModalHeader>プロフィールを編集</ModalHeader>
+                    <ModalBody>
+                      <p>プロフィールを編集する</p>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="primary">保存</Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+              </>
             )}
           </div>
         </CardFooter>
