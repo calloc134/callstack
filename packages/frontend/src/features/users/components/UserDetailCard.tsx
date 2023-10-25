@@ -40,11 +40,14 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   // モーダル用のフックを実行
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  // 現在のログインユーザが自分自身かどうかを判定
+  const is_myself = my_user_uuid === user.user_uuid;
+
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-row justify-between gap-2">
         <Image src="https://picsum.photos/200" radius="full" width={200} className="shadow-md" />
-        {my_user_uuid === user.user_uuid && (
+        {is_myself && (
           <Button color="primary" variant="shadow" radius="full" isIconOnly className="rounded-full hover:-translate-y-1 -translate-x-8">
             <input type="file" className="absolute opacity-0 w-full h-full" />
             <PhotoUp />
@@ -55,19 +58,19 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
       <Spacer y={6} />
       <Card isBlurred className="w-full bg-secondary" shadow="sm">
         <CardBody>
-          <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
-            <div className="flex flex-col justify-start col-span-4">
-              <h1 className="text-2xl font-bold truncate">{user.screen_name}</h1>
-              <p className="text-xl line-clamp-3">@{user.handle}</p>
+          <div className="flex">
+            <div className="flex flex-col justify-star">
+              <h1 className="text-2xl font-bold">{user.screen_name}</h1>
+              <p className="text-xl">@{user.handle}</p>
             </div>
-            <div className="flex col-span-4 md:col-span-10">
+            <div className="flex">
               <p className="text-xl">{user.bio}</p>
             </div>
           </div>
         </CardBody>
         <CardFooter className="justify-end">
           <div className="flex flex-row">
-            {my_user_uuid === user.user_uuid && (
+            {is_myself && (
               <>
                 <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1" onPress={onOpen}>
                   プロフィールを編集
