@@ -3,6 +3,7 @@ import { Card, CardBody, CardFooter, Image, Spacer, Button, Modal, ModalContent,
 import { useMutation } from "urql";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { Link } from "@tanstack/react-router";
+import { PhotoUp } from "tabler-icons-react";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -42,7 +43,13 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-row justify-between gap-2">
-        <Image src="https://picsum.photos/200" radius="full" width={200} className="shadow-md hover:scale-105" />
+        <Image src="https://picsum.photos/200" radius="full" width={200} className="shadow-md" />
+        {my_user_uuid === user.user_uuid && (
+          <Button color="primary" variant="shadow" radius="full" isIconOnly className="rounded-full hover:-translate-y-1 -translate-x-8">
+            <input type="file" className="absolute opacity-0 w-full h-full" />
+            <PhotoUp />
+          </Button>
+        )}
         <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
       </div>
       <Spacer y={6} />

@@ -26,7 +26,7 @@ module.exports = {
             default: "#fdfdfd", // 中立的なデフォルト色
             background: "#fdfdfd", // 薄い色で柔らかい背景
             foreground: "#4e4e4e", // 読みやすさを保つためのフォント色
-            primary: "#76a7da", // 主要な色で、強調したい場所に使用
+            primary: "#d2e5fc", // 主要な色で、強調したい場所に使用
             secondary: "#f5f8fb", // 補助的な色で、主要色とのバランスを取る
             success: "#28a745", // 成功を示す色
             warning: "#ffc107", // 警告に使用
