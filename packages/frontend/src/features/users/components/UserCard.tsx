@@ -19,10 +19,17 @@ const UserCard = ({ user: user_flag }: { user: FragmentType<typeof UserFragment>
 
   return (
     <div className="flex flex-row justify-between">
-      <Image src="https://picsum.photos/200" width={200} height={200} radius="full" className="translate-x-12 shadow-md" />
-      <Card isBlurred className="w-full bg-secondary" shadow="sm">
+      <Card isBlurred className="w-full bg-secondary relative" shadow="sm">
+        <Image
+          src="https://picsum.photos/200"
+          width={200}
+          height={200}
+          radius="full"
+          removeWrapper
+          className="shadow-md absolute top-1/2 -left-8 transform -translate-y-1/2"
+        />
         <div className="flex flex-row justify-between">
-          <Spacer x={12} />
+          <Spacer x={48} />
           <CardBody>
             <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
               <div className="flex flex-col justify-start col-span-6">
