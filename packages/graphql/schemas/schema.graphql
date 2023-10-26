@@ -14,12 +14,16 @@ scalar NonNegativeInt
 scalar NonEmptyString
 
 # ユーザのハンドル用の文字列スカラー型を利用するための定義
+# 英数字のみを許容し、20文字以内の必要がある
 scalar HandleString
 # ユーザのスクリーンネーム用の文字列スカラー型を利用するための定義
+# 任意の文字を許容し、50文字以内の必要がある
 scalar ScreenNameString
 # ユーザの自己紹介用の文字列スカラー型を利用するための定義
+# 400文字以内の必要がある
 scalar BioString
 # タイトル用の文字列スカラー型を利用するための定義
+#
 scalar TitleString
 # 本文用の文字列スカラー型を利用するための定義
 scalar BodyString
