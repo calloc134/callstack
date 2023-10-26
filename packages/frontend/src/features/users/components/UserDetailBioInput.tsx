@@ -31,8 +31,8 @@ const UserDetailBioInput = ({ bio, onClose }: { bio: string; onClose: () => void
     }
 
     // 50文字以上の場合はエラーを表示
-    if (input_ref.current?.value?.length > 50) {
-      toast.error("自己紹介文は50文字以内で入力してください。");
+    if (input_ref.current?.value?.length > 400) {
+      toast.error("自己紹介文は400文字以内で入力してください。");
       return;
     }
 
