@@ -21,21 +21,12 @@ const UserDetailFragment = graphql(`
   }
 `);
 
-// 自分のプロフィールを更新するためのミューテーションを定義
-const UpdateMyProfileMutation = graphql(`
-  mutation UpdateMyProfileMutation($input: UpdateUserInput!) {
-    updateMyUser(input: $input) {
-      ...UserDetailFragment
-    }
-  }
-`);
-
 const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; user_frag: FragmentType<typeof UserDetailFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
   const user = useFragment(UserDetailFragment, user_frag);
 
   // スクリーンネーム用のモーダル用のフックを実行
-  const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange } = useDisclosure();
+  const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange, onClose: sc_onClose } = useDisclosure();
   // ハンドル用のモーダル用のフックを実行
   const { isOpen: hd_isOpen, onOpen: hd_onOpen, onOpenChange: hd_onOpenChange } = useDisclosure();
   // 自己紹介文用のモーダル用のフックを実行
@@ -80,7 +71,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
             {is_myself && (
               <>
                 <Modal isOpen={sc_isOpen} onOpenChange={sc_onOpenChange}>
-                  <UserDetailScreenNameInput screen_name={user.screen_name} />
+                  <UserDetailScreenNameInput screen_name={user.screen_name} onClose={sc_onClose} />
                 </Modal>
               </>
             )}
