@@ -116,17 +116,7 @@ const UrqlProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     // urql用のprovider
-    <Provider value={urql_client}>
-      <>
-        {children}
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            duration: 5000,
-          }}
-        />
-      </>
-    </Provider>
+    <Provider value={urql_client}>{children}</Provider>
   );
 };
 

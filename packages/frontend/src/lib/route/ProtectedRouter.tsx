@@ -24,12 +24,6 @@ export const ProtectedRouter = () => {
     return (
       <div className="flex flex-col items-center justify-center">
         <Spinner label="認証中..." color="warning" />
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            duration: 5000,
-          }}
-        />
       </div>
     );
   }
