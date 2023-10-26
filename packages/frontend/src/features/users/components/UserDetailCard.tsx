@@ -1,9 +1,7 @@
 import { graphql } from "src/lib/generated/gql";
-import { Card, CardBody, CardFooter, Image, Spacer, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
-import { useMutation } from "urql";
+import { Card, CardBody, CardFooter, Image, Spacer, Modal, useDisclosure } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
-import { Link } from "@tanstack/react-router";
-import { PhotoUp } from "tabler-icons-react";
+import { UserDetailScreenNameInput } from "./UserDetailScreenNameInput";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -33,9 +31,6 @@ const UpdateMyProfileMutation = graphql(`
 const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; user_frag: FragmentType<typeof UserDetailFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
   const user = useFragment(UserDetailFragment, user_frag);
-
-  // プロフィール更新用ミューテーションのフックを実行
-  const [result, executeMutation] = useMutation(UpdateMyProfileMutation);
 
   // スクリーンネーム用のモーダル用のフックを実行
   const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange } = useDisclosure();
@@ -79,15 +74,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
             {is_myself && (
               <>
                 <Modal isOpen={sc_isOpen} onOpenChange={sc_onOpenChange}>
-                  <ModalContent>
-                    <ModalHeader>プロフィールを編集</ModalHeader>
-                    <ModalBody>
-                      <p>プロフィールを編集する</p>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="primary">保存</Button>
-                    </ModalFooter>
-                  </ModalContent>
+                  <UserDetailScreenNameInput screen_name={user.screen_name} />
                 </Modal>
               </>
             )}
