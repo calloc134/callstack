@@ -60,7 +60,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
               </p>
             </div>
             <div className="flex col-span-4 md:col-span-10">
-              <p className={`text-xl ${is_myself ? "cursor-pointer hover:opacity-60" : ""}`} onClick={bio_onOpen}>
+              <p className={`text-xl ${is_myself ? "cursor-pointer hover:opacity-60 whitespace-pre-line" : ""}`} onClick={bio_onOpen}>
                 {user.bio}
               </p>
             </div>
