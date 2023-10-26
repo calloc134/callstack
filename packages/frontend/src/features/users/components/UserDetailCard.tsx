@@ -37,8 +37,8 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   // プロフィール更新用ミューテーションのフックを実行
   const [result, executeMutation] = useMutation(UpdateMyProfileMutation);
 
-  // モーダル用のフックを実行
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // スクリーンネーム用のモーダル用のフックを実行
+  const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange } = useDisclosure();
 
   // 現在のログインユーザが自分自身かどうかを判定
   const is_myself = my_user_uuid === user.user_uuid;
@@ -46,25 +46,31 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-row justify-between gap-2">
-        <Image src="https://picsum.photos/200" radius="full" width={200} className="shadow-md" />
-        {is_myself && (
-          <Button color="primary" variant="shadow" radius="full" isIconOnly className="rounded-full hover:-translate-y-1 -translate-x-8">
-            <input type="file" className="absolute opacity-0 w-full h-full" />
-            <PhotoUp />
-          </Button>
-        )}
-        <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
+        <div className={`flex relative rounded-full ${is_myself ? "cursor-pointer hover:scale-105 duration-75" : ""}`}>
+          <Image src="https://picsum.photos/200" removeWrapper radius="full" width={200} className="shadow-md" />
+          {is_myself && <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} />}
+        </div>
+        <div className="flex relative">
+          <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
+          {is_myself && <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} />}
+        </div>
       </div>
       <Spacer y={6} />
       <Card isBlurred className="w-full bg-secondary" shadow="sm">
         <CardBody>
           <div className="flex">
             <div className="flex flex-col justify-star">
-              <h1 className="text-2xl font-bold">{user.screen_name}</h1>
-              <p className="text-xl">@{user.handle}</p>
+              <h1 className={`text-2xl font-bold ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={sc_onOpen}>
+                {user.screen_name}
+              </h1>
+              <p className={`text-xl ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={sc_onOpen}>
+                @{user.handle}
+              </p>
             </div>
             <div className="flex">
-              <p className="text-xl">{user.bio}</p>
+              <p className="text-xl" onClick={sc_onOpen}>
+                {user.bio}
+              </p>
             </div>
           </div>
         </CardBody>
@@ -72,10 +78,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
           <div className="flex flex-row">
             {is_myself && (
               <>
-                <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1" onPress={onOpen}>
-                  プロフィールを編集
-                </Button>
-                <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <Modal isOpen={sc_isOpen} onOpenChange={sc_onOpenChange}>
                   <ModalContent>
                     <ModalHeader>プロフィールを編集</ModalHeader>
                     <ModalBody>
