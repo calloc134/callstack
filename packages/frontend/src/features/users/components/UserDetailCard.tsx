@@ -2,6 +2,7 @@ import { graphql } from "src/lib/generated/gql";
 import { Card, CardBody, CardFooter, Image, Spacer, Modal, useDisclosure } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserDetailScreenNameInput } from "./UserDetailScreenNameInput";
+import { UserDetailHandleInput } from "./UserDetailHandleInput";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -34,6 +35,8 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
 
   // スクリーンネーム用のモーダル用のフックを実行
   const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange } = useDisclosure();
+  // ハンドル用のモーダル用のフックを実行
+  const { isOpen: hd_isOpen, onOpen: hd_onOpen, onOpenChange: hd_onOpenChange } = useDisclosure();
 
   // 現在のログインユーザが自分自身かどうかを判定
   const is_myself = my_user_uuid === user.user_uuid;
@@ -58,7 +61,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
               <h1 className={`text-2xl font-bold ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={sc_onOpen}>
                 {user.screen_name}
               </h1>
-              <p className={`text-xl ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={sc_onOpen}>
+              <p className={`text-xl ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={hd_onOpen}>
                 @{user.handle}
               </p>
             </div>
@@ -75,6 +78,13 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
               <>
                 <Modal isOpen={sc_isOpen} onOpenChange={sc_onOpenChange}>
                   <UserDetailScreenNameInput screen_name={user.screen_name} />
+                </Modal>
+              </>
+            )}
+            {is_myself && (
+              <>
+                <Modal isOpen={hd_isOpen} onOpenChange={hd_onOpenChange}>
+                  <UserDetailHandleInput screen_name={user.handle} />
                 </Modal>
               </>
             )}
