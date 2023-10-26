@@ -57,7 +57,6 @@ const UserCard = ({ user: user_flag }: { user: FragmentType<typeof UserFragment>
           </div>
         </CardFooter>
       </Card>
-      <Spacer x={12} />
     </div>
   );
 };
