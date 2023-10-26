@@ -94,7 +94,7 @@ export const useAuthMock = <TOptions extends AuthMockPluginOptions>(options: TOp
       algorithm: "ES384", // 使用するアルゴリズム
       audience: audience, // オーディエンスを指定する
       issuer: issuer, // 発行者を指定する
-      expiresIn: "1h", // 有効期限を指定する
+      expiresIn: "24h", // 有効期限を指定する
       keyid: "dummy", // キーIDを指定する
     });
 
