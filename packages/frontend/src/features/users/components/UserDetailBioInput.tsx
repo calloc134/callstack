@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { ModalContent, ModalBody, ModalHeader, ModalFooter, Button, Textarea } from "@nextui-org/react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useMutation } from "urql";
 import { graphql } from "src/lib/generated/gql";
 

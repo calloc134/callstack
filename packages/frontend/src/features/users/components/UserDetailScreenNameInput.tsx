@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { ModalContent, ModalBody, ModalHeader, ModalFooter, Button, Input } from "@nextui-org/react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useMutation } from "urql";
 import { graphql } from "src/lib/generated/gql";
 
@@ -64,7 +64,6 @@ const UserDetailScreenNameInput = ({ screen_name, onClose }: { screen_name: stri
           <Button color="primary" type="submit">
             保存
           </Button>
-          <Toaster />
         </ModalFooter>
       </form>
     </ModalContent>
