@@ -26,13 +26,19 @@ const UserDetailHandleInput = ({ handle, onClose }: { handle: string; onClose: (
 
     // 参照が取得できなかった場合はエラーを表示
     if (input_ref === null || input_ref.current === null) {
-      toast.error("エラーが発生しました");
+      toast.error("エラーが発生しました。");
       return;
     }
 
     // 文字数でバリデーションを行う
     if (input_ref.current?.value?.length > 20) {
-      toast.error("ハンドルは20文字以内で入力してください");
+      toast.error("ハンドルは20文字以内で入力してください。");
+      return;
+    }
+
+    // 英数字のみを許容する
+    if (!input_ref.current?.value?.match(/^[a-z0-9_]+$/)) {
+      toast.error("ハンドルは英数字のみで入力してください。");
       return;
     }
 

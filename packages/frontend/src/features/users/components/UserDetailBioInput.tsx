@@ -26,7 +26,13 @@ const UserDetailBioInput = ({ bio, onClose }: { bio: string; onClose: () => void
 
     // 参照が取得できなかった場合はエラーを表示
     if (input_ref === null || input_ref.current === null) {
-      toast.error("エラーが発生しました");
+      toast.error("エラーが発生しました。");
+      return;
+    }
+
+    // 50文字以上の場合はエラーを表示
+    if (input_ref.current?.value?.length > 50) {
+      toast.error("自己紹介文は50文字以内で入力してください。");
       return;
     }
 
@@ -38,11 +44,11 @@ const UserDetailBioInput = ({ bio, onClose }: { bio: string; onClose: () => void
     });
 
     if (result.error) {
-      toast.error("エラーが発生しました");
+      toast.error("エラーが発生しました。");
       return;
     }
 
-    toast.success("自己紹介文を更新しました");
+    toast.success("自己紹介文を更新しました。");
     onClose();
     return;
   };

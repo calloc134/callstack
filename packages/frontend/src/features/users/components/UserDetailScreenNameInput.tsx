@@ -26,13 +26,13 @@ const UserDetailScreenNameInput = ({ screen_name, onClose }: { screen_name: stri
 
     // 参照が取得できなかった場合はエラーを表示
     if (input_ref === null || input_ref.current === null) {
-      toast.error("エラーが発生しました");
+      toast.error("エラーが発生しました。");
       return;
     }
 
     // 文字数でバリデーションを行う
-    if (input_ref.current?.value?.length > 20) {
-      toast.error("スクリーンネームは20文字以内で入力してください");
+    if (input_ref.current?.value?.length > 50) {
+      toast.error("スクリーンネームは50文字以内で入力してください。");
       return;
     }
 
@@ -44,11 +44,11 @@ const UserDetailScreenNameInput = ({ screen_name, onClose }: { screen_name: stri
     });
 
     if (result.error) {
-      toast.error("エラーが発生しました");
+      toast.error("エラーが発生しました。");
       return;
     }
 
-    toast.success("スクリーンネームを更新しました");
+    toast.success("スクリーンネームを更新しました。");
     onClose();
     return;
   };
