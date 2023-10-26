@@ -1,12 +1,56 @@
 import { useRef } from "react";
 import { ModalContent, ModalBody, ModalHeader, ModalFooter, Button, Input } from "@nextui-org/react";
+import toast, { Toaster } from "react-hot-toast";
+import { useMutation } from "urql";
+import { graphql } from "src/lib/generated/gql";
 
-const UserDetailHandleInput = ({ handle }: { handle: string }) => {
+// 自分のプロフィールのハンドルを更新するためのミューテーションを定義
+const UpdateMyHandleMutation = graphql(`
+  mutation UpdateMyHandleMutation($input: UpdateUserInput!) {
+    updateMyUser(input: $input) {
+      handle
+    }
+  }
+`);
+
+const UserDetailHandleInput = ({ handle, onClose }: { handle: string; onClose: () => void }) => {
+  // フォームの入力値を取得するための参照を取得するフックを実行
   const input_ref = useRef<HTMLInputElement>(null);
 
-  const handle_submit = (e: React.FormEvent<HTMLFormElement>) => {
+  // ハンドルのミューテーション用のフックを実行
+  const [, update_my_profile] = useMutation(UpdateMyHandleMutation);
+
+  // フォームが送信されたときの処理
+  const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(input_ref.current?.value);
+
+    // 参照が取得できなかった場合はエラーを表示
+    if (input_ref === null || input_ref.current === null) {
+      toast.error("エラーが発生しました");
+      return;
+    }
+
+    // 文字数でバリデーションを行う
+    if (input_ref.current?.value?.length > 20) {
+      toast.error("ハンドルは20文字以内で入力してください");
+      return;
+    }
+
+    // ミューテーションを実行
+    const result = await update_my_profile({
+      input: {
+        handle: input_ref.current.value,
+      },
+    });
+
+    if (result.error) {
+      toast.error("エラーが発生しました");
+      return;
+    }
+
+    toast.success("ハンドルを更新しました");
+    onClose();
+    return;
   };
 
   return (

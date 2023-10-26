@@ -28,9 +28,9 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   // スクリーンネーム用のモーダル用のフックを実行
   const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange, onClose: sc_onClose } = useDisclosure();
   // ハンドル用のモーダル用のフックを実行
-  const { isOpen: hd_isOpen, onOpen: hd_onOpen, onOpenChange: hd_onOpenChange } = useDisclosure();
+  const { isOpen: hd_isOpen, onOpen: hd_onOpen, onOpenChange: hd_onOpenChange, onClose: hd_onClose } = useDisclosure();
   // 自己紹介文用のモーダル用のフックを実行
-  const { isOpen: bio_isOpen, onOpen: bio_onOpen, onOpenChange: bio_onOpenChange } = useDisclosure();
+  const { isOpen: bio_isOpen, onOpen: bio_onOpen, onOpenChange: bio_onOpenChange, onClose: bio_onClose } = useDisclosure();
 
   // 現在のログインユーザが自分自身かどうかを判定
   const is_myself = my_user_uuid === user.user_uuid;
@@ -78,14 +78,14 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
             {is_myself && (
               <>
                 <Modal isOpen={hd_isOpen} onOpenChange={hd_onOpenChange}>
-                  <UserDetailHandleInput handle={user.handle} />
+                  <UserDetailHandleInput handle={user.handle} onClose={hd_onClose} />
                 </Modal>
               </>
             )}
             {is_myself && (
               <>
                 <Modal isOpen={bio_isOpen} onOpenChange={bio_onOpenChange}>
-                  <UserDetailBioInput bio={user.bio} />
+                  <UserDetailBioInput bio={user.bio} onClose={bio_onClose} />
                 </Modal>
               </>
             )}

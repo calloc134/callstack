@@ -4,9 +4,9 @@ import toast, { Toaster } from "react-hot-toast";
 import { useMutation } from "urql";
 import { graphql } from "src/lib/generated/gql";
 
-// 自分のプロフィールを更新するためのミューテーションを定義
-const UpdateMyProfileMutation = graphql(`
-  mutation UpdateMyProfileMutation($input: UpdateUserInput!) {
+// 自分のプロフィールのスクリーンネームを更新するためのミューテーションを定義
+const UpdateMyScreenNameMutation = graphql(`
+  mutation UpdateMyScreenNameMutation($input: UpdateUserInput!) {
     updateMyUser(input: $input) {
       screen_name
     }
@@ -14,20 +14,23 @@ const UpdateMyProfileMutation = graphql(`
 `);
 
 const UserDetailScreenNameInput = ({ screen_name, onClose }: { screen_name: string; onClose: () => void }) => {
+  // フォームの入力値を取得するための参照を取得するフックを実行
   const input_ref = useRef<HTMLInputElement>(null);
 
   // スクリーンネームのミューテーション用のフックを実行
-  const [, update_my_profile] = useMutation(UpdateMyProfileMutation);
+  const [, update_my_profile] = useMutation(UpdateMyScreenNameMutation);
 
+  // フォームが送信されたときの処理
   const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 文字数でバリデーションを行う
+    // 参照が取得できなかった場合はエラーを表示
     if (input_ref === null || input_ref.current === null) {
       toast.error("エラーが発生しました");
       return;
     }
 
+    // 文字数でバリデーションを行う
     if (input_ref.current?.value?.length > 20) {
       toast.error("スクリーンネームは20文字以内で入力してください");
       return;
