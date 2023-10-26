@@ -26,10 +26,10 @@ const UserCard = ({ user: user_flag }: { user: FragmentType<typeof UserFragment>
           height={200}
           radius="full"
           removeWrapper
-          className="shadow-md absolute top-1/2 -left-8 transform -translate-y-1/2"
+          className="shadow-md absolute top-1/2 -left-16 transform -translate-y-1/2"
         />
         <div className="flex flex-row justify-between">
-          <Spacer x={48} />
+          <Spacer x={36} />
           <CardBody>
             <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
               <div className="flex flex-col justify-start col-span-6">

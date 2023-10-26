@@ -3,6 +3,7 @@ import { Card, CardBody, CardFooter, Image, Spacer, Modal, useDisclosure } from 
 import { FragmentType, useFragment } from "src/lib/generated";
 import { UserDetailScreenNameInput } from "./UserDetailScreenNameInput";
 import { UserDetailHandleInput } from "./UserDetailHandleInput";
+import { UserDetailBioInput } from "./UserDetailBioInput";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -37,6 +38,8 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange } = useDisclosure();
   // ハンドル用のモーダル用のフックを実行
   const { isOpen: hd_isOpen, onOpen: hd_onOpen, onOpenChange: hd_onOpenChange } = useDisclosure();
+  // 自己紹介文用のモーダル用のフックを実行
+  const { isOpen: bio_isOpen, onOpen: bio_onOpen, onOpenChange: bio_onOpenChange } = useDisclosure();
 
   // 現在のログインユーザが自分自身かどうかを判定
   const is_myself = my_user_uuid === user.user_uuid;
@@ -56,17 +59,17 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
       <Spacer y={6} />
       <Card isBlurred className="w-full bg-secondary" shadow="sm">
         <CardBody>
-          <div className="flex">
-            <div className="flex flex-col justify-star">
-              <h1 className={`text-2xl font-bold ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={sc_onOpen}>
+          <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
+            <div className="flex flex-col justify-star col-span-3">
+              <h1 className={`text-2xl font-bold line-clamp-3 ${is_myself ? "cursor-pointer hover:opacity-60" : ""}`} onClick={sc_onOpen}>
                 {user.screen_name}
               </h1>
-              <p className={`text-xl ${is_myself ? "cursor-pointer hover:scale-105 hover:opacity-80 duration-75" : ""}`} onClick={hd_onOpen}>
+              <p className={`text-xl line-clamp-3 ${is_myself ? "cursor-pointer hover:opacity-60" : ""}`} onClick={hd_onOpen}>
                 @{user.handle}
               </p>
             </div>
-            <div className="flex">
-              <p className="text-xl" onClick={sc_onOpen}>
+            <div className="flex col-span-4 md:col-span-10">
+              <p className={`text-xl ${is_myself ? "cursor-pointer hover:opacity-60" : ""}`} onClick={bio_onOpen}>
                 {user.bio}
               </p>
             </div>
@@ -84,7 +87,14 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
             {is_myself && (
               <>
                 <Modal isOpen={hd_isOpen} onOpenChange={hd_onOpenChange}>
-                  <UserDetailHandleInput screen_name={user.handle} />
+                  <UserDetailHandleInput handle={user.handle} />
+                </Modal>
+              </>
+            )}
+            {is_myself && (
+              <>
+                <Modal isOpen={bio_isOpen} onOpenChange={bio_onOpenChange}>
+                  <UserDetailBioInput bio={user.bio} />
                 </Modal>
               </>
             )}

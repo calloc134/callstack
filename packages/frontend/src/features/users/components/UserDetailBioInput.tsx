@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { ModalContent, ModalBody, ModalHeader, ModalFooter, Button, Input } from "@nextui-org/react";
+import { ModalContent, ModalBody, ModalHeader, ModalFooter, Button, Textarea } from "@nextui-org/react";
 
-const UserDetailHandleInput = ({ handle }: { handle: string }) => {
+const UserDetailBioInput = ({ bio }: { bio: string }) => {
   const input_ref = useRef<HTMLInputElement>(null);
 
   const handle_submit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -12,9 +12,9 @@ const UserDetailHandleInput = ({ handle }: { handle: string }) => {
   return (
     <ModalContent>
       <form onSubmit={handle_submit}>
-        <ModalHeader>ハンドルを編集</ModalHeader>
+        <ModalHeader>自己紹介文を編集</ModalHeader>
         <ModalBody>
-          <Input defaultValue={handle} ref={input_ref} />
+          <Textarea defaultValue={bio} ref={input_ref} />
         </ModalBody>
         <ModalFooter>
           <Button color="primary" type="submit">
@@ -26,4 +26,4 @@ const UserDetailHandleInput = ({ handle }: { handle: string }) => {
   );
 };
 
-export { UserDetailHandleInput };
+export { UserDetailBioInput };
