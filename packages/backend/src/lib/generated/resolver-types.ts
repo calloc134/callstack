@@ -18,6 +18,7 @@ export type Scalars = {
   BioString: { input: string; output: string; }
   BodyString: { input: string; output: string; }
   DateTime: { input: Date; output: Date; }
+  File: { input: File; output: File; }
   HandleString: { input: string; output: string; }
   NonEmptyString: { input: string; output: string; }
   NonNegativeInt: { input: number; output: number; }
@@ -28,13 +29,13 @@ export type Scalars = {
 
 export type Mutation = {
   createPost: Post;
-  createPresignedURLForUploadImage: Scalars['NonEmptyString']['output'];
   deleteMyUser: User;
   deletePost: Post;
   deleteUserForAdmin: User;
   updateMyUser: User;
   updatePost: Post;
   updateUserForAdmin: User;
+  uploadProfileImage: User;
 };
 
 
@@ -64,6 +65,11 @@ export type MutationUpdateUserForAdminArgs = {
   handle?: InputMaybe<Scalars['HandleString']['input']>;
   screen_name?: InputMaybe<Scalars['ScreenNameString']['input']>;
   user_uuid: Scalars['UUID']['input'];
+};
+
+
+export type MutationUploadProfileImageArgs = {
+  file: Scalars['File']['input'];
 };
 
 export type Post = {
@@ -118,7 +124,6 @@ export type UpdatePostInput = {
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['BioString']['input']>;
   handle?: InputMaybe<Scalars['HandleString']['input']>;
-  image_url?: InputMaybe<Scalars['NonEmptyString']['input']>;
   screen_name?: InputMaybe<Scalars['ScreenNameString']['input']>;
 };
 
@@ -215,6 +220,7 @@ export type ResolversTypes = {
   BodyString: ResolverTypeWrapper<Scalars['BodyString']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  File: ResolverTypeWrapper<Scalars['File']['output']>;
   HandleString: ResolverTypeWrapper<Scalars['HandleString']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   NonEmptyString: ResolverTypeWrapper<Scalars['NonEmptyString']['output']>;
@@ -237,6 +243,7 @@ export type ResolversParentTypes = {
   BodyString: Scalars['BodyString']['output'];
   Boolean: Scalars['Boolean']['output'];
   DateTime: Scalars['DateTime']['output'];
+  File: Scalars['File']['output'];
   HandleString: Scalars['HandleString']['output'];
   Mutation: {};
   NonEmptyString: Scalars['NonEmptyString']['output'];
@@ -270,19 +277,23 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export interface FileScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['File'], any> {
+  name: 'File';
+}
+
 export interface HandleStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['HandleString'], any> {
   name: 'HandleString';
 }
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
-  createPresignedURLForUploadImage?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>;
   deleteMyUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   deletePost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'post_uuid'>>;
   deleteUserForAdmin?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserForAdminArgs, 'user_uuid'>>;
   updateMyUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateMyUserArgs, 'input'>>;
   updatePost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'input' | 'post_uuid'>>;
   updateUserForAdmin?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserForAdminArgs, 'user_uuid'>>;
+  uploadProfileImage?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUploadProfileImageArgs, 'file'>>;
 };
 
 export interface NonEmptyStringScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['NonEmptyString'], any> {
@@ -341,6 +352,7 @@ export type Resolvers<ContextType = GraphQLContext> = {
   BioString?: GraphQLScalarType;
   BodyString?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
+  File?: GraphQLScalarType;
   HandleString?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   NonEmptyString?: GraphQLScalarType;

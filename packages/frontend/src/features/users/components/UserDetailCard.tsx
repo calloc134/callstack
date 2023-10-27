@@ -4,6 +4,7 @@ import { FragmentType, useFragment } from "src/lib/generated";
 import { UserDetailScreenNameInput } from "./UserDetailScreenNameInput";
 import { UserDetailHandleInput } from "./UserDetailHandleInput";
 import { UserDetailBioInput } from "./UserDetailBioInput";
+import { UserDetailProfileImageInput } from "./UserDetailProfileImageInput";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -38,10 +39,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-row justify-between gap-2">
-        <div className={`flex relative rounded-full ${is_myself ? "cursor-pointer hover:scale-105 duration-75" : ""}`}>
-          <Image src="https://picsum.photos/200" removeWrapper radius="full" width={200} className="shadow-md" />
-          {is_myself && <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} />}
-        </div>
+        <UserDetailProfileImageInput is_myself={is_myself} />
         <div className="flex relative">
           <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
           {is_myself && <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} />}

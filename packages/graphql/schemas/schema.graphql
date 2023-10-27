@@ -28,6 +28,9 @@ scalar TitleString
 # 本文用の文字列スカラー型を利用するための定義
 scalar BodyString
 
+# ファイルを利用するためのスカラーの定義
+scalar File
+
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
 
@@ -60,7 +63,6 @@ input UpdateUserInput {
   handle: HandleString
   screen_name: ScreenNameString
   bio: BioString
-  image_url: NonEmptyString
 }
 
 # 投稿をアップデートする際の入力型の定義
@@ -77,8 +79,8 @@ type Mutation {
   # ユーザを削除するミューテーション 管理者用
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
-  # 画像をアップロードするためのプリサインドURLを作成するミューテーション
-  createPresignedURLForUploadImage: NonEmptyString! @auth(role: USER)
+  # 自分のユーザの画像をアップロードするためのミューテーション
+  uploadProfileImage(file: File!): User! @auth(role: USER)
 
   # 自分のユーザの情報を更新するミューテーション
   updateMyUser(input: UpdateUserInput!): User! @auth(role: USER)

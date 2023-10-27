@@ -6,27 +6,50 @@ import { withErrorHandling } from "src/lib/error/handling";
 import { GraphQLErrorWithCode } from "src/lib/error/error";
 import { Client } from "minio";
 import { v4 as uuidv4 } from "uuid";
-import { is_dev, minio_bucket } from "src/env";
+import { minio_bucket, minio_endpoint } from "src/env";
+import Jimp = require("jimp");
 
 // prismaのupdateは、undefinedな値を渡すと、そのフィールドを更新しないことに留意する
 const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // createPresignedURLForUploadImageフィールドのリゾルバー
-  createPresignedURLForUploadImage: async (_parent, _args, context) => {
-    const safe = withErrorHandling(async (minio: Client) => {
-      // uuidを生成
-      const uuid = uuidv4();
+  // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  uploadProfileImage: async (_parent, args, context) => {
+    const safe = withErrorHandling(async (currentUser_uuid: string, prisma: PrismaClient, minioClient: Client, file: File) => {
+      // ファイルのアレイバッファを取得
+      const fileArrayBuffer = await file.arrayBuffer();
 
-      // プリサインドURLを作成
-      const result = await minio.presignedPutObject(minio_bucket, uuid, 60 * 60 * 24);
+      // 画像をjimpで開く
+      const image = await Jimp.read(Buffer.from(fileArrayBuffer));
 
-      // プリサインドURLを返す
+      // 画像のサイズを変更
+      image.cover(200, 200);
+
+      // uuid v4を生成
+      const filename = `${uuidv4()}.png`;
+
+      // ファイルをアップロード
+      await minioClient.putObject(minio_bucket, filename, await image.getBufferAsync(Jimp.MIME_PNG));
+
+      // ファイルのURLを生成
+      const url = minio_endpoint + "/" + minio_bucket + "/" + filename;
+
+      // ユーザーのプロフィール画像を更新
+      const result = await prisma.user.update({
+        where: {
+          user_uuid: currentUser_uuid,
+        },
+        data: {
+          image_url: url,
+        },
+      });
+
       return result;
     });
 
-    // コンテキストからminioクライアントを取得
-    const { minio } = context;
+    // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
+    const { currentUser, prisma, minio: minioClient } = context;
 
-    return await safe(minio);
+    return await safe(currentUser.user_uuid, prisma, minioClient, args.file);
   },
 
   // updateUserForAdminフィールドのリゾルバー
@@ -86,17 +109,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   updateMyUser: async (_parent, args, context) => {
     const safe = withErrorHandling(
-      async (
-        currentUser_uuid: string,
-        prisma: PrismaClient,
-        { bio, handle, screen_name }: { bio?: string; handle?: string; screen_name?: string; image_url?: string }
-      ) => {
-        // 画像URLが存在し、かつ本番環境である場合
-        if (is_dev === false && args.input.image_url) {
-          // 画像URLが正規のURLであるかチェック
-          // TODO
-        }
-
+      async (currentUser_uuid: string, prisma: PrismaClient, { bio, handle, screen_name }: { bio?: string; handle?: string; screen_name?: string }) => {
         // UUIDからユーザーを取得
         const result = await prisma.user.update({
           where: {
@@ -113,7 +126,7 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     );
 
     // 引数からミューテーションの引数を取得
-    const { bio: maybeBio, handle: maybeHandle, screen_name: maybeScreenName, image_url: mayBeImageUrl } = args.input;
+    const { bio: maybeBio, handle: maybeHandle, screen_name: maybeScreenName } = args.input;
 
     // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
     const { prisma, currentUser } = context;
@@ -121,9 +134,8 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
     const bio = maybeBio ?? undefined;
     const handle = maybeHandle ?? undefined;
     const screen_name = maybeScreenName ?? undefined;
-    const image_url = mayBeImageUrl ?? undefined;
 
-    return await safe(currentUser.user_uuid, prisma, { bio, handle, screen_name, image_url });
+    return await safe(currentUser.user_uuid, prisma, { bio, handle, screen_name });
   },
 
   // deleteMyUserフィールドのリゾルバー

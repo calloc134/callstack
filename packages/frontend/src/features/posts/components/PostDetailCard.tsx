@@ -34,8 +34,8 @@ const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDet
             </div>
           </CardHeader>
           <CardBody>
-            <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12 gap-2">
-              <div className="flex justify-between col-span-4 md:col-span-10">
+            <div className="flex">
+              <div className="flex whitespace-pre-line bg-background rounded-lg">
                 <p className="text-xl">{post.body}</p>
               </div>
             </div>
@@ -43,7 +43,7 @@ const PostDetailCard = ({ post: post_frag }: { post: FragmentType<typeof PostDet
           <CardFooter className="justify-end"></CardFooter>
         </Card>
         <Card isBlurred className="col-span-1 h-full" shadow="md">
-          <CardBody className="flex flex-col justify-center">
+          <CardBody className="flex flex-col justify-start">
             <Button radius="full" className="flex flex-row gap-2">
               <Heart size={24} strokeWidth={1.5} />
               <p>10</p>

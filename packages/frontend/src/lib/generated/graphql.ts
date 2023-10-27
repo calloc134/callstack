@@ -17,6 +17,7 @@ export type Scalars = {
   BioString: { input: string; output: string; }
   BodyString: { input: string; output: string; }
   DateTime: { input: Date; output: Date; }
+  File: { input: File; output: File; }
   HandleString: { input: string; output: string; }
   NonEmptyString: { input: string; output: string; }
   NonNegativeInt: { input: number; output: number; }
@@ -27,13 +28,13 @@ export type Scalars = {
 
 export type Mutation = {
   createPost: Post;
-  createPresignedURLForUploadImage: Scalars['NonEmptyString']['output'];
   deleteMyUser: User;
   deletePost: Post;
   deleteUserForAdmin: User;
   updateMyUser: User;
   updatePost: Post;
   updateUserForAdmin: User;
+  uploadProfileImage: User;
 };
 
 
@@ -63,6 +64,11 @@ export type MutationUpdateUserForAdminArgs = {
   handle?: InputMaybe<Scalars['HandleString']['input']>;
   screen_name?: InputMaybe<Scalars['ScreenNameString']['input']>;
   user_uuid: Scalars['UUID']['input'];
+};
+
+
+export type MutationUploadProfileImageArgs = {
+  file: Scalars['File']['input'];
 };
 
 export type Post = {
@@ -117,7 +123,6 @@ export type UpdatePostInput = {
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['BioString']['input']>;
   handle?: InputMaybe<Scalars['HandleString']['input']>;
-  image_url?: InputMaybe<Scalars['NonEmptyString']['input']>;
   screen_name?: InputMaybe<Scalars['ScreenNameString']['input']>;
 };
 
@@ -177,6 +182,13 @@ export type UpdateMyHandleMutationMutationVariables = Exact<{
 
 export type UpdateMyHandleMutationMutation = { updateMyUser: { handle: string } };
 
+export type UpdateMyProfileImageMutationMutationVariables = Exact<{
+  file: Scalars['File']['input'];
+}>;
+
+
+export type UpdateMyProfileImageMutationMutation = { uploadProfileImage: { image_url: string } };
+
 export type UpdateMyScreenNameMutationMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
@@ -211,6 +223,7 @@ export const GetPostDetailQueryDocument = {"kind":"Document","definitions":[{"ki
 export const GetAllPostsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllPostsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getAllPosts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserPopupFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_uuid"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}},{"kind":"Field","name":{"kind":"Name","value":"screen_name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Post"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"post_uuid"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserPopupFragment"}}]}}]}}]} as unknown as DocumentNode<GetAllPostsQueryQuery, GetAllPostsQueryQueryVariables>;
 export const UpdateMyBioMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateMyBioMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateMyUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]}}]} as unknown as DocumentNode<UpdateMyBioMutationMutation, UpdateMyBioMutationMutationVariables>;
 export const UpdateMyHandleMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateMyHandleMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateMyUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]} as unknown as DocumentNode<UpdateMyHandleMutationMutation, UpdateMyHandleMutationMutationVariables>;
+export const UpdateMyProfileImageMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateMyProfileImageMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"file"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"File"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadProfileImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"file"},"value":{"kind":"Variable","name":{"kind":"Name","value":"file"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image_url"}}]}}]}}]} as unknown as DocumentNode<UpdateMyProfileImageMutationMutation, UpdateMyProfileImageMutationMutationVariables>;
 export const UpdateMyScreenNameMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateMyScreenNameMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateMyUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"screen_name"}}]}}]}}]} as unknown as DocumentNode<UpdateMyScreenNameMutationMutation, UpdateMyScreenNameMutationMutationVariables>;
 export const GetMeQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMeQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getMyUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_uuid"}}]}}]}}]} as unknown as DocumentNode<GetMeQueryQuery, GetMeQueryQueryVariables>;
 export const UserDetailQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserDetailQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uuid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUserByUUID"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uuid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uuid"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserDetailFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostPopupFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Post"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"post_uuid"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserDetailFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_uuid"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}},{"kind":"Field","name":{"kind":"Name","value":"screen_name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostPopupFragment"}}]}}]}}]} as unknown as DocumentNode<UserDetailQueryQuery, UserDetailQueryQueryVariables>;
