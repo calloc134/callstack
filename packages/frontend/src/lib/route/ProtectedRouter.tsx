@@ -3,7 +3,7 @@ import { Outlet } from "@tanstack/react-router";
 import { useAuthn } from "src/lib/provider/authn/useAuthn";
 import { hostname } from "src/env";
 import { Spinner } from "@nextui-org/react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export const ProtectedRouter = () => {
   // Logtoフックより認証状態とログイン関数を取得

@@ -1,7 +1,7 @@
 import { ReactNode, useState, useCallback } from "react";
 import { Provider, Client, cacheExchange, fetchExchange, mapExchange, MapExchangeOpts } from "urql";
 import { authExchange, AuthUtilities, AuthConfig } from "@urql/exchange-auth";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { devtoolsExchange } from "@urql/devtools";
 
 import { is_dev, hostname, logto_api_resource } from "src/env";
