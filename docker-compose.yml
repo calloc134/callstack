@@ -230,8 +230,5 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    # ネットワークに接続
-    networks:
-      - traefik-public
     # コンテナが停止したら再起動
     restart: on-failure
