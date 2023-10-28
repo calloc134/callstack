@@ -42,7 +42,7 @@ module.exports = {
         },
         dark: {
           colors: {
-            default: "#54BAB9", // 中立的なデフォルト色
+            default: "#0a0f1c", // 中立的なデフォルト色
             background: "#000511", // より暗い背景
             foreground: "#FFFFFF", // 白い文字色
             primary: "#0e3765", // 主要な色で、強調したい場所に使用
