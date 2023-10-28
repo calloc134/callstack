@@ -63,15 +63,24 @@ services:
       - app-minio-network
       - traefik-public
     labels:
+      # traefikで公開する
       - "traefik.enable=true"
+      # ホスト名を指定
+      # 元オリジンのホスト名を指定
       - "traefik.http.routers.minio.rule=Host(`${HOSTNAME}`) && PathPrefix(`/${MINIO_BUCKET_NAME}/`)"
       - "traefik.http.routers.minio.service=minio"
+      # 9000番ポートを指定
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      # SSLを有効化
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
+      # ホスト名を指定
+      # minioadminサブドメインを指定
       - "traefik.http.routers.minio-admin.rule=Host(`minioadmin.${HOSTNAME}`)"
       - "traefik.http.routers.minio-admin.service=minio-admin"
+      # 9001番ポートを指定
       - "traefik.http.services.minio-admin.loadbalancer.server.port=9001"
+      # SSLを有効化
       - "traefik.http.routers.minio-admin.entrypoints=websecure"
       - "traefik.http.routers.minio-admin.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
@@ -112,15 +121,24 @@ services:
       - logto-db-network
       - traefik-public
     labels:
+      # traefikで公開する
       - "traefik.enable=true"
+      # ホスト名を指定
+      # authサブドメインを指定
       - "traefik.http.routers.logto_auth.rule=Host(`auth.${HOSTNAME}`)"
       - "traefik.http.routers.logto_auth.service=logto_auth"
+      # 3001番ポートを指定
       - "traefik.http.services.logto_auth.loadbalancer.server.port=3001"
+      # SSLを有効化
       - "traefik.http.routers.logto_auth.entrypoints=websecure"
       - "traefik.http.routers.logto_auth.tls.certresolver=letsencrypt"
+      # ホスト名を指定
+      # authadminサブドメインを指定
       - "traefik.http.routers.logto_admin.rule=Host(`authadmin.${HOSTNAME}`)"
       - "traefik.http.routers.logto_admin.service=logto_admin"
+      # 3002番ポートを指定
       - "traefik.http.services.logto_admin.loadbalancer.server.port=3002"
+      # SSLを有効化
       - "traefik.http.routers.logto_admin.entrypoints=websecure"
       - "traefik.http.routers.logto_admin.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
@@ -163,9 +181,14 @@ services:
       - app-minio-network
       - traefik-public
     labels:
+      # traefikで公開する
       - "traefik.enable=true"
+      # ホスト名を指定
+      # apiディレクトリを指定
       - "traefik.http.routers.backend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/`)"
+      # 6173番ポートを指定
       - "traefik.http.services.backend.loadbalancer.server.port=6173"
+      # SSLを有効化
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
@@ -202,9 +225,14 @@ services:
     networks:
       - traefik-public
     labels:
+      # traefikで公開する
       - "traefik.enable=true"
+      # ホスト名を指定
+      # ホームディレクトリを指定
       - "traefik.http.routers.frontend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/`)"
+      # 6000番ポートを指定
       - "traefik.http.services.frontend.loadbalancer.server.port=6000"
+      # SSLを有効化
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
     depends_on:
@@ -219,20 +247,30 @@ services:
     image: traefik:latest
     # traefikの環境変数を読み込む
     command:
+      # traefikのdockerプロバイダを有効化
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      # 80番ポートを指定
       - "--entrypoints.web.address=:80"
+      # 443番ポートを指定
       - "--entrypoints.websecure.address=:443"
+      # letsencryptを有効化
+      # httpチャレンジを有効化
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      # 環境変数より取得したメールアドレスを指定
       - "--certificatesresolvers.letsencrypt.acme.email=${CERTBOT_EMAIL}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/etc/letsencrypt/acme.json"
+      # ネットワークを指定
       - "--providers.docker.network=traefik-public"
     volumes:
+      # ホストのdockerソケットをマウント
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
+        # 読み取り専用でマウント
         read_only: true
+      # ホストのletsencryptディレクトリをマウント
       - type: bind
         source: /etc/letsencrypt
         target: /etc/letsencrypt

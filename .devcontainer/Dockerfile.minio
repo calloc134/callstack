@@ -1,7 +1,8 @@
 FROM quay.io/minio/minio:latest
 
+# developmentバケットの作成
 RUN mkdir -p /data/development
-RUN mkdir -p /data/.minio.sys/buckets/development
-COPY ./policy.json /data/.minio.sys/buckets/development/policy.json
+# RUN mkdir -p /data/.minio.sys/buckets/development
+# COPY ./policy.json /data/.minio.sys/buckets/development/policy.json
 
 ENTRYPOINT ["minio", "server", "/data", "--console-address", ":9001"]
