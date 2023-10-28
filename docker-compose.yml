@@ -3,12 +3,18 @@ version: "3.8"
 # ネットワークの作成
 networks:
   # 内部ネットワーク
-  # バックエンドとlogtoコンテナ、リバースプロキシのみ接続
-  app-ins-network:
-  # バックエンドとそれに対応するデータベース、minioのみ接続
+  # バックエンドとlogtoコンテナのみ接続
+  app-logto-network:
+  # バックエンドとそれに対応するデータベースのみ接続
   app-db-network:
+  # バックエンドとminioのみ接続
+  app-minio-network:
   # logtoとそれに対応するデータベースのみ接続
   logto-db-network:
+  # リバースプロキシで公開するネットワーク
+  traefik-public:
+    # リバースプロキシのネットワークを外部に公開
+    external: true
 
 # データベースのデータを格納するボリューム
 volumes:
@@ -55,7 +61,8 @@ services:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     networks:
-      - app-db-network
+      - app-minio-network
+      - traefik-public
 
   # logto用のデータベース
   db-logto:
@@ -87,8 +94,9 @@ services:
       - ADMIN_ENDPOINT=${LOGTO_ADMIN_ENDPOINT}
     # 内部ネットワークに接続
     networks:
-      app-ins-network:
-      logto-db-network:
+      - app-logto-network
+      - logto-db-network
+      - traefik-public
 
   backend:
     container_name: backend-prod
@@ -122,22 +130,15 @@ services:
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
-      - app-ins-network
+      - app-logto-network
       - app-db-network
+      - app-minio-network
+      - traefik-public
     # コンテナが停止したら再起動
     restart: on-failure
 
   frontend:
     container_name: frontend-prod
-    ports:
-      # 80ポートを開放
-      # - target: 80
-      #   published: 80
-      #   host_ip: localhost
-      # 443ポートを開放
-      - target: 443
-        published: 443
-        host_ip: localhost
     build:
       context: .
       # フロントエンドのDockerfileを指定
@@ -161,17 +162,36 @@ services:
         VITE_HOSTNAME: ${HOSTNAME}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
-    environment:
-      # ホストネームを指定
-      - HOSTNAME=${HOSTNAME}
-    volumes:
-      - type: bind
-        source: /etc/letsencrypt
-        target: /etc/letsencrypt
-    # 内部ネットワークに接続
     networks:
-      - app-ins-network
+      - traefik-public
     # コンテナが停止したら再起動
     restart: on-failure
     depends_on:
       - backend
+
+  # リバースプロキシコンテナ
+  traefik:
+    container_name: traefik
+    # traefikの最新イメージを使用
+    image: traefik:latest
+    # traefikの環境変数を読み込む
+    labels:
+      # TODO
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
+    # traefikの設定ファイルを指定
+    # ポートを指定
+    ports:
+      - "80:80"
+      - "443:443"
+    # ネットワークに接続
+    networks:
+      - traefik-public
+    # コンテナが停止したら再起動
+    restart: on-failure
