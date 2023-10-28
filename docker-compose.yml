@@ -13,8 +13,6 @@ networks:
   logto-db-network:
   # リバースプロキシで公開するネットワーク
   traefik-public:
-    # リバースプロキシのネットワークを外部に公開
-    external: true
 
 # データベースのデータを格納するボリューム
 volumes:
