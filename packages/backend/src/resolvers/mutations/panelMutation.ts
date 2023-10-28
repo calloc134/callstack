@@ -6,7 +6,7 @@ import { withErrorHandling } from "src/lib/error/handling";
 import { GraphQLErrorWithCode } from "src/lib/error/error";
 import { Client } from "minio";
 import { v4 as uuidv4 } from "uuid";
-import { minio_bucket, minio_endpoint } from "src/env";
+import { minio_bucket_name, minio_outside_endpoint } from "src/env";
 import Jimp = require("jimp");
 
 // prismaのupdateは、undefinedな値を渡すと、そのフィールドを更新しないことに留意する
@@ -28,10 +28,10 @@ const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
       const filename = `${uuidv4()}.png`;
 
       // ファイルをアップロード
-      await minioClient.putObject(minio_bucket, filename, await image.getBufferAsync(Jimp.MIME_PNG));
+      await minioClient.putObject(minio_bucket_name, filename, await image.getBufferAsync(Jimp.MIME_PNG));
 
       // ファイルのURLを生成
-      const url = minio_endpoint + "/" + minio_bucket + "/" + filename;
+      const url = minio_outside_endpoint + "/" + minio_bucket_name + "/" + filename;
 
       // ユーザーのプロフィール画像を更新
       const result = await prisma.user.update({

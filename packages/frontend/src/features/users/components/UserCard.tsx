@@ -10,6 +10,7 @@ const UserFragment = graphql(`
     handle
     screen_name
     bio
+    image_url
   }
 `);
 
@@ -21,7 +22,7 @@ const UserCard = ({ user: user_flag }: { user: FragmentType<typeof UserFragment>
     <div className="flex flex-row justify-between">
       <Card isBlurred className="w-full bg-secondary relative" shadow="sm">
         <Image
-          src="https://picsum.photos/200"
+          src={user.image_url}
           width={200}
           height={200}
           radius="full"

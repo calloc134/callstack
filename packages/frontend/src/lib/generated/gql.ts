@@ -19,9 +19,9 @@ const documents = {
     "\n  query GetPostDetailQuery($uuid: UUID!) {\n    getPostByUUID(uuid: $uuid) {\n      ...PostDetailFragment\n    }\n  }\n": types.GetPostDetailQueryDocument,
     "\n  query GetAllPostsQuery {\n    getAllPosts(limit: 10) {\n      ...PostFragment\n    }\n  }\n": types.GetAllPostsQueryDocument,
     "\n  fragment PostPopupFragment on Post {\n    post_uuid\n    title\n    body\n  }\n": types.PostPopupFragmentFragmentDoc,
-    "\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n  }\n": types.UserFragmentFragmentDoc,
+    "\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    image_url\n  }\n": types.UserFragmentFragmentDoc,
     "\n  mutation UpdateMyBioMutation($input: UpdateUserInput!) {\n    updateMyUser(input: $input) {\n      bio\n    }\n  }\n": types.UpdateMyBioMutationDocument,
-    "\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n": types.UserDetailFragmentFragmentDoc,
+    "\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    image_url\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n": types.UserDetailFragmentFragmentDoc,
     "\n  mutation UpdateMyHandleMutation($input: UpdateUserInput!) {\n    updateMyUser(input: $input) {\n      handle\n    }\n  }\n": types.UpdateMyHandleMutationDocument,
     "\n  mutation UpdateMyProfileImageMutation($file: File!) {\n    uploadProfileImage(file: $file) {\n      image_url\n    }\n  }\n": types.UpdateMyProfileImageMutationDocument,
     "\n  mutation UpdateMyScreenNameMutation($input: UpdateUserInput!) {\n    updateMyUser(input: $input) {\n      screen_name\n    }\n  }\n": types.UpdateMyScreenNameMutationDocument,
@@ -71,7 +71,7 @@ export function graphql(source: "\n  fragment PostPopupFragment on Post {\n    p
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n  }\n"): (typeof documents)["\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n  }\n"];
+export function graphql(source: "\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    image_url\n  }\n"): (typeof documents)["\n  fragment UserFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    image_url\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -79,7 +79,7 @@ export function graphql(source: "\n  mutation UpdateMyBioMutation($input: Update
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n"): (typeof documents)["\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n"];
+export function graphql(source: "\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    image_url\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n"): (typeof documents)["\n  fragment UserDetailFragment on User {\n    user_uuid\n    handle\n    screen_name\n    bio\n    image_url\n    created_at\n    updated_at\n    role\n    posts {\n      ...PostPopupFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

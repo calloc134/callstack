@@ -13,6 +13,7 @@ const UserDetailFragment = graphql(`
     handle
     screen_name
     bio
+    image_url
     created_at
     updated_at
     role
@@ -39,7 +40,7 @@ const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; use
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-row justify-between gap-2">
-        <UserDetailProfileImageInput is_myself={is_myself} />
+        <UserDetailProfileImageInput is_myself={is_myself} image_url={user.image_url} />
         <div className="flex relative">
           <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
           {is_myself && <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} />}

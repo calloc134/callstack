@@ -25,7 +25,7 @@ import { AuthMockOption, AuthnOption } from "./lib/security/authn";
 // 認可プラグインのオプション
 import { authzOption } from "./lib/security/authz";
 // 開発環境かどうかを判断する変数
-import { is_dev, minio_endpoint, minio_root_password, minio_root_user } from "./env";
+import { is_dev, minio_inside_endpoint, minio_root_password, minio_root_user } from "./env";
 import { useWebHook } from "./lib/webhook/webhook";
 import { useGraphQlJit } from "@envelop/graphql-jit";
 
@@ -37,7 +37,7 @@ const prisma = new PrismaClient();
 
 // minioクライアントを作成
 const minio = new Client({
-  endPoint: minio_endpoint,
+  endPoint: minio_inside_endpoint,
   port: 9000,
   useSSL: false,
   accessKey: minio_root_user,

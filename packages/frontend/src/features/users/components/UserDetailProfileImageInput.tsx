@@ -11,7 +11,7 @@ const UpdateMyProfileImageMutation = graphql(`
   }
 `);
 
-const UserDetailProfileImageInput = ({ is_myself }: { is_myself: boolean }) => {
+const UserDetailProfileImageInput = ({ is_myself, image_url }: { is_myself: boolean; image_url: string }) => {
   // 画像のミューテーション用のフックを実行
   const [, update_my_profile_image] = useMutation(UpdateMyProfileImageMutation);
 
@@ -41,7 +41,7 @@ const UserDetailProfileImageInput = ({ is_myself }: { is_myself: boolean }) => {
 
   return (
     <div className={`flex relative rounded-full ${is_myself ? "cursor-pointer hover:scale-105 duration-75" : ""}`}>
-      <Image src="https://picsum.photos/200" removeWrapper radius="full" width={200} className="shadow-md" />
+      <Image src={image_url} removeWrapper radius="full" width={200} className="shadow-md" />
       {is_myself && (
         <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} onChange={handle_select_file} />
       )}
