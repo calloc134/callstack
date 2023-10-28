@@ -48,7 +48,6 @@ services:
     build:
       context: .
       dockerfile: packages/infra/Dockerfiles/Minio-Dockerfile
-    restart: unless-stopped
     volumes:
       - type: volume
         source: minio-data
@@ -67,6 +66,8 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
+    # コンテナが停止したら再起動
+    restart: on-failure
 
   # logto用のデータベース
   db-logto:
@@ -113,6 +114,8 @@ services:
       - "traefik.http.services.logto_admin.loadbalancer.server.port=3002"
       - "traefik.http.routers.logto_admin.entrypoints=websecure"
       - "traefik.http.routers.logto_admin.tls.certresolver=letsencrypt"
+    # コンテナが停止したら再起動
+    restart: on-failure
 
   backend:
     container_name: backend-prod
@@ -192,10 +195,10 @@ services:
       - "traefik.http.services.frontend.loadbalancer.server.port=6000"
       - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-    # コンテナが停止したら再起動
-    restart: on-failure
     depends_on:
       - backend
+    # コンテナが停止したら再起動
+    restart: on-failure
 
   # リバースプロキシコンテナ
   traefik:
@@ -213,6 +216,7 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.letsencrypt.acme.email=${CERTBOT_EMAIL}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/etc/letsencrypt/acme.json"
+      - "--providers.docker.network=traefik-public"
     volumes:
       - type: bind
         source: /var/run/docker.sock
