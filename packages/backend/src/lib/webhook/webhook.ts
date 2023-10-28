@@ -73,7 +73,7 @@ export const useWebHook = (prisma: PrismaClient): Plugin => ({
             handle: body.user.username || generateRandomString(),
             // スクリーンネームかランダムな文字列を保持
             screen_name: body.user.username || generateRandomString(),
-            bio: "",
+            bio: "自己紹介がここに入ります。",
             image_url: "https://picsum.photos/200",
           },
         });
