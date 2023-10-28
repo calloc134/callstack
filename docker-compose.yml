@@ -190,8 +190,9 @@ services:
         VITE_HOSTNAME: ${HOSTNAME}
         # インフラの環境変数を指定
         INFRADIR: ${INFRADIR}
-        # ホストネームを指定
-        HOSTNAME: ${HOSTNAME}
+    environment:
+      # ホストネームを指定
+      - HOSTNAME=${HOSTNAME}
     networks:
       - traefik-public
     labels:
