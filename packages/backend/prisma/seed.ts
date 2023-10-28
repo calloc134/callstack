@@ -11,9 +11,21 @@ async function main() {
 
   await prisma.user.createMany({
     data: [
-      { auth_sub: auth_subs[0], handle: generateRandomString(), screen_name: generateRandomString(), bio: "", image_url: "https://picsum.photos/200" },
+      {
+        auth_sub: auth_subs[0],
+        handle: generateRandomString(),
+        screen_name: generateRandomString(),
+        bio: generateRandomString(),
+        image_url: "https://picsum.photos/200",
+      },
 
-      { auth_sub: auth_subs[1], handle: generateRandomString(), screen_name: generateRandomString(), bio: "", image_url: "https://picsum.photos/200" },
+      {
+        auth_sub: auth_subs[1],
+        handle: generateRandomString(),
+        screen_name: generateRandomString(),
+        bio: generateRandomString(),
+        image_url: "https://picsum.photos/200",
+      },
     ],
   });
 
