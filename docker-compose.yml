@@ -65,10 +65,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.minio.rule=Host(`${HOSTNAME}`) && PathPrefix(`/${MINIO_BUCKET_NAME}/`)"
+      - "traefik.http.routers.minio.service=minio"
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
       - "traefik.http.routers.minio-admin.rule=Host(`minioadmin.${HOSTNAME}`)"
+      - "traefik.http.routers.minio-admin.service=minio-admin"
       - "traefik.http.services.minio-admin.loadbalancer.server.port=9001"
       - "traefik.http.routers.minio-admin.entrypoints=websecure"
       - "traefik.http.routers.minio-admin.tls.certresolver=letsencrypt"
