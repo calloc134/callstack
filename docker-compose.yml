@@ -63,6 +63,12 @@ services:
     networks:
       - app-minio-network
       - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.rule=Host(`${HOSTNAME}`) && PathPrefix(`/${MINIO_BUCKET_NAME}/`)"
+      - "traefik.http.routers.minio.loadbalancer.server.port=9000"
+      - "traefik.http.routers.minio.entrypoints=websecure"
+      - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
 
   # logto用のデータベース
   db-logto:
@@ -97,6 +103,16 @@ services:
       - app-logto-network
       - logto-db-network
       - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.logto_auth.rule=Host(`auth.${HOSTNAME}`)"
+      - "traefik.http.routers.logto_auth.loadbalancer.server.port=3001"
+      - "traefik.http.routers.logto_auth.entrypoints=websecure"
+      - "traefik.http.routers.logto_auth.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.logto_admin.rule=Host(`authadmin.${HOSTNAME}`)"
+      - "traefik.http.routers.logto_admin.loadbalancer.server.port=3002"
+      - "traefik.http.routers.logto_admin.entrypoints=websecure"
+      - "traefik.http.routers.logto_admin.tls.certresolver=letsencrypt"
 
   backend:
     container_name: backend-prod
@@ -134,6 +150,12 @@ services:
       - app-db-network
       - app-minio-network
       - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend.loadbalancer.server.port=6173"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -164,6 +186,12 @@ services:
         INFRADIR: ${INFRADIR}
     networks:
       - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.loadbalancer.server.port=6000"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
     restart: on-failure
     depends_on:
@@ -175,8 +203,16 @@ services:
     # traefikの最新イメージを使用
     image: traefik:latest
     # traefikの環境変数を読み込む
-    labels:
-      # TODO
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${CERT_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
     volumes:
       - type: bind
         source: /var/run/docker.sock
