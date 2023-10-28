@@ -68,6 +68,10 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.minio-admin.rule=Host(`minioadmin.${HOSTNAME}`)"
+      - "traefik.http.services.minio-admin.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio-admin.entrypoints=websecure"
+      - "traefik.http.routers.minio-admin.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
     restart: on-failure
 
