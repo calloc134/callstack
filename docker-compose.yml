@@ -104,10 +104,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.logto_auth.rule=Host(`auth.${HOSTNAME}`)"
+      - "traefik.http.routers.logto_auth.service=logto_auth"
       - "traefik.http.services.logto_auth.loadbalancer.server.port=3001"
       - "traefik.http.routers.logto_auth.entrypoints=websecure"
       - "traefik.http.routers.logto_auth.tls.certresolver=letsencrypt"
       - "traefik.http.routers.logto_admin.rule=Host(`authadmin.${HOSTNAME}`)"
+      - "traefik.http.routers.logto_admin.service=logto_admin"
       - "traefik.http.services.logto_admin.loadbalancer.server.port=3002"
       - "traefik.http.routers.logto_admin.entrypoints=websecure"
       - "traefik.http.routers.logto_admin.tls.certresolver=letsencrypt"
