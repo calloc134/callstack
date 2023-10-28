@@ -196,7 +196,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=6000"
-      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
     depends_on:
       - backend
