@@ -30,9 +30,9 @@ export const Document = () => {
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""} text-foreground bg-background/80 bg-gradient-to from-background w-screen h-screen`}>
+    <div className={`${darkMode ? "dark" : ""} text-foreground bg-background bg-gradient-to-r from-slate-300 to-50% w-screen h-screen`}>
       <div className="flex flex-col">
-        <Navbar className="bg-gradient-to-r from-primary bg-primary/50 backdrop-blur-sm shadow-xl rounded-b-lg">
+        <Navbar className="bg-gradient-to-r from-red-600/20 via-blue-300 bg-purple-500/80 transition-colors backdrop-blur-sm shadow-md rounded-b-sm hover:via-blue-200">
           <NavbarBrand>
             <Tooltip content="callstack" color="secondary">
               <Link to="/">callstack</Link>
@@ -51,7 +51,7 @@ export const Document = () => {
               {/* 十分に画面サイズが大きい場合 */}
               <NavbarItem className="hidden sm:flex gap-4">
                 <Tooltip content="スタイル切替" color="secondary">
-                  <Button color="secondary" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1 ">
+                  <Button isIconOnly radius="full" variant="light" onClick={toggleDarkMode} className="hover:bg-secondary">
                     <Sun size={20} />
                   </Button>
                 </Tooltip>
@@ -59,7 +59,7 @@ export const Document = () => {
                   <Avatar
                     isBordered
                     as="button"
-                    className="transition-transform hover:-translate-y-1"
+                    className="transition-transform hover:scale-110"
                     color="secondary"
                     name="Jason Hughes"
                     size="sm"
@@ -79,14 +79,14 @@ export const Document = () => {
               <NavbarItem className="flex sm:hidden gap-4">
                 <Dropdown>
                   <DropdownTrigger>
-                    <Button color="secondary" variant="light" className="hover:-translate-y-1">
+                    <Button isIconOnly color="secondary" radius="full" variant="light" className="hover:scale-110">
                       <Menu2 size={20} />
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu>
                     <DropdownItem>
                       <Tooltip content="スタイル切替" color="secondary">
-                        <Button color="secondary" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1">
+                        <Button isIconOnly color="secondary" radius="full" variant="shadow" onClick={toggleDarkMode} className="hover:-translate-y-1">
                           <Sun size={20} />
                         </Button>
                       </Tooltip>
@@ -120,7 +120,7 @@ export const Document = () => {
         </Navbar>
         <div>
           {" "}
-          <Spacer y={40} />
+          <Spacer y={10} />
           {/* ここで内側のコンポーネントを表示 */}
           <Outlet />
         </div>

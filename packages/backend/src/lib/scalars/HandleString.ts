@@ -6,6 +6,7 @@ const validate = (value: any, ast?: ASTNode) => {
     throw createGraphQLError(`Value is not a string: ${value}`, ast ? { nodes: ast } : undefined);
   }
 
+  // 空文字列を許容しない
   if (!value.trim().length) {
     throw createGraphQLError(`Value cannot be an empty string: ${value}`, ast ? { nodes: ast } : undefined);
   }
@@ -13,6 +14,11 @@ const validate = (value: any, ast?: ASTNode) => {
   // ASCIIで表現可能な小文字、数字、簡単な記号のみを許容
   if (!/^[a-z0-9_]+$/.test(value)) {
     throw createGraphQLError(`Value must consist only of lowercase ASCII letters, numbers, or underscores: ${value}`, ast ? { nodes: ast } : undefined);
+  }
+
+  // 20文字を超える文字列を許容しない
+  if (value.length > 20) {
+    throw createGraphQLError(`Value cannot be longer than 20 characters: ${value}`, ast ? { nodes: ast } : undefined);
   }
 
   return value;

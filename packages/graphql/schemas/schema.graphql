@@ -14,15 +14,22 @@ scalar NonNegativeInt
 scalar NonEmptyString
 
 # ユーザのハンドル用の文字列スカラー型を利用するための定義
+# 英数字のみを許容し、20文字以内の必要がある
 scalar HandleString
 # ユーザのスクリーンネーム用の文字列スカラー型を利用するための定義
+# 任意の文字を許容し、50文字以内の必要がある
 scalar ScreenNameString
 # ユーザの自己紹介用の文字列スカラー型を利用するための定義
+# 400文字以内の必要がある
 scalar BioString
 # タイトル用の文字列スカラー型を利用するための定義
+#
 scalar TitleString
 # 本文用の文字列スカラー型を利用するための定義
 scalar BodyString
+
+# ファイルを利用するためのスカラーの定義
+scalar File
 
 # authディレクティブを利用するための定義
 directive @auth(role: Role! = USER) on FIELD_DEFINITION
@@ -72,6 +79,9 @@ type Mutation {
   # ユーザを削除するミューテーション 管理者用
   deleteUserForAdmin(user_uuid: UUID!): User! @auth(role: ADMIN)
 
+  # 自分のユーザの画像をアップロードするためのミューテーション
+  uploadProfileImage(file: File!): User! @auth(role: USER)
+
   # 自分のユーザの情報を更新するミューテーション
   updateMyUser(input: UpdateUserInput!): User! @auth(role: USER)
 
@@ -95,6 +105,7 @@ type User {
   handle: String!
   screen_name: String!
   bio: String!
+  image_url: String!
   created_at: DateTime!
   updated_at: DateTime!
   role: Role!

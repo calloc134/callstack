@@ -8,6 +8,7 @@
     "lint": "turbo lint",
     "prigen": "turbo prigen",
     "primig": "turbo primig",
+    "priseed": "turbo priseed",
     "prepare": "husky install && turbo prigen && turbo codegen"
   },
   "keywords": [],
@@ -26,7 +27,6 @@
     "@commitlint/cli": "^17.6.7",
     "@commitlint/config-conventional": "^17.6.7",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.3",
     "tsc": "^2.0.4",
     "tsx": "^3.12.7",
     "turbo": "^1.10.12"

@@ -4,10 +4,54 @@ import { MutationResolvers } from "src/lib/generated/resolver-types";
 import { GraphQLContext } from "src/context";
 import { withErrorHandling } from "src/lib/error/handling";
 import { GraphQLErrorWithCode } from "src/lib/error/error";
+import { Client } from "minio";
+import { v4 as uuidv4 } from "uuid";
+import { minio_bucket_name, minio_outside_endpoint } from "src/env";
+import Jimp = require("jimp");
 
 // prismaのupdateは、undefinedな値を渡すと、そのフィールドを更新しないことに留意する
-
 const PanelMutationResolver: MutationResolvers<GraphQLContext> = {
+  // createPresignedURLForUploadImageフィールドのリゾルバー
+  // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
+  uploadProfileImage: async (_parent, args, context) => {
+    const safe = withErrorHandling(async (currentUser_uuid: string, prisma: PrismaClient, minioClient: Client, file: File) => {
+      // ファイルのアレイバッファを取得
+      const fileArrayBuffer = await file.arrayBuffer();
+
+      // 画像をjimpで開く
+      const image = await Jimp.read(Buffer.from(fileArrayBuffer));
+
+      // 画像のサイズを変更
+      image.cover(200, 200);
+
+      // uuid v4を生成
+      const filename = `${uuidv4()}.png`;
+
+      // ファイルをアップロード
+      await minioClient.putObject(minio_bucket_name, filename, await image.getBufferAsync(Jimp.MIME_PNG));
+
+      // ファイルのURLを生成
+      const url = minio_outside_endpoint + "/" + minio_bucket_name + "/" + filename;
+
+      // ユーザーのプロフィール画像を更新
+      const result = await prisma.user.update({
+        where: {
+          user_uuid: currentUser_uuid,
+        },
+        data: {
+          image_url: url,
+        },
+      });
+
+      return result;
+    });
+
+    // コンテキストからPrismaクライアントと現在ログインしているユーザーのデータを取得
+    const { currentUser, prisma, minio: minioClient } = context;
+
+    return await safe(currentUser.user_uuid, prisma, minioClient, args.file);
+  },
+
   // updateUserForAdminフィールドのリゾルバー
   // @ts-expect-error postsフィールドが存在しないためエラーが出るが、実際には存在するので無視
   updateUserForAdmin: async (_parent, args, context) => {

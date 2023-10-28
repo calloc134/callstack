@@ -1,6 +1,10 @@
 import { graphql } from "src/lib/generated/gql";
-import { Card, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Spacer, Modal, useDisclosure } from "@nextui-org/react";
 import { FragmentType, useFragment } from "src/lib/generated";
+import { UserDetailScreenNameInput } from "./UserDetailScreenNameInput";
+import { UserDetailHandleInput } from "./UserDetailHandleInput";
+import { UserDetailBioInput } from "./UserDetailBioInput";
+import { UserDetailProfileImageInput } from "./UserDetailProfileImageInput";
 
 // クエリするフラグメントを定義
 const UserDetailFragment = graphql(`
@@ -9,6 +13,7 @@ const UserDetailFragment = graphql(`
     handle
     screen_name
     bio
+    image_url
     created_at
     updated_at
     role
@@ -18,38 +23,75 @@ const UserDetailFragment = graphql(`
   }
 `);
 
-const UserDetailCard = ({ user: user_frag }: { user: FragmentType<typeof UserDetailFragment> }) => {
+const UserDetailCard = ({ my_user_uuid, user_frag }: { my_user_uuid: string; user_frag: FragmentType<typeof UserDetailFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
   const user = useFragment(UserDetailFragment, user_frag);
 
+  // スクリーンネーム用のモーダル用のフックを実行
+  const { isOpen: sc_isOpen, onOpen: sc_onOpen, onOpenChange: sc_onOpenChange, onClose: sc_onClose } = useDisclosure();
+  // ハンドル用のモーダル用のフックを実行
+  const { isOpen: hd_isOpen, onOpen: hd_onOpen, onOpenChange: hd_onOpenChange, onClose: hd_onClose } = useDisclosure();
+  // 自己紹介文用のモーダル用のフックを実行
+  const { isOpen: bio_isOpen, onOpen: bio_onOpen, onOpenChange: bio_onOpenChange, onClose: bio_onClose } = useDisclosure();
+
+  // 現在のログインユーザが自分自身かどうかを判定
+  const is_myself = my_user_uuid === user.user_uuid;
+
   return (
-    <Card isBlurred className="w-full bg-secondary" shadow="sm">
-      <CardBody>
-        <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
-          <div className="flex flex-col justify-start col-span-4">
-            <h1 className="text-2xl font-bold truncate">{user.screen_name}</h1>
-            <p className="text-xl line-clamp-3">@{user.handle}</p>
-          </div>
-          <div className="flex col-span-4 md:col-span-10">
-            <p className="text-xl">{user.bio}</p>
-          </div>
+    <div className="flex flex-col justify-between">
+      <div className="flex flex-row justify-between gap-2">
+        <UserDetailProfileImageInput is_myself={is_myself} image_url={user.image_url} />
+        <div className="flex relative">
+          <Image src="https://picsum.photos/800/200" width={800} height={200} radius="sm" className="shadow-md " />
+          {is_myself && <input type="file" className={`absolute w-full h-full z-10 opacity-0 ${is_myself ? "cursor-pointer" : ""}`} />}
         </div>
-      </CardBody>
-      <CardFooter className="justify-end">
-        <div className="flex flex-row">
-          {/* <Button color="primary" variant="shadow" className="rounded-full hover:-translate-y-1">
-            <Link
-              to="/auth/users/$user_uuid"
-              params={{
-                user_uuid: user.user_uuid,
-              }}
-            >
-              詳細を見る
-            </Link>
-          </Button> */}
-        </div>
-      </CardFooter>
-    </Card>
+      </div>
+      <Spacer y={6} />
+      <Card isBlurred className="w-full bg-secondary" shadow="sm">
+        <CardBody>
+          <div className="grid grid-flow-col grid-cols-6 md:grid-cols-12">
+            <div className="flex flex-col justify-star col-span-3">
+              <h1 className={`text-2xl font-bold line-clamp-3 ${is_myself ? "cursor-pointer hover:opacity-60" : ""}`} onClick={sc_onOpen}>
+                {user.screen_name}
+              </h1>
+              <p className={`text-xl line-clamp-3 ${is_myself ? "cursor-pointer hover:opacity-60" : ""}`} onClick={hd_onOpen}>
+                @{user.handle}
+              </p>
+            </div>
+            <div className="flex col-span-4 md:col-span-10">
+              <p className={`text-xl ${is_myself ? "cursor-pointer hover:opacity-60 whitespace-pre-line" : ""}`} onClick={bio_onOpen}>
+                {user.bio}
+              </p>
+            </div>
+          </div>
+        </CardBody>
+        <CardFooter className="justify-end">
+          <div className="flex flex-row">
+            {is_myself && (
+              <>
+                <Modal isOpen={sc_isOpen} onOpenChange={sc_onOpenChange}>
+                  <UserDetailScreenNameInput screen_name={user.screen_name} onClose={sc_onClose} />
+                </Modal>
+              </>
+            )}
+            {is_myself && (
+              <>
+                <Modal isOpen={hd_isOpen} onOpenChange={hd_onOpenChange}>
+                  <UserDetailHandleInput handle={user.handle} onClose={hd_onClose} />
+                </Modal>
+              </>
+            )}
+            {is_myself && (
+              <>
+                <Modal isOpen={bio_isOpen} onOpenChange={bio_onOpenChange}>
+                  <UserDetailBioInput bio={user.bio} onClose={bio_onClose} />
+                </Modal>
+              </>
+            )}
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

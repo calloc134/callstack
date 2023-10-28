@@ -1,3 +1,4 @@
-!backend.dev.env
+!codespace.dev.env
 !logto.dev.env
 !postgres.dev.env
+!minio.dev.env

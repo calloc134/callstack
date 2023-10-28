@@ -6,10 +6,12 @@ const validate = (value: any, ast?: ASTNode) => {
     throw createGraphQLError(`Value is not a string: ${value}`, ast ? { nodes: ast } : undefined);
   }
 
+  // 空文字列を許容しない
   if (!value.trim().length) {
     throw createGraphQLError(`Value cannot be an empty string: ${value}`, ast ? { nodes: ast } : undefined);
   }
 
+  // 400文字を超える文字列を許容しない
   if (value.length > 400) {
     throw createGraphQLError(`Value cannot be longer than 400 characters: ${value}`, ast ? { nodes: ast } : undefined);
   }

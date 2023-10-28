@@ -3,12 +3,17 @@ version: "3.8"
 # ネットワークの作成
 networks:
   # 内部ネットワーク
-  # バックエンドとlogtoコンテナ、リバースプロキシのみ接続
-  app-ins-network:
+  # バックエンドとlogtoコンテナのみ接続
+  app-logto-network:
   # バックエンドとそれに対応するデータベースのみ接続
   app-db-network:
+  # バックエンドとminioのみ接続
+  app-minio-network:
   # logtoとそれに対応するデータベースのみ接続
   logto-db-network:
+  # リバースプロキシで公開するネットワーク
+  traefik-public:
+    name: traefik-public
 
 # データベースのデータを格納するボリューム
 volumes:
@@ -16,6 +21,8 @@ volumes:
   app-db-vol:
   # logtoのデータベースデータを格納するボリューム
   logto-db-vol:
+  # minioのデータを格納するボリューム
+  minio-data:
 
 services:
   # バックエンド用のデータベース
@@ -34,6 +41,48 @@ services:
     # 内部ネットワークに接続
     networks:
       - app-db-network
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  minio:
+    container_name: minio
+    # 画像ストレージ
+    build:
+      context: .
+      dockerfile: packages/infra/Dockerfiles/Minio-Dockerfile
+    volumes:
+      - type: volume
+        source: minio-data
+        target: /data
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+        # バックエンドのminioのバケット名を指定
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+    networks:
+      - app-minio-network
+      - traefik-public
+    labels:
+      # traefikで公開する
+      - "traefik.enable=true"
+      # ホスト名を指定
+      # 元オリジンのホスト名を指定
+      - "traefik.http.routers.minio.rule=Host(`${HOSTNAME}`) && PathPrefix(`/${MINIO_BUCKET_NAME}/`)"
+      - "traefik.http.routers.minio.service=minio"
+      # 9000番ポートを指定
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      # SSLを有効化
+      - "traefik.http.routers.minio.entrypoints=websecure"
+      - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
+      # ホスト名を指定
+      # minioadminサブドメインを指定
+      - "traefik.http.routers.minio-admin.rule=Host(`minioadmin.${HOSTNAME}`)"
+      - "traefik.http.routers.minio-admin.service=minio-admin"
+      # 9001番ポートを指定
+      - "traefik.http.services.minio-admin.loadbalancer.server.port=9001"
+      # SSLを有効化
+      - "traefik.http.routers.minio-admin.entrypoints=websecure"
+      - "traefik.http.routers.minio-admin.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -58,6 +107,7 @@ services:
 
   # logtoコンテナ
   logto:
+    container_name: logto
     image: svhd/logto:latest
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
     env_file: ${LOGTO_ENV}
@@ -67,11 +117,35 @@ services:
       - ADMIN_ENDPOINT=${LOGTO_ADMIN_ENDPOINT}
     # 内部ネットワークに接続
     networks:
-      app-ins-network:
-      logto-db-network:
+      - app-logto-network
+      - logto-db-network
+      - traefik-public
+    labels:
+      # traefikで公開する
+      - "traefik.enable=true"
+      # ホスト名を指定
+      # authサブドメインを指定
+      - "traefik.http.routers.logto_auth.rule=Host(`auth.${HOSTNAME}`)"
+      - "traefik.http.routers.logto_auth.service=logto_auth"
+      # 3001番ポートを指定
+      - "traefik.http.services.logto_auth.loadbalancer.server.port=3001"
+      # SSLを有効化
+      - "traefik.http.routers.logto_auth.entrypoints=websecure"
+      - "traefik.http.routers.logto_auth.tls.certresolver=letsencrypt"
+      # ホスト名を指定
+      # authadminサブドメインを指定
+      - "traefik.http.routers.logto_admin.rule=Host(`authadmin.${HOSTNAME}`)"
+      - "traefik.http.routers.logto_admin.service=logto_admin"
+      # 3002番ポートを指定
+      - "traefik.http.services.logto_admin.loadbalancer.server.port=3002"
+      # SSLを有効化
+      - "traefik.http.routers.logto_admin.entrypoints=websecure"
+      - "traefik.http.routers.logto_admin.tls.certresolver=letsencrypt"
+    # コンテナが停止したら再起動
+    restart: on-failure
 
   backend:
-    container_name: backend-prod
+    container_name: backend
     # バックエンドのDockerfileを指定
     build:
       context: .
@@ -87,6 +161,11 @@ services:
     environment:
       # スキーマのパスを指定
       - SCHEMA_PATH=${SCHEMA_PATH}
+      # バックエンドのminioのユーザー名とパスワードを指定
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      # バックエンドのminioのバケット名を指定
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       # logtoコンテナのエンドポイントを指定
       - LOGTO_ENDPOINT=${LOGTO_ENDPOINT}
       # オーディエンスを指定
@@ -97,22 +176,26 @@ services:
       - NODE_ENV=production
     # 内部ネットワークに接続
     networks:
-      - app-ins-network
+      - app-logto-network
       - app-db-network
+      - app-minio-network
+      - traefik-public
+    labels:
+      # traefikで公開する
+      - "traefik.enable=true"
+      # ホスト名を指定
+      # apiディレクトリを指定
+      - "traefik.http.routers.backend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/`)"
+      # 6173番ポートを指定
+      - "traefik.http.services.backend.loadbalancer.server.port=6173"
+      # SSLを有効化
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
     # コンテナが停止したら再起動
     restart: on-failure
 
   frontend:
-    container_name: frontend-prod
-    ports:
-      # 80ポートを開放
-      # - target: 80
-      #   published: 80
-      #   host_ip: localhost
-      # 443ポートを開放
-      - target: 443
-        published: 443
-        host_ip: localhost
+    container_name: frontend
     build:
       context: .
       # フロントエンドのDockerfileを指定
@@ -139,14 +222,65 @@ services:
     environment:
       # ホストネームを指定
       - HOSTNAME=${HOSTNAME}
+    networks:
+      - traefik-public
+    labels:
+      # traefikで公開する
+      - "traefik.enable=true"
+      # ホスト名を指定
+      # ホームディレクトリを指定
+      - "traefik.http.routers.frontend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/`)"
+      # 6000番ポートを指定
+      - "traefik.http.services.frontend.loadbalancer.server.port=6000"
+      # SSLを有効化
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+    depends_on:
+      - backend
+    # コンテナが停止したら再起動
+    restart: on-failure
+
+  # リバースプロキシコンテナ
+  traefik:
+    container_name: traefik
+    # traefikの最新イメージを使用
+    image: traefik:latest
+    # traefikの環境変数を読み込む
+    command:
+      # traefikのdockerプロバイダを有効化
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      # 80番ポートを指定
+      - "--entrypoints.web.address=:80"
+      # 443番ポートを指定
+      - "--entrypoints.websecure.address=:443"
+      # letsencryptを有効化
+      # httpチャレンジを有効化
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      # 環境変数より取得したメールアドレスを指定
+      - "--certificatesresolvers.letsencrypt.acme.email=${CERTBOT_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/etc/letsencrypt/acme.json"
+      # ネットワークを指定
+      - "--providers.docker.network=traefik-public"
     volumes:
+      # ホストのdockerソケットをマウント
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        # 読み取り専用でマウント
+        read_only: true
+      # ホストのletsencryptディレクトリをマウント
       - type: bind
         source: /etc/letsencrypt
         target: /etc/letsencrypt
-    # 内部ネットワークに接続
+    # traefikの設定ファイルを指定
+    # ポートを指定
+    ports:
+      - "80:80"
+      - "443:443"
+    # ネットワークに接続
     networks:
-      - app-ins-network
+      - traefik-public
     # コンテナが停止したら再起動
     restart: on-failure
-    depends_on:
-      - backend

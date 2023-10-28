@@ -2,7 +2,7 @@ version: "3.8"
 
 # ネットワークを作成
 networks:
-  app-db-network:
+  app-network:
 
 services:
   app:
@@ -32,22 +32,24 @@ services:
 
     environment:
       - SCHEMA_PATH=../graphql/schemas/*.graphql
+      # バックエンドのminioのユーザー名とパスワードを指定
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      # バックエンドのminioのバケット名を指定
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       # - OPERATION_PATH=../graphql/operations/*.graphql
     # アプリケーションコンテナの環境変数を読み込む
-    env_file: ${BACK_ENV}
+    env_file: ${CODESPACE_ENV}
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     networks:
-      - app-db-network
+      - app-network
     # depends_on:
     #   db:
     #     condition: service_healthy
-
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   db:
     image: postgres:latest
@@ -59,18 +61,28 @@ services:
     # ポスグレの環境変数を読み込む
     env_file: ${POSTGRES_ENV}
     networks:
-      - app-db-network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
-    #   interval: 30s
-    #   timeout: 30s
-    #   retries: 5
+      - app-network
 
-    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
-
+  minio:
+    build:
+      context: .
+      dockerfile: Dockerfile.minio
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: minio-data
+        target: /data
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    networks:
+      - app-network
+    ports:
+      - 9000:9000
+      - 9001:9001
 volumes:
   postgres-data:
+  minio-data:
   root-data:
   frontend-data:
   backend-data:

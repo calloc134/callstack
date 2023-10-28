@@ -20,6 +20,7 @@ const config: CodegenConfig = {
           BioString: "string",
           TitleString: "string",
           BodyString: "string",
+          File: "File",
         },
         enumsAsTypes: true,
         skipTypename: true,
