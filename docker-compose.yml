@@ -213,7 +213,6 @@ services:
     image: traefik:latest
     # traefikの環境変数を読み込む
     command:
-      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
