@@ -32,6 +32,9 @@ services:
 
     environment:
       - SCHEMA_PATH=../graphql/schemas/*.graphql
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       # - OPERATION_PATH=../graphql/operations/*.graphql
     # アプリケーションコンテナの環境変数を読み込む
     env_file: ${BACK_ENV}
@@ -69,6 +72,9 @@ services:
         target: /data
     # minioの環境変数を読み込む
     env_file: ${MINIO_ENV}
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     networks:
       - app-network
     ports:
