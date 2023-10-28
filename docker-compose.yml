@@ -68,7 +68,6 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=traefik-public"
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -118,7 +117,6 @@ services:
       - "traefik.http.services.logto_admin.loadbalancer.server.port=3002"
       - "traefik.http.routers.logto_admin.entrypoints=websecure"
       - "traefik.http.routers.logto_admin.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=traefik-public"
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -164,7 +162,6 @@ services:
       - "traefik.http.services.backend.loadbalancer.server.port=6173"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=traefik-public"
     # コンテナが停止したら再起動
     restart: on-failure
 
@@ -201,7 +198,6 @@ services:
       - "traefik.http.services.frontend.loadbalancer.server.port=6000"
       - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=traefik-public"
     depends_on:
       - backend
     # コンテナが停止したら再起動
