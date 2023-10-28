@@ -37,7 +37,7 @@ services:
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       # - OPERATION_PATH=../graphql/operations/*.graphql
     # アプリケーションコンテナの環境変数を読み込む
-    env_file: ${BACK_ENV}
+    env_file: ${CODESPACE_ENV}
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
