@@ -5,7 +5,7 @@ server {
     listen 6000;
     # ホスト名
     # 環境変数で指定した値を使用する
-    server_name frontend;
+    server_name ${HOSTNAME};
     
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;

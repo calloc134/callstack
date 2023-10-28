@@ -46,6 +46,8 @@ FROM nginx:latest as production-stage
 
 # nginx構成ファイルのディレクトリ
 ARG INFRADIR=packages/infra
+# ホスト名(このホストでnginxを構成)
+ARG HOSTNAME="dummy.dummy"
 
 # データを引き継ぐ
 COPY --from=build-stage /home/dist /usr/share/nginx/dist
