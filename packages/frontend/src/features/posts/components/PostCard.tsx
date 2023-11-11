@@ -20,7 +20,6 @@ const PostFragment = graphql(`
 const PostCard = ({ post: post_frag }: { post: FragmentType<typeof PostFragment> }) => {
   // フラグメントの型を指定して対応するデータを取得
   const post = useFragment(PostFragment, post_frag);
-
   return (
     <div className="grid grid-cols-3 flex-row  gap-2 h-unit-72">
       <Card isBlurred className="col-span-1 h-full shadow-sm" shadow="sm">
